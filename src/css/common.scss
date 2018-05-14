@@ -1,0 +1,137 @@
+$em-base: 100;
+@import "./mixin.scss";
+
+* {
+  font-family: PingFangSC-Regular;
+}
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.row {
+  flex-direction: row;
+}
+.column {
+  flex-direction: column;
+}
+.start {
+  justify-content: flex-start;
+}
+.end {
+  justify-content: flex-end;
+}
+.space {
+  justify-content: space-between;
+}
+.center {
+  justify-content: center;
+  align-items: center;
+}
+.content-center {
+  justify-content: center;
+}
+.item-center {
+  align-items: center;
+}
+.f-0 {
+  flex: 0 0 auto;
+}
+.f-1 {
+  flex: 1;
+}
+.fz-24 {
+  font-size: 0.32rem;
+  line-height: 0.32rem;
+}
+.fz-26 {
+  font-size: 0.3467rem;
+  line-height: 0.3467rem;
+}
+.fz-28 {
+  font-size: 0.3733rem;
+  line-height: 0.3733rem;
+}
+.fz-30 {
+  font-size: 0.4rem;
+  line-height: 0.4rem;
+}
+.fz-32 {
+  font-size: 0.4267rem;
+  line-height: 0.4267rem;
+}
+.fz-34 {
+  font-size: 0.4533rem;
+  line-height: 0.4533rem;
+}
+.fz-36 {
+  font-size: 0.48rem;
+  line-height: 0.48rem;
+}
+.fz-40 {
+  font-size: 0.5333rem;
+  line-height: 0.5333rem;
+}
+.fz-44 {
+  font-size: 0.5867rem;
+  line-height: 0.5867rem;
+}
+.fz-48 {
+  font-size: 0.64rem;
+  line-height: 0.64rem;
+}
+.fw-4 {
+  font-weight: 400;
+}
+.fw-7 {
+  font-weight: 700;
+}
+.anyi-btn {
+  background: #278AFA;
+  color: #fff;
+  box-shadow: 0 0.1067rem 0.4667rem 0 rgba(84, 165, 255, 0.8);
+  border-radius: 0.16rem;
+  text-align: center;
+  height: 1.2rem;
+  line-height: 1.2rem;
+  font-size: 0.4267rem;
+}
+.anyi-btn:active {
+  color: #9AB0CA;
+  background: #2270C8;
+}
+.anyi-btn-disabled {
+  opacity: 0.4;
+  color: #fff;
+  background: #278AFA;
+}
+.anyi-btn-disabled:active {
+  opacity: 0.4;
+  color: #fff;
+  background: #278AFA;
+}
+.anyi-btn-txt {
+  line-height: 0.3733rem;
+  font-size: 0.3733rem;
+  color: #278AFA;
+  letter-spacing: 0;
+}
+.anyi-btn-txt-disabled {
+  color: #BFBFBF;
+}
+
+
+//单行溢出
+.line-over {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+ }
+
+ //多行溢出
+ .more-over {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+ }
