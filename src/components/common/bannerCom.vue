@@ -25,7 +25,7 @@
 }
 </style>
 <template>
-  <div v-if="imgUrl" class="banner-com flex center" :style="{width: typeof width === 'number' ? width / 75 + 'rem' : width, height:  height / 75 + 'rem'}">
+  <div v-if="imgUrl" class="banner-com flex center" :style="{width: typeof width === 'number' ? width / 100 + 'rem' : width, height:  height / 100 + 'rem'}">
     <img :src="imgUrl" class="banner-img">
   </div>
 </template>

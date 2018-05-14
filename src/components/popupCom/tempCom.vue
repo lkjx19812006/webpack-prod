@@ -7,11 +7,11 @@
   .popup-close-btn {
     border-radius: 0;
     z-index: 9;
-    height: 1.4533rem;
-    font-size: 0.4267rem;
+    height: 1.09rem;
+    font-size: 0.32rem;
     font-family: PingFangSC-Medium;
     color: rgba(255, 255, 255, 1);
-    line-height: 1.4533rem;
+    line-height: 1.09rem;
   }
 }
 </style>

@@ -37,7 +37,7 @@ var authLogin = {
   },
   methods: {
     checkLogin () {
-      return !!this.http.getCookie('sso_token');
+      return !!this.$http.getCookie('sso_token');
     },
     showLogin () {
       // TODO 当前用的测试环境的地址测试，实际需要动态配置

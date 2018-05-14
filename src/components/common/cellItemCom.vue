@@ -3,16 +3,16 @@
 .yd-cell-item {
   display: flex;
   position: relative;
-  height: 1.4667rem;
-  padding-left: 0.4267rem;
-  padding-right: 0.4267rem;
+  height: 1.1rem;
+  padding-left: 0.32rem;
+  padding-right: 0.32rem;
   overflow: hidden;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 }
 .yd-cell-left {
-  font-size: 0.4rem;
+  font-size: 0.3rem;
   font-family: PingFangSC-Medium;
   color: rgba(112, 112, 112, 1);
   display: flex;
@@ -20,12 +20,12 @@
   justify-content: flex-start;
   align-items: center;
   span {
-    line-height: 0.4rem;
+    line-height: 0.3rem;
   }
 }
 .yd-cell-right {
   flex: 1;
-  font-size: 0.4rem;
+  font-size: 0.3rem;
   font-family: PingFangSC-Regular;
   color: rgba(112, 112, 112, 1);
   display: flex;
@@ -34,36 +34,36 @@
   align-items: center;
   padding: 0;
   span {
-    line-height: 0.4rem;
+    line-height: 0.3rem;
   }
 }
 .yd-cell-arrow:after {
-  font-size: 0.4rem;
-  height: 0.4rem;
+  font-size: 0.3rem;
+  height: 0.3rem;
   color: rgba(151, 151, 151, 1);
   content: "\E608";
 }
 //------------- 迭代YDUI样式EDN -----------------
 .cell-item-com {
   .left-title-line {
-    width: 0.0533rem;
-    height: 0.4267rem;
+    width: 0.04rem;
+    height: 0.32rem;
     background: rgba(40, 40, 40, 1);
-    margin-right: 0.2667rem;
+    margin-right: 0.2rem;
   }
   .left-title {
-    height: 0.6rem;
-    font-size: 0.4267rem;
+    height: 0.45rem;
+    font-size: 0.32rem;
     font-family: PingFangSC-Medium;
     color: rgba(31, 31, 31, 1);
-    line-height: 0.6rem;
+    line-height: 0.45rem;
   }
   .right-title {
-    height: 0.56rem;
-    font-size: 0.4rem;
+    height: 0.42rem;
+    font-size: 0.3rem;
     font-family: PingFangSC-Regular;
     color: rgba(112, 112, 112, 1);
-    line-height: 0.56rem;
+    line-height: 0.42rem;
   }
 }
 </style>

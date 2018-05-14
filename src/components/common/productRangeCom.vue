@@ -18,34 +18,34 @@
 }
 //--------------flex布局结束--------------
 .product-range-com {
-  height: 1.7067rem;
+  height: 1.28rem;
   background: rgba(255, 255, 255, 1);
-  margin-bottom: 0.32rem;
+  margin-bottom: 0.24rem;
   .range-item {
     justify-content: space-between;
     flex: 1;
     .left-range {
       flex: 1;
       .range-title {
-        height: 0.44rem;
-        font-size: 0.32rem;
+        height: 0.33rem;
+        font-size: 0.24rem;
         font-family: PingFangSC-Medium;
         color: rgba(112, 112, 112, 1);
-        line-height: 0.44rem;
+        line-height: 0.33rem;
       }
       .range {
-        height: 0.56rem;
-        font-size: 0.4rem;
+        height: 0.42rem;
+        font-size: 0.3rem;
         font-family: PingFangSC-Medium;
         color: rgba(31, 40, 59, 1);
-        line-height: 0.56rem;
+        line-height: 0.42rem;
       }
     }
 
     &::after {
       content: "";
-      height: 0.9333rem;
-      width: 0.0267rem;
+      height: 0.7rem;
+      width: 0.02rem;
       background: #cfcfcf;
     }
   }

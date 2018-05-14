@@ -18,41 +18,41 @@
 }
 //--------------flex布局结束--------------
 .anyi-footer-com {
-  height: 1.4533rem;
+  height: 1.09rem;
   background: #fff;
-  flex: 0 0 1.4533rem;
+  flex: 0 0 1.09rem;
   z-index: 9;
   .left-price {
     flex: 1;
-    border-top: 0.0133rem solid #e7e7e7;
+    border-top: 0.01rem solid #e7e7e7;
     color: rgba(228, 47, 70, 1);
-    padding-left: 0.5333rem;
+    padding-left: 0.4rem;
     .price-num {
-      margin-top: 0.1333rem;
-      height: 1.2rem;
-      font-size: 0.8533rem;
+      margin-top: 0.1rem;
+      height: 0.9rem;
+      font-size: 0.64rem;
       font-family: PingFangSC-Medium;
-      line-height: 1.2rem;
+      line-height: 0.9rem;
     }
     .price-txt {
-      margin-top: 0.5467rem;
-      margin-left: 0.2133rem;
-      height: 0.6rem;
-      font-size: 0.4267rem;
+      margin-top: 0.41rem;
+      margin-left: 0.16rem;
+      height: 0.45rem;
+      font-size: 0.32rem;
       font-family: PingFangSC-Regular;
-      line-height: 0.6rem;
+      line-height: 0.45rem;
     }
   }
 
   .right-btn {
     border-radius: 0;
     flex: 0 0 auto;
-    width: 4rem;
-    height: 1.4533rem;
-    font-size: 0.4267rem;
+    width: 3rem;
+    height: 1.09rem;
+    font-size: 0.32rem;
     font-family: PingFangSC-Medium;
     color: rgba(255, 255, 255, 1);
-    line-height: 0.6rem;
+    line-height: 0.45rem;
   }
   .right-btn:active {
     background: rgb(204, 54, 73) !important;
