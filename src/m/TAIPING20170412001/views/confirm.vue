@@ -17,7 +17,6 @@
 }
 .yd-cell-left {
   font-size: 0.3rem;
-  font-family: PingFangSC-Medium;
   color: rgba(112, 112, 112, 1);
   display: flex;
   flex-direction: row;
@@ -30,7 +29,6 @@
 .yd-cell-right {
   flex: 1;
   font-size: 0.3rem;
-  font-family: PingFangSC-Regular;
   color: rgba(112, 112, 112, 1);
   display: flex;
   flex-direction: row;
@@ -53,14 +51,12 @@
   color: #282828 !important;
   height: 0.45rem !important;
   text-align: right !important;
-  font-family: PingFangSC-Regular !important;
   justify-content: flex-end !important;
 }
 .yd-datetime-placeholder {
   font-size: 0.3rem !important;
   color: #b7b7b7 !important;
   outline: none;
-  font-family: PingFangSC-Regular !important;
 }
 .yd-popup-content {
   > div {
@@ -77,13 +73,11 @@ option {
   color: #282828 !important;
   height: 0.45rem !important;
   text-align: right !important;
-  font-family: PingFangSC-Regular !important;
 }
 input::placeholder {
   font-size: 0.3rem !important;
   color: #b7b7b7 !important;
   outline: none;
-  font-family: PingFangSC-Regular !important;
 }
 select,
 option {
@@ -109,14 +103,12 @@ option {
   .left-title {
     height: 0.45rem;
     font-size: 0.32rem;
-    font-family: PingFangSC-Medium;
     color: #707070;
     line-height: 0.45rem;
   }
   .right-title {
     height: 0.45rem;
     font-size: 0.3rem;
-    font-family: PingFangSC-Regular;
     color: #282828;
     line-height: 0.42rem;
   }
@@ -125,7 +117,6 @@ option {
   .yd-radio-group {
     padding: 0 0.32rem;
     font-size: 0.28rem;
-    font-family: PingFangSC-Medium;
     color: rgba(40, 40, 40, 1);
     padding-bottom: 1rem;
     display: flex;

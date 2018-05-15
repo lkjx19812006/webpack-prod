@@ -103,15 +103,13 @@ option {
   }
   .left-title {
     height: 0.45rem;
-    font-size: 0.32rem;
-    font-family: PingFangSC-Medium;
+    font-size: 0.30rem;
     color: #282828;
     line-height: 0.45rem;
   }
   .right-title {
     height: 0.45rem;
     font-size: 0.3rem;
-    font-family: PingFangSC-Regular;
     color: #282828;
     line-height: 0.42rem;
   }
@@ -120,7 +118,6 @@ option {
   .yd-radio-group {
     padding: 0 0.32rem;
     font-size: 0.28rem;
-    font-family: PingFangSC-Medium;
     color: rgba(40, 40, 40, 1);
     padding-bottom: 1rem;
     display: flex;
@@ -151,8 +148,8 @@ option {
       </yd-cell-item>
       <yd-cell-item>
         <span slot="left" class="left-title">生效日期</span>
-        <!-- 
-          自定义表单校验 如 类似与时间控件这样的没有input的可以设置一个隐藏的input 在这个input上进行表单校验定义  
+        <!--
+          自定义表单校验 如 类似与时间控件这样的没有input的可以设置一个隐藏的input 在这个input上进行表单校验定义
          -->
         <input slot="left" v-form:item="{required:'请选择生效时间'}" v-model="addtional.effect" type="text" v-show="false">
         <yd-datetime slot="right" v-model="addtional.effect" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
@@ -176,7 +173,7 @@ option {
       </yd-cell-item>
       <yd-cell-item>
         <span slot="left" class="left-title">投保人姓名</span>
-        <!-- 
+        <!--
           自定义表单校验指令 v-form:item="{required:'为空时报的错误信息', valid:{regex: '正则的规则', errMsg:'正则错误的信息'}}"
           一些内置的默认指令
           v-form:applicantname  校验投保人姓名   传参时用参数的校验规则 同上 不传时默认内部的校验规则
@@ -186,7 +183,7 @@ option {
           v-form:email          校验邮箱
           v-form:account        请输入账号
           v-form:pass           请输入密码
-          
+
           其他校验 后期根据需求再进行添加
          -->
         <input slot="right" v-model="applicant.name" type="text" placeholder="请输入">
