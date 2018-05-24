@@ -1,6 +1,20 @@
-$em-base: 100;
-@import "./mixin.scss";
+$themeColor: #194FC8;//主题色
+$hoverColor: #366be4;
+$activeColor: #224492;
 
+
+$titleColor: #1F283B;//标题颜色
+$textColor: #707070;//文字颜色 
+$tipColor: #A0A0A0;//提示文案颜色
+$priceColor: #CA1251;//价钱颜色
+
+$itemTitleColor: #1F1F1F;//列表总标题颜色
+$itemSubTitleColor: #282828;//列表子标题颜色
+
+$bodybgc: #F5F5F5;//body的背景色
+//------主题色rem计算相关与浮动清除---------
+@import "./mixin.scss";
+//------主题色rem计算相关与浮动清除end------
 * {
   font-family: PingFangSC-Regular;
 }
@@ -135,3 +149,152 @@ $em-base: 100;
   -webkit-line-clamp: 3;
   overflow: hidden;
  }
+
+ //-----------input样式修改-------
+input,
+select,
+option {
+  font-size: rem(30);
+  color: $itemSubTitleColor;
+  height:rem(45);
+  text-align: right;
+  font-family: PingFangSC-Regular;
+  border: 0 none;
+  outline-style: none;
+}
+input::placeholder {
+  font-size: rem(30);
+  color: #b7b7b7;
+  outline: none;
+  font-family: PingFangSC-Regular;
+}
+select,
+option {
+  direction: rtl; //设置文字对齐方式
+  text-align: right;
+}
+ //-----------input样式修改end----
+
+
+ //------------修改样式--------
+ //自己的组件cell样式
+ .anyi-cell-item  {
+  background: #fff;
+  .anyi-cell-left {
+    .left-title-line {
+      border-left: rem(6) solid $itemTitleColor;
+      height:rem(32); 
+      padding-left: rem(16);
+      background: transparent;
+      margin-bottom: rem(3);
+    }
+    .left-title {
+      height:rem(42); 
+      font-size:rem(30);   
+      font-family:PingFangSC-Regular;
+      color: $itemSubTitleColor;
+      line-height:rem(42);
+    }
+    .top-title{
+      height:rem(45); 
+      font-size:rem(32);
+      font-family:PingFangSC-Medium;
+      color:$itemTitleColor;
+      line-height:rem(45);
+    }
+  }
+  .anyi-cell-right {
+    padding-left: rem(20);
+    .right-title,
+    .yd-datetime-input,
+    .yd-datetime-placeholder {
+      height:rem(42); 
+      font-size:rem(30);
+      font-family:PingFangSC-Regular;
+      color:$itemSubTitleColor;
+      line-height:rem(42);
+    }
+    //YDUI日期控件
+    .yd-datetime-input {
+      padding-right: rem(42);
+      position: relative;    
+      &:after{
+        content: '';
+        height: rem(42);
+        width: rem(42);
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAACrElEQVRIS81WPWgUURD+Zu8ulaiFSAoLBQtFosbaIukEK0XBwiKSXHbfipirRKurDBaiKfbe26xyCVj4iwj2l0LtzKlJcyjYphCxPMzujszmFo6QZPcuMWSqZefne9+bnzeETcT3/SFmfgvgqeM405vZdf83xtwFME5El2zbXtrIhzYLZIy5zcyPATSVUufyAGqtFwEME9GU4zgzGwJqrYcB1AEMAbDyBO7DJgYgjG+Q1voLgDN9BOnH5asARsKMmStEJOCJENEVZr4J4AeAcs7oAYDjROQx8+vUh5nPEtEjALEAckcxqpRaSI1qtdqUGMkhHMeRa88UY0xTgsvhXdeV/CeitR4B0EiI7BlArfVYp5gWlFKjmfTWmAiLEcuyxmzbnu+Joe/7pTiOrxWLxQ/lcvlnHsAgCI6FYXjesqzntm2v9gSYByCvzYY5JKK/UkV5g/RoJ10wsL5oeozRn3l3ld4hom/9hdnai5lPA3iwZVvsJHCuPtw1QM/z9hUKhVcAjnZAmysrK9er1Wrsed5Jy7LmiGg/r8kz13Xvi53v+xfjOJ4mohIzhwCqSqk3mZNmdnb2VBRFy10MV9vt9uFKpfLHGDPOzE+6dMtKKXllpOlrAFSXbl4pJcMje7QZYy6kDJl5SSn1URwbjUax1WpdBXCAiGJmbjiO81109Xr9YLvdvkxEUv6rRPTOtu1fuQB3Mn+ZgNVqdWBwcFBe6ySHcRw3Xde9J99BEBwJw/BhmkMAL5VSc1kH3LJKOxuArAqpcKlUOjQxMfFbay05klyl0lJKndgWYOcK7JRh5z18If87FXyLmZMqLRaL7ycnJz9tGzArQK/6vdX4vZ4+j/16hskSBWA3hneyRH0GkGvRzcMmw2aRZKWPoiggoiEi+i+LMDPLVFoqFArlfwxnqhVIEioSAAAAAElFTkSuQmCC') no-repeat center;
+        background-size: rem(32) rem(32);
+        position: absolute;
+        bottom: rem(2);
+        margin: auto;
+        right: rem(-5);
+      }
+      .yd-datetime-placeholder {
+        color:$textColor;
+      }
+    }   
+    input {
+      flex: 1;
+    }
+  }
+  &:not(:last-child):after {
+    content: none;
+  }
+ }
+
+ //页面布局样式
+ .yd-scrollview:after {
+   height: rem(32);
+ }
+ .yd-popup-content {
+   >div{
+     height: 100%;
+   }
+ }
+ //时间控件确定样式
+.yd-datetime-head {
+  >a:last-child{
+    color: $themeColor;
+  }
+}
+.yd-popup {
+  background: #f5f5f5;
+}
+//按钮样式
+.popup-close-btn,
+.yd-btn,
+.yd-btn-primary{
+  background: $themeColor;
+  border-radius: 0;
+  z-index: 9;
+  height: 1.09rem;
+  font-size: 0.32rem;
+  font-family: PingFangSC-Medium;
+  color: rgba(255, 255, 255, 1);
+  line-height: 1.09rem;
+  &:hover{
+    background: $hoverColor;
+  }
+  &:active{
+    background: $activeColor;
+  }
+}
+
+ //------------修改样式END-----
+
+
+ //------------公共底部边框样式-----
+ .bottom-after{
+   position: relative;
+   &:after {
+     position: absolute;
+     bottom: 0;
+     left: rem(32);
+     right: rem(32);
+     margin: auto;
+     content: '';
+     height: 1px;
+     background: #d2d2d2;
+   }
+ }
+ //------------公共底部边框样式end--

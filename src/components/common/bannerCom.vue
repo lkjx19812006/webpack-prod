@@ -1,22 +1,5 @@
-<style lang="scss" >
-//底部立即投保按钮
-//-----------flex布局开始-------------
-.flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-.column {
-  flex-direction: column;
-}
-.center {
-  justify-content: center;
-  align-items: center;
-}
-.item-center {
-  align-items: center;
-}
-//--------------flex布局结束--------------
+<style lang="scss" scoped>
+@import "../../css/mixin.scss";
 .banner-com {
   .banner-img {
     height: 100%;

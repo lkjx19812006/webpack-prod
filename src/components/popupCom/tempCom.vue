@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 // 弹窗框模板
 .yd-popup-content {
   > div {

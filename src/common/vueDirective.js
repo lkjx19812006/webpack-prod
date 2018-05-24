@@ -13,6 +13,7 @@ anyiDirective.install = function (Vue, options) {
    *
    */
   var _setInputData = function (input, binding, vnode) {
+    var validObj = { msg: '表单校验成功', valid: true };// 默认校验通过
     // 添加特定样式
     input.classList.add('directive-valid-input');
     // 校验是否为空
@@ -20,7 +21,9 @@ anyiDirective.install = function (Vue, options) {
       if (!input.value) {
         input.setAttribute('data-valid', false);
         input.setAttribute('data-errMsg', binding.value.required);
-        return;
+        validObj.msg = binding.value.required;
+        validObj.valid = false;
+        return validObj;
       } else {
         input.setAttribute('data-valid', true);
         input.setAttribute('data-errMsg', '校验通过');
@@ -37,11 +40,15 @@ anyiDirective.install = function (Vue, options) {
       if (!regex.test(input.value)) {
         input.setAttribute('data-valid', false);
         input.setAttribute('data-errMsg', binding.value.valid.errMsg);
+        validObj.msg = binding.value.valid.errMsg;
+        validObj.valid = false;
+        return validObj;
       } else {
         input.setAttribute('data-valid', true);
         input.setAttribute('data-errMsg', '校验通过');
       }
     }
+    return validObj
   }
 
   var _setInputDataBefore = function (el, binding, vnode) {
@@ -106,16 +113,40 @@ anyiDirective.install = function (Vue, options) {
     _setInputDataBefore(el, binding, vnode);
   }
 
+  //change事件时动态校验表单格式
+  var _inputChangeHandle = function (e, el, binding, vnode) {
+    var validRes = _setInputData(el, binding, vnode);//获取校验结果
+    //获取父级元素
+    var parentNode = el.parentNode;
+    var msgNode = parentNode.querySelector('.directive-valid-input-msg');//获取消息展示的盒子
+    //拿到结果 对样式进行修改
+    if (validRes.valid) {//校验成功 
+      if (msgNode) parentNode.removeChild(msgNode);
+    } else {//校验失败
+      if (msgNode) {//修改校验内容展示
+        msgNode.innerText = validRes.msg
+      } else {//创建一条信息展示内容
+        var div = document.createElement('div');
+        div.classList.add('directive-valid-input-msg');
+        div.innerText = validRes.msg;
+        parentNode.appendChild(div);
+      }
+    }
+    console.log(validRes)
+  }
+
   // v-form:xxxx={required:, valid: {regex:,errMsg:''}}或者不传参数
   Vue.directive('form', {
     // 防止页面刷新时未更新数据不BUG
-    inserted (el, binding, vnode) {
+    inserted(el, binding, vnode) {
       setTimeout(function () {
         _initInputData(el, binding, vnode);
+        el.addEventListener('change', function (e) { _inputChangeHandle(e, el, binding, vnode) });
       })
+
     },
     // 组件更新时调用
-    componentUpdated (el, binding, vnode) {
+    componentUpdated(el, binding, vnode) {
       setTimeout(function () {
         _initInputData(el, binding, vnode);
       })
@@ -124,7 +155,7 @@ anyiDirective.install = function (Vue, options) {
 
   // v-submit={formEl: el, eventEl: el, submit: fn} //formEl 元素内部的表单 eventEl 绑定提交时间的按钮为支持组件  submit 提交事件
   Vue.directive('submit', {
-    inserted (el, binding, vnode) {
+    inserted(el, binding, vnode) {
       if (binding.value && binding.value.eventEl) {
         el = el.querySelector(binding.value.eventEl)
       }

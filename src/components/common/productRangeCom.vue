@@ -1,51 +1,35 @@
-<style lang="scss">
-//底部立即投保按钮
-//-----------flex布局开始-------------
-.flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-.column {
-  flex-direction: column;
-}
-.center {
-  justify-content: center;
-  align-items: center;
-}
-.item-center {
-  align-items: center;
-}
+<style lang="scss" scoped>
+@import "../../css/mixin.scss";
 //--------------flex布局结束--------------
 .product-range-com {
-  height: 1.28rem;
+  height: rem(128);
   background: rgba(255, 255, 255, 1);
-  margin-bottom: 0.24rem;
+  margin-bottom: rem(24);
   .range-item {
     justify-content: space-between;
     flex: 1;
     .left-range {
       flex: 1;
       .range-title {
-        height: 0.33rem;
-        font-size: 0.24rem;
+        height: rem(33);
+        font-size: rem(24);
         font-family: PingFangSC-Medium;
-        color: rgba(112, 112, 112, 1);
-        line-height: 0.33rem;
+        color: $textColor;
+        line-height: rem(33);
       }
       .range {
-        height: 0.42rem;
-        font-size: 0.3rem;
+        height: rem(42);
+        font-size: rem(30);
         font-family: PingFangSC-Medium;
-        color: rgba(31, 40, 59, 1);
-        line-height: 0.42rem;
+        color: $titleColor;
+        line-height: rem(42);
       }
     }
 
     &::after {
       content: "";
-      height: 0.7rem;
-      width: 0.02rem;
+      height: rem(70);
+      width: 1px;
       background: #cfcfcf;
     }
   }
@@ -58,8 +42,8 @@
 }
 </style>
 <template>
-  <div class="product-range-com flex item-center">
-    <div class="range-item flex" v-for="item,index in rangeList" :key="index">
+  <div class="product-range-com flex row item-center">
+    <div class="range-item flex row" v-for="(item,index) in rangeList" :key="index">
       <div class="left-range flex column item-center">
         <span class="range-title">{{item.title}}</span>
         <span class="range">{{item.rang}}</span>
