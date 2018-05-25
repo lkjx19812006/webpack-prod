@@ -1,18 +1,10 @@
 <style lang="scss" scoped>
-//-----------迭代YDUI样式------------------
-.yd-scrollview:after {
-  height: 0;
+.limit-select {
 }
-//-----------YDUI END----------------------
 </style>
 <template>
   <yd-layout>
-    <!-- 
-      图片组件 属性
-      imgUrl 图片地址 类型  string  可以是本地图片地址或网络地址
-      height 图片高度 类型  number  按750设计图算的高度 内部默认有转换
-     -->
-    <bannerCom :imgUrl="require('@/img/bg@2x.png')" :height="361"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/banner@2x.png')"></bannerCom>
     <!-- 
       产品范围组件 属性
       rangeList 产品范围数据源 类型 array  格式如下
@@ -27,6 +19,10 @@
     <!--头部套餐选择组件  -->
     <planSelect :planList="planList" @change="_planChange"></planSelect>
 
+    <div class="bottom-after">
+      <limitCell v-model="limitNum" @change="_limitChange" :tabList="limitList"></limitCell>
+    </div>
+
     <!-- 保障责任 -->
     <anyiCellItem :arrow="true" :rightColor="'#707070'">
       <span class="left-title-line" slot="left"></span>
@@ -35,26 +31,21 @@
     </anyiCellItem>
     <cellItemCom :cellList="bzzrList" :hasMore="true" :showBeforeNum="4" @showPopup="_showPopup"></cellItemCom>
 
-    <bannerCom :imgUrl="require('@/img/pic_details@2x.png')" :height="655"></bannerCom>
-
-    <bannerCom :imgUrl="require('@/img/pic_details2@2x.png')" :height="655"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/Bitmap@2x.png')"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/BitmapCopy7@2x.png')"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/BitmapCopy8@2x.png')"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/BitmapCopy9@2x.png')"></bannerCom>
 
     <cellItemCom leftColor="#282828" :cellList="cellList" @showPopup="_showPopup"></cellItemCom>
 
     <bottomTips></bottomTips>
-    <!-- 
-      底部价格和立即投保按钮组件 属性      
-      themecolor    主题色        类型  string   默认为#278AFA 设置该属性值 会改变文字和按钮背景颜色
-      price         价格          类型  number   根据传入的值 显示价格 默认为0
-      btntext       按钮文字      类型  string   可自定义按钮文字  默认为立即投保
-      insureClick   按钮点击事件  类型  function  可定义一个事件接受到按钮点击 做些逻辑处理
-     -->
+
     <footerCom slot="bottom" themecolor="#E42F46" :price="49.9" @insureClick="_insureClick"></footerCom>
 
     <!-- 更多详情弹框 -->
     <yd-popup v-model="popup.more" position="right" width="100%" height="100%">
       <!-- 弹框内部内容模板 -->
-      <gdxq :docInfos="gdxqDoc" btnText="自定义按钮文字" @closePopup="popup.more = false"></gdxq>
+      <popupContent :docInfos="gdxqDoc" btnText="自定义按钮文字" @closePopup="popup.more = false"></popupContent>
     </yd-popup>
 
     <!-- 售后及理赔 -->
@@ -64,13 +55,12 @@
 
     <!-- 常见问题 -->
     <yd-popup v-model="popup.cjwt" position="right" width="100%">
-      <cjwt :docInfos="cjwtDoc" @closePopup="popup.cjwt = false"></cjwt>
+      <popupContent :docInfos="cjwtDoc" @closePopup="popup.cjwt = false"></popupContent>
     </yd-popup>
 
     <!-- 投保须知 -->
     <yd-popup v-model="popup.tbxz" position="right" width="100%">
-      <span>投保须知</span>
-      <yd-button type="danger" @click.native="popup.tbxz = false">Close Right Popup</yd-button>
+      <popupContent :docInfos="tbxzDoc" @closePopup="popup.tbxz = false"></popupContent>
     </yd-popup>
 
     <!-- 保险条款 -->
@@ -81,8 +71,7 @@
 
     <!-- 保险条款 -->
     <yd-popup v-model="popup.popup1" position="right" width="100%">
-      <span>投保人声明</span>
-      <yd-button type="danger" @click.native="popup.popup1 = false">Close Right Popup</yd-button>
+      <popupContent :docInfos="tbrsmDoc" @closePopup="popup.popup1 = false"></popupContent>
     </yd-popup>
 
     <!-- 保险购买模板 -->
@@ -104,10 +93,12 @@ import planSelect from "@/components/common/plan-select";
 import buyModalCom from "@/components/common/buy-modal-com";
 import bottomTips from "@/components/common/bottom-tip";
 
+import limitCell from "@/components/common/limitCell";
+
 //弹框相关
-import gdxq from "../components/gdxq";
 import shjlp from "../components/shjlp";
-import cjwt from "../components/cjwt";
+import popupContent from "../components/popup-content";
+
 import product from "../config/product.js";
 export default {
   name: "Index",
@@ -122,9 +113,10 @@ export default {
     planSelect,
     buyModalCom,
     bottomTips,
-    gdxq,
+    limitCell,
+
     shjlp,
-    cjwt
+    popupContent
   },
   data() {
     return {
@@ -149,6 +141,16 @@ export default {
     },
     cjwtDoc() {
       return product.doc["常见问题"];
+    },
+    tbxzDoc() {
+      return product.doc["投保须知"];
+    },
+    tbrsmDoc() {
+      return product.doc["投保人声明"];
+    },
+
+    limitList() {
+      return product.limit;
     }
   },
 
@@ -174,6 +176,9 @@ export default {
     _planChange(param) {
       this.packageName = param.select.name;
       console.log(param);
+    },
+    _limitChange(param) {
+      this.limitNum = param.value;
     }
   }
 };

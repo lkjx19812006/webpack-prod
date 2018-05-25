@@ -19,7 +19,7 @@
       }
       .range {
         height: rem(42);
-        font-size: rem(30);
+        font-size: rem(24);
         font-family: PingFangSC-Medium;
         color: $titleColor;
         line-height: rem(42);
