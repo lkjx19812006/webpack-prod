@@ -58,7 +58,9 @@ export default {
         startX: 0,
         moveX: 0,
         endX: 0,
-        temp: 0
+        temp: 0,
+        startTime: 0,
+        endTime: 0
       }
     };
   },
@@ -114,6 +116,7 @@ export default {
     _touchstart(e) {
       if (this._getWrapBoxWidth() > this._getBoxScrollWidth()) return;
       this.touchObj.startX = e.touches[0].pageX;
+      this.touchObj.startTime = new Date().getTime();
       // console.log("触摸开始：" + this.touchObj.startX);
     },
     _touchmove(e) {
@@ -127,6 +130,14 @@ export default {
     },
     _touchend(e) {
       if (this._getWrapBoxWidth() > this._getBoxScrollWidth()) return;
+      var duration = new Date().getTime() - this.touchObj.startTime;
+      var touches = e.changedTouches ? e.changedTouches[0] : e;
+      var offsetLeft = this.touchObj.startX - touches.pageX; //本次滚动偏移位置
+      var speed = Math.abs(offsetLeft) / duration; // 惯性移动速度
+      var moveTime = duration * speed * 2; // 惯性滚动时间(动画)
+      moveTime = moveTime > 1000 ? 1000 : moveTime;
+      this.touchObj.moveX += offsetLeft * speed * 2; // 惯性移动距离
+
       if (this.touchObj.moveX < 0) {
         this.touchObj.temp = 0;
       } else if (this.touchObj.moveX > this._getLeftOrRightScrollWidth()) {
@@ -134,7 +145,18 @@ export default {
       } else {
         this.touchObj.temp = this.touchObj.moveX;
       }
-      // console.log("触摸结束：" + this.touchObj.temp);
+      var tabWrap = this.$refs.tabWrap;
+      console.log(this.touchObj.temp, tabWrap.scrollLeft, tabWrap);
+      this.stateTransform(
+        tabWrap.scrollLeft,
+        this.touchObj.temp,
+        num => {
+          console.log();
+          tabWrap.scrollLeft = num;
+          this.touchObj.temp = num;
+        },
+        moveTime
+      );
     },
     //获取盒子滚动宽度
     _getBoxScrollWidth() {
@@ -180,8 +202,9 @@ export default {
           requestAnimationFrame(animate);
         }
       }
+
       new TWEEN.Tween({ number: from })
-        .easing(TWEEN.Easing.Cubic.InOut)
+        .easing(TWEEN.Easing.Circular.Out)
         .to({ number: to }, 300)
         .onUpdate(function() {
           callback(Number(this.number.toFixed(0)));

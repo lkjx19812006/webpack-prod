@@ -125,7 +125,7 @@ export default {
       planList: product.packageName,
       rangeList: product.rangeList,
       cellList: product.responsibility,
-      showBuy: true
+      showBuy: false
     };
   },
   computed: {
