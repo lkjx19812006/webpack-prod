@@ -280,6 +280,18 @@ option {
   }
 }
 
+//弹框样式 所有购买组件必须有buy-com样式
+.yd-mask {
+  z-index: 1501 !important;
+  .yd-datetime {
+    z-index: 1502 !important;
+  }
+}
+.buy-com {
+  >.yd-mask {
+    z-index: 1500 !important;
+  }
+}
  //------------修改样式END-----
 
 

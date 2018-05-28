@@ -22,6 +22,28 @@ var product = {
     { label: '45万元', value: 450000 },
     { label: '50万元', value: 500000 }
   ],
+  //保障期限
+  '保障期限': [
+    { label: '至70岁', value: 70 },
+    { label: '至80岁', value: 80 },
+    { label: '终身', value: 100 },
+  ],
+  '缴费年限': [
+    { label: '15年', value: 15 },
+    { label: '20年', value: 20 },
+    { label: '30年', value: 30 },
+  ],
+  '缴费类型': [
+    { label: '年缴', value: 15 }
+  ],
+  '附加轻症及轻症豁免': [
+    { label: '包含', value: true },
+    { label: '不包含', value: false },
+  ],
+  '保费豁免': [
+    { label: '包含', value: true },
+    { label: '不包含', value: false }
+  ],
   //保险类型
   insured: {
     "B款升级版": {

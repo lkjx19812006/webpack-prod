@@ -75,7 +75,7 @@
     </yd-popup>
 
     <!-- 保险购买模板 -->
-    <yd-popup v-model="showBuy" position="bottom" height="47%">
+    <yd-popup class="buy-com" v-model="showBuy" position="bottom" height="72%">
       <buyModalCom @close="showBuy = false"></buyModalCom>
     </yd-popup>
   </yd-layout>
@@ -90,14 +90,14 @@ import cellItemCom from "@/components/common/cellItemCom";
 import mixinPopup from "@/mixins/popup";
 import tempCom from "@/components/popupCom/tempCom";
 import planSelect from "@/components/common/plan-select";
-import buyModalCom from "@/components/common/buy-modal-com";
-import bottomTips from "@/components/common/bottom-tip";
 
+import bottomTips from "@/components/common/bottom-tip";
 import limitCell from "@/components/common/limitCell";
 
 //弹框相关
 import shjlp from "../components/shjlp";
 import popupContent from "../components/popup-content";
+import buyModalCom from "../components/buy-modal-com";
 
 import product from "../config/product.js";
 export default {
@@ -125,7 +125,7 @@ export default {
       planList: product.packageName,
       rangeList: product.rangeList,
       cellList: product.responsibility,
-      showBuy: false
+      showBuy: true
     };
   },
   computed: {

@@ -387,6 +387,18 @@ option {
   background: #224492;
 }
 
+.yd-mask {
+  z-index: 1501 !important;
+}
+
+.yd-mask .yd-datetime {
+  z-index: 1502 !important;
+}
+
+.buy-com > .yd-mask {
+  z-index: 1500 !important;
+}
+
 .bottom-after {
   position: relative;
 }
