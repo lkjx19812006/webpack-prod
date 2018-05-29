@@ -14,6 +14,9 @@
     }
     /deep/ .left {
       flex: 1;
+      .icon {
+        margin-right: rem(20);
+      }
       .left-title {
         flex: 0 0 auto;
         height: rem(42);

@@ -9,15 +9,6 @@
 .write {
   .group {
     margin-bottom: rem(26);
-    .no-after-border {
-      &:after {
-        content: none;
-      }
-    }
-    .xieyi {
-      color: #e3263a;
-      flex: 0 0 auto;
-    }
   }
 
   .accordion {
