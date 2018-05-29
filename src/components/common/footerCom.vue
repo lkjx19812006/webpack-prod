@@ -61,7 +61,7 @@ export default {
   props: {
     price: {
       //价格
-      type: Number,
+      type: [Number, String],
       default: 0
     },
     btntext: {

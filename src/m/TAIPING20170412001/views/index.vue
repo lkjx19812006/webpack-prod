@@ -40,12 +40,12 @@
 
     <bottomTips></bottomTips>
 
-    <footerCom slot="bottom" themecolor="#E42F46" :price="49.9" @insureClick="_insureClick"></footerCom>
+    <footerCom slot="bottom" themecolor="#E42F46" price="0.00" @insureClick="_insureClick"></footerCom>
 
     <!-- 更多详情弹框 -->
     <yd-popup v-model="popup.more" position="right" width="100%" height="100%">
       <!-- 弹框内部内容模板 -->
-      <popupContent :docInfos="gdxqDoc" btnText="自定义按钮文字" @closePopup="popup.more = false"></popupContent>
+      <popupContent :docInfos="gdxqDoc" @closePopup="popup.more = false"></popupContent>
     </yd-popup>
 
     <!-- 售后及理赔 -->
@@ -65,8 +65,7 @@
 
     <!-- 保险条款 -->
     <yd-popup v-model="popup.bxtk" position="right" width="100%">
-      <span>保险条款</span>
-      <yd-button type="danger" @click.native="popup.bxtk = false">Close Right Popup</yd-button>
+      <bxtk :docInfos="bxtkDoc" @closePopup="popup.bxtk = false"></bxtk>
     </yd-popup>
 
     <!-- 保险条款 -->
@@ -88,8 +87,9 @@ import footerCom from "@/components/common/footerCom";
 import bannerCom from "@/components/common/bannerCom";
 import productRangeCom from "@/components/common/productRangeCom";
 import cellItemCom from "@/components/common/cellItemCom";
+
 import mixinPopup from "@/mixins/popup";
-import tempCom from "@/components/popupCom/tempCom";
+
 import planSelect from "@/components/common/plan-select";
 
 import bottomTips from "@/components/common/bottom-tip";
@@ -97,6 +97,7 @@ import limitCell from "@/components/common/limitCell";
 
 //弹框相关
 import shjlp from "../components/shjlp";
+import bxtk from "../components/bxtk";
 import popupContent from "../components/popup-content";
 import buyModalCom from "../components/buy-modal-com";
 
@@ -110,12 +111,13 @@ export default {
     bannerCom,
     productRangeCom,
     cellItemCom,
-    tempCom,
+
     planSelect,
     buyModalCom,
     bottomTips,
     limitCell,
 
+    bxtk,
     shjlp,
     popupContent
   },
@@ -123,10 +125,10 @@ export default {
     return {
       packageName: "B款升级版",
       limitNum: 50000,
-      planList: product.packageName,
-      rangeList: product.rangeList,
-      cellList: product.responsibility,
-      showBuy: false
+      planList: product.packageName, //保险套餐配置
+      rangeList: product.rangeList, //保障范围配置
+      cellList: product.responsibility, //收获理赔等常见问题 弹窗相关配置
+      showBuy: false //显示购买组件？
     };
   },
   computed: {
@@ -149,7 +151,9 @@ export default {
     tbrsmDoc() {
       return product.doc["投保人声明"];
     },
-
+    bxtkDoc() {
+      return product.doc["保险条款"][this.packageName];
+    },
     limitList() {
       return product.limit;
     }
@@ -162,7 +166,6 @@ export default {
     _insureClick() {
       // 跳转到表单页面进行填写
       this.showBuy = true;
-      // this.$router.push("/write");
     },
     // 显示弹窗信息
     _showPopup(pid) {
@@ -176,7 +179,6 @@ export default {
     //保险计划改变
     _planChange(param) {
       this.packageName = param.select.name;
-      console.log(param);
     },
     _limitChange(param) {
       this.limitNum = param.value;

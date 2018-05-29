@@ -1,13 +1,10 @@
 <style lang="scss" scoped>
 @import "../../../css/mixin.scss";
-.yd-popup-content {
-  //公共样式 基于更多详情来写的 后面其他弹框页面在此基础上迭代
-  .content {
-    background: #fff;
-    .p-modal-sub-conetnt {
-      padding: 0 rem(32);
-      padding-bottom: rem(32);
-    }
+.content {
+  background: #fff;
+  .p-modal-sub-conetnt {
+    padding: 0 rem(32);
+    padding-bottom: rem(32);
   }
 }
 </style>

@@ -128,7 +128,7 @@
         <buttonRadio :radioList="bfhm" slot="right" v-model="sex1" @change="_sexChange"></buttonRadio>
       </anyiCellItem>
     </div>
-    <footerCom class="footer-com"></footerCom>
+    <footerCom class="footer-com" :price="price"></footerCom>
   </div>
 </template>
 <script>
@@ -140,9 +140,10 @@ import product from "../config/product.js";
 export default {
   data() {
     return {
+      price: "0.00",
       planList: [
-        { code: "B", packageName: "B款升级款" },
-        { code: "C", packageName: "C款升级款" }
+        { code: "A", packageName: "B款升级款" },
+        { code: "B", packageName: "C款升级款" }
       ],
       limitNum: 50000,
       sex: "1",

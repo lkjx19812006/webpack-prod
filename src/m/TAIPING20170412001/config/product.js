@@ -341,29 +341,28 @@ var product = {
       ]
     },
     '保险条款': {
-      title: '保险条款',
       'B款升级版': [
         {
           label: '复星联合康乐一生重大疾病保险（B款升级款）条款.pdf',
-          value: ''
+          value: '/static/doc/TAIPING20170412001/B/复星联合康乐一生重大疾病保险（B款升级款）条款.pdf'
         },
         {
           label: '复星联合附加康乐一生轻症疾病保险（升级款）条款.pdf',
-          value: ''
+          value: '/static/doc/TAIPING20170412001/B/复星联合附加康乐一生轻症疾病保险（升级款）条款.pdf'
         },
         {
           label: '复星联合附加康乐一生投保人豁免重大疾病保险（升级款）条款.pdf',
-          value: ''
+          value: '/static/doc/TAIPING20170412001/B/复星联合附加康乐一生投保人豁免重大疾病保险（升级款）条款.pdf'
         }
       ],
       'C款升级版': [
         {
           label: '复星联合康乐一生重大疾病保险（C款升级款）条款.pdf',
-          value: ''
+          value: '/static/doc/TAIPING20170412001/C/复星联合康乐一生重大疾病保险（C款升级款）条款.pdf'
         },
         {
           label: '复星联合附加康乐一生投保人豁免重大疾病保险（升级款）条款.pdf',
-          value: ''
+          value: '/static/doc/TAIPING20170412001/C/复星联合附加康乐一生投保人豁免重大疾病保险（升级款）条款.pdf'
         }
       ]
     },
