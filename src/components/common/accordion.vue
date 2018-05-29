@@ -91,7 +91,7 @@
         <div class="right-icon"></div>
       </div>
     </div>
-    <div class="content" :class="[ isOpen ? 'show-content':'']">
+    <div class="content" :class="[ isOpen ? 'show-content':'', showBottomBorder ? 'bottom-after' : '']">
       <slot></slot>
     </div>
   </div>
@@ -117,6 +117,11 @@ export default {
       type: Boolean,
       default: false
     },
+    isOpenShowBottomBorder: {
+      //是否打开时显示底部边框
+      type: Boolean,
+      default: false
+    },
     notop: {
       type: Boolean,
       default: false
@@ -131,6 +136,12 @@ export default {
         //关闭时
         return this.isCloseShowTopBorder;
       }
+    },
+    showBottomBorder() {
+      if (this.isOpen) {
+        return this.isOpenShowBottomBorder;
+      }
+      return false;
     }
   },
   data() {

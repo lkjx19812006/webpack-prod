@@ -4,6 +4,10 @@
   //公共样式 基于更多详情来写的 后面其他弹框页面在此基础上迭代
   .content {
     background: #fff;
+    .p-modal-sub-conetnt {
+      padding: 0 rem(32);
+      padding-bottom: rem(32);
+    }
   }
 }
 </style>
@@ -15,7 +19,7 @@
         <span slot="left" class="left-title top-title">{{docInfos.title}}</span>
       </anyiCellItem>
 
-      <accordion :notop="!item.title" :open="idx === 0" :noBorder="idx >= docInfos.lists.length - 1" class="item" v-for="(item, idx) in docInfos.lists" :key="idx" :title="item.title">
+      <accordion :notop="!item.title" :open="idx === 0" :isOpenShowBottomBorder="idx < docInfos.lists.length - 1" :isCloseShowTopBorder="idx < docInfos.lists.length - 1" class="item" v-for="(item, idx) in docInfos.lists" :key="idx" :title="item.title">
         <div class="p-modal-sub-conetnt" v-for="(subItem, jdx) in item.infos" :key="jdx">{{subItem}}</div>
       </accordion>
     </div>

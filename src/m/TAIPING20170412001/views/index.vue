@@ -26,8 +26,8 @@
     <!-- 保障责任 -->
     <anyiCellItem :arrow="true" :rightColor="'#707070'">
       <span class="left-title-line" slot="left"></span>
-      <span class="left-title" slot="left">保障责任</span>
-      <span @click="popup.more = true" class="right-title" slot="right">更多详情</span>
+      <span class="left-title top-title" slot="left">保障责任</span>
+      <span @click="popup.more = true" class="right-title" slot="right" style="color: #707070">更多详情</span>
     </anyiCellItem>
     <cellItemCom :cellList="bzzrList" :hasMore="true" :showBeforeNum="4" @showPopup="_showPopup"></cellItemCom>
 
@@ -78,6 +78,7 @@
     <yd-popup class="buy-com" v-model="showBuy" position="bottom" height="72%">
       <buyModalCom @close="showBuy = false"></buyModalCom>
     </yd-popup>
+
   </yd-layout>
 </template>
 
