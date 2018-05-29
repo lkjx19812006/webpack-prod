@@ -137,7 +137,7 @@ export default {
       var moveTime = duration * speed * 2; // 惯性滚动时间(动画)
       moveTime = moveTime > 1000 ? 1000 : moveTime;
       this.touchObj.moveX += offsetLeft * speed * 2; // 惯性移动距离
-
+      //计算极限值
       if (this.touchObj.moveX < 0) {
         this.touchObj.temp = 0;
       } else if (this.touchObj.moveX > this._getLeftOrRightScrollWidth()) {
@@ -145,8 +145,8 @@ export default {
       } else {
         this.touchObj.temp = this.touchObj.moveX;
       }
+      //执行动画过渡
       var tabWrap = this.$refs.tabWrap;
-      console.log(this.touchObj.temp, tabWrap.scrollLeft, tabWrap);
       this.stateTransform(
         tabWrap.scrollLeft,
         this.touchObj.temp,

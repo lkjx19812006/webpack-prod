@@ -155,6 +155,22 @@ var product = {
       ]
     },
   },
+  //开户银行
+  banks: [
+    { label: '工商银行', value: '工商银行' },
+    { label: '建设银行', value: '建设银行' },
+    { label: '邮储银行', value: '邮储银行' },
+    { label: '农业银行', value: '农业银行' },
+    { label: '民生银行', value: '民生银行' },
+    { label: '招商银行', value: '招商银行' },
+    { label: '兴业银行', value: '兴业银行' },
+    { label: '中国银行', value: '中国银行' },
+    { label: '中信银行', value: '中信银行' },
+    { label: '交通银行', value: '交通银行' },
+    { label: '平安银行', value: '平安银行' },
+    { label: '光大银行', value: '光大银行' }
+  ],
+
   doc: {
     //保障责任
     'B款升级版': {

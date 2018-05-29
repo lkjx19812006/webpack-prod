@@ -19,6 +19,60 @@
       flex: 0 0 auto;
     }
   }
+
+  .accordion {
+    .cut-icon {
+      margin-right: rem(20);
+    }
+    .right-title {
+      color: $textColor !important;
+      &.name-tit {
+        margin-right: rem(100);
+      }
+      &.percent {
+        margin-right: rem(30);
+      }
+    }
+    .accordion-content {
+      padding: 0 !important;
+    }
+  }
+
+  .add {
+    margin-bottom: rem(24);
+    .add-person {
+      flex: 0 0 auto;
+      height: rem(110);
+      background: #fff;
+      .btn-txt {
+        height: rem(42);
+        font-size: rem(30);
+        font-family: PingFangSC-Regular;
+        color: $themeColor;
+        line-height: rem(42);
+        margin-left: rem(15);
+      }
+    }
+  }
+
+  .xieyi {
+    padding: rem(32);
+    padding-bottom: 0;
+    align-items: flex-start;
+    .radio {
+      margin-right: rem(18);
+    }
+    .xieyi-content {
+      flex: 1;
+      font-size: rem(28);
+      font-family: PingFangSC-Medium;
+      color: $itemSubTitleColor;
+      line-height: rem(42);
+      .xieyi-item {
+        color: $themeColor;
+      }
+    }
+  }
 }
 </style>
 <template>
@@ -26,29 +80,27 @@
     <!-- 保障计划 -->
     <div class="group">
       <!-- 标题样式 -->
+      <anyiCellItem :arrow="true">
+        <span slot="left" class="left-title">为谁投保</span>
+        <select slot="right" class="right-title text-select">
+          <option value="1">本人</option>
+          <option value="1">他人</option>
+        </select>
+      </anyiCellItem>
+      <anyiCellItem :noBorder="true">
+        <span slot="left" class="left-title">起保日期</span>
+        <span slot="right" class="yd-datetime-input">默认为次日</span>
+      </anyiCellItem>
+    </div>
+
+    <!-- 投保人信息 -->
+    <div class="group">
+      <!-- 标题样式 -->
       <anyiCellItem>
         <span slot="left" class="left-title-line"></span>
-        <span slot="left" class="left-title top-title">保障计划</span>
+        <span slot="left" class="left-title">保险信息</span>
       </anyiCellItem>
-      <anyiCellItem>
-        <span slot="left" class="left-title">保险方案</span>
-        <span slot="right" class="right-title">二轮快递外卖综合方案</span>
-      </anyiCellItem>
-      <anyiCellItem>
-        <span slot="left" class="left-title">生效日期</span>
-        <!--
-          自定义表单校验 如 类似与时间控件这样的没有input的可以设置一个隐藏的input 在这个input上进行表单校验定义
-         -->
-        <input slot="left" v-form:item="{required:'请选择生效时间'}" v-model="addtional.effect" type="text" v-show="false">
-        <yd-datetime slot="right" v-model="addtional.effect" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
-      </anyiCellItem>
-      <anyiCellItem class="no-after-border">
-        <span slot="left" class="left-title">保障期限</span>
-        <div slot="right">
-          <span class="right-title">{{addtional.effect}}</span><br>
-          <span class="right-title">至{{addtional.effect}}</span>
-        </div>
-      </anyiCellItem>
+      <cellItemCom leftColor="#282828" rightColor="#282828" :cellList="bxxx" :hasMore="true" :showBeforeNum="2" @showPopup="_showPopup"></cellItemCom>
     </div>
 
     <!-- 投保人信息 -->
@@ -60,36 +112,69 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">投保人姓名</span>
-        <!--
-          自定义表单校验指令 v-form:item="{required:'为空时报的错误信息', valid:{regex: '正则的规则', errMsg:'正则错误的信息'}}"
-          一些内置的默认指令
-          v-form:applicantname  校验投保人姓名   传参时用参数的校验规则 同上 不传时默认内部的校验规则
-          v-form:insurename     校验被保人姓名
-          v-form:cardid         简单校验身份证
-          v-form:phone          校验手机
-          v-form:email          校验邮箱
-          v-form:account        请输入账号
-          v-form:pass           请输入密码
-
-          其他校验 后期根据需求再进行添加
-         -->
-        <input v-form:applicantname slot="right" v-model="applicant.name" type="text" placeholder="请输入">
+        <input slot="right" v-model="insured.name" type="text" placeholder="请输入">
+      </anyiCellItem>
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">证件类型</span>
+        <select slot="right">
+          <option value="">身份证</option>
+          <option value="">护照</option>
+        </select>
       </anyiCellItem>
       <anyiCellItem>
-        <span slot="left" class="left-title">身份证号码</span>
-        <input slot="right" v-model="applicant.card_id" type="text" placeholder="请输入">
+        <span slot="left" class="left-title">证件号码</span>
+        <input slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
+      </anyiCellItem>
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">性别</span>
+        <select slot="right">
+          <option value="">男</option>
+          <option value="">女</option>
+        </select>
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
-        <yd-datetime slot="right" v-model="applicant.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">居住城市</span>
+        <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">联系地址</span>
+        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入详细地址便于联系和理赔">
+      </anyiCellItem>
+
       <anyiCellItem>
         <span slot="left" class="left-title">手机号码</span>
-        <input slot="right" type="text" v-model="applicant.phone" placeholder="请输入">
+        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
       </anyiCellItem>
-      <anyiCellItem class="no-after-border">
-        <span slot="left" class="left-title">邮箱地址</span>
-        <input slot="right" type="text" v-model="applicant.email" placeholder="请输入">
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">电子邮箱</span>
+        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">身高（CM）</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">体重（KG）</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">职业</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem :noBorder="true">
+        <span slot="left" class="left-title">购买份数</span>
+        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
@@ -111,36 +196,172 @@
         </select>
       </anyiCellItem>
       <anyiCellItem>
-        <span slot="left" class="left-title">被保人姓名</span>
+        <span slot="left" class="left-title">被保险人姓名</span>
         <input slot="right" v-model="insured.name" type="text" placeholder="请输入">
       </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">证件类型</span>
+        <select slot="right">
+          <option value="">身份证</option>
+          <option value="">护照</option>
+        </select>
+      </anyiCellItem>
+
       <anyiCellItem>
-        <span slot="left" class="left-title">身份证号码</span>
+        <span slot="left" class="left-title">证件号码</span>
         <input slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
+      </anyiCellItem>
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">性别</span>
+        <select slot="right">
+          <option value="">男</option>
+          <option value="">女</option>
+        </select>
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
         <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">居住城市</span>
+        <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">联系地址</span>
+        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入详细地址便于联系和理赔">
+      </anyiCellItem>
+
       <anyiCellItem>
         <span slot="left" class="left-title">手机号码</span>
         <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
       </anyiCellItem>
-      <anyiCellItem class="no-after-border">
-        <span slot="left" class="left-title">受益人</span>
-        <span slot="right" class="right-title">法定受益人</span>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">电子邮箱</span>
+        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">身高（CM）</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">体重（KG）</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+      </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">职业</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
       </anyiCellItem>
     </div>
 
+    <!-- 收益人信息 -->
+    <div class="group">
+      <accordion isOpenShowTopBorder :isCloseShowTopBorder="false" class="accordion">
+        <span slot="left" class="cut-icon"></span>
+        <span slot="left" class="left-title">受益人1</span>
+        <span slot="right" class="right-title name-tit">张三</span>
+        <span slot="right" class="right-title percent">50%</span>
+        <div class="accordion-content">
+          <anyiCellItem>
+            <span slot="left" class="left-title">姓名</span>
+            <input slot="right" v-model="insured.name" type="text" placeholder="请输入真实姓名">
+          </anyiCellItem>
+          <anyiCellItem arrow>
+            <span slot="left" class="left-title">受益人是被保险人的</span>
+            <select v-model="insured.relation" slot="right">
+              <option value="00">本人</option>
+              <option value="01">配偶</option>
+              <option value="02">父母</option>
+              <option value="03">子女</option>
+            </select>
+          </anyiCellItem>
+          <anyiCellItem arrow>
+            <span slot="left" class="left-title">证件类型</span>
+            <select slot="right">
+              <option value="">身份证</option>
+              <option value="">护照</option>
+            </select>
+          </anyiCellItem>
+          <anyiCellItem>
+            <span slot="left" class="left-title">证件号码</span>
+            <input slot="right" v-model="insured.name" type="text" placeholder="请输入有效的证件号码">
+          </anyiCellItem>
+          <anyiCellItem noBorder>
+            <span slot="left" class="left-title">受益比例（%）</span>
+            <input slot="right" v-model="insured.name" type="text" placeholder="请填写受益百分比">
+          </anyiCellItem>
+        </div>
+      </accordion>
+
+    </div>
+
+    <!-- 新增受益人 -->
+    <div class="add">
+      <div class="add-person flex row center">
+        <span class="add-icon"></span>
+        <span class="btn-txt">新增受益人</span>
+      </div>
+    </div>
+
+    <!-- 续期缴费信息 -->
+    <div class="group">
+      <anyiCellItem>
+        <span slot="left" class="left-title-line"></span>
+        <span slot="left" class="left-title">续期缴费信息</span>
+      </anyiCellItem>
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">开户银行</span>
+        <select v-model="insured.relation" slot="right">
+          <option :key="index" v-for="(item, index) in banks" :value="item.value">{{item.label}}</option>
+        </select>
+      </anyiCellItem>
+      <anyiCellItem>
+        <span slot="left" class="left-title">持卡人姓名</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="需为投保人本人">
+      </anyiCellItem>
+      <anyiCellItem noBorder>
+        <span slot="left" class="left-title">银行账号</span>
+        <input slot="right" v-model="insured.phone" type="number" placeholder="只支持银行储蓄卡">
+      </anyiCellItem>
+    </div>
+
+    <!-- 紧急联系人 -->
+    <div class="group">
+      <accordion isOpenShowTopBorder :isCloseShowTopBorder="false" class="accordion">
+        <span slot="left" class="left-title-line"></span>
+        <span slot="left" class="left-title">紧急联系人</span>
+        <span slot="left" class="left-title" style="color:#B7B7B7">（选填）</span>
+        <div class="accordion-content">
+          <anyiCellItem>
+            <span slot="left" class="left-title">联系人姓名</span>
+            <input slot="right" v-model="insured.name" type="text" placeholder="请输入">
+          </anyiCellItem>
+          <anyiCellItem noBorder>
+            <span slot="left" class="left-title">联系人手机号</span>
+            <input slot="right" v-model="insured.name" type="text" placeholder="请输入有效手机号，便于联系">
+          </anyiCellItem>
+        </div>
+      </accordion>
+    </div>
+
     <!-- 协议部分 -->
-    <yd-radio-group class="group" v-model="radio" color="#E42F46" :size="20">
-      <yd-radio val="1" class="yd-radio">
+    <div class="xieyi flex row">
+      <anyiRadio class="radio" v-model="radio"></anyiRadio>
+      <div class="xieyi-content">
         <span>我已了解并同意</span>
-      </yd-radio>
-      <span @click="popup.tbxz = true" class="xieyi">《投保须知》</span>
-      <span>、</span>
-      <span @click="popup.bxtk = true" class="xieyi">《保险条款》</span>
-    </yd-radio-group>
+        <span @click="popup.tbxz = true" class="xieyi-item">《投保须知》</span>
+        <span>、</span>
+        <span @click="popup.bxtk = true" class="xieyi-item">《保险条款》</span>
+        <span>和</span>
+        <span @click="popup.popup1 = true" class="xieyi-item">《投保人声明》</span>
+      </div>
+    </div>
 
     <!-- 投保须知 -->
     <yd-popup v-model="popup.tbxz" position="right" width="100%">
@@ -161,12 +382,19 @@
 import footerCom from "@/components/common/footerCom";
 import mixinPopup from "@/mixins/popup";
 import anyiCellItem from "@/components/common/anyi-cell-item";
+import cellItemCom from "@/components/common/cellItemCom";
+import accordion from "@/components/common/accordion";
+import product from "../config/product.js";
+import anyiRadio from "@/components/common/anyi-radio";
 export default {
   name: "Write",
   mixins: [mixinPopup],
   components: {
     footerCom,
-    anyiCellItem
+    anyiCellItem,
+    cellItemCom,
+    accordion,
+    anyiRadio
   },
   data() {
     return {
@@ -199,6 +427,24 @@ export default {
       radio: "" // 协议部分
     };
   },
+  computed: {
+    bxxx() {
+      return [
+        { label: "保障计划", value: "B款升级款" },
+        { label: "基本保额", value: "5万元" },
+        { label: "保障期限", value: "至70岁" },
+        { label: "缴费年限", value: "15年" },
+        { label: "缴费类型", value: "年缴" },
+        { label: "附加轻症及轻症豁免", value: "包含" },
+        { label: "轻症疾病保额", value: "1万元" },
+        { label: "保费豁免", value: "包含" },
+        { label: "附加险缴费年限", value: "14年" }
+      ];
+    },
+    banks() {
+      return product.banks;
+    }
+  },
   methods: {
     _insureClick(res) {
       // 基本的表单校验
@@ -210,7 +456,8 @@ export default {
         return;
       }
       this.$router.push("/confirm");
-    }
+    },
+    _showPopup() {}
   }
 };
 </script>

@@ -23,6 +23,7 @@
     justify-content: flex-end;
     text-align: right;
     flex: 1;
+    flex-wrap: wrap;
     position: relative;
     &.cell-right-show-arrow {
       padding-right: rem(40);
@@ -38,6 +39,24 @@
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5UlEQVRYR+XXuw2DMBSF4YOQEANAQ88ktBQsS8UEVIxAgTyGcUQXkSL3cRyKUBv9H8LS1S1SSgmCJ8aI4zjQdR2qqhK8ITtSSAHbtmFdVzRNg3EcUde1rPDllBgQQsA8zzjPk4oQA64P2fcdy7JQESpADoQawEaYAEyEGcBCuAAMhBvgRVAAHgQNYEVQARYEHaBFZAHcEW3bYpomlGX5MZqyAe6IYRjQ9/0fAd4n589/gWZs0++AJn5dCCpAG6cCLHEawBqnADxxN8AbdwEYcTOAFTcBmHE1gB1XAR5fzR5fTnOt5y+2SpOwS8kS6QAAAABJRU5ErkJggg==")
           no-repeat center;
         background-size: rem(32) rem(32);
+      }
+    }
+    //针对输入框错误提示
+    /deep/ .directive-valid-input-msg {
+      flex: 0 0 100%;
+      color: red;
+      font-size: rem(24);
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      padding: rem(10) 0;
+      &:before {
+        font-family: YDUI-ICONS;
+        font-size: inherit;
+        font-size: rem(32);
+        content: "\E614";
+        padding-right: rem(10);
       }
     }
   }
