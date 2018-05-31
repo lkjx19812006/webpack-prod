@@ -134,7 +134,7 @@
         <span class="right-title" slot="right">{{lifelongYear}}</span>
       </anyiCellItem>
     </div>
-    <footerCom class="footer-com" :price="countPrice"></footerCom>
+    <footerCom @insureClick="_insureClick" class="footer-com" :price="countPrice"></footerCom>
   </div>
 </template>
 <script>
@@ -215,7 +215,8 @@ export default {
     applicantAge() {
       var birthday = this.applicant.birthday;
       console.log("选择投保人出生日期:%o", birthday);
-      return Date.getAgeByDate(birthday);
+      var age = Date.getAgeByDate(birthday);
+      return age;
     },
     //被保人年龄
     insuredAge() {
@@ -320,13 +321,46 @@ export default {
       return product["保障期限"];
     },
     yearPeriod() {
-      return product["缴费年限"];
+      //1.投保人年龄 + 缴费年限<=70 被保险人年龄+缴费年限<=70
+      var result = [];
+      var arr = product["缴费年限"];
+      var applicantAge = Date.getAgeByDate(this.applicant.birthday);
+      var insuredAge = Date.getAgeByDate(this.insured.birthday);
+      var countAge =
+        70 - (applicantAge > insuredAge ? applicantAge : insuredAge);
+      if (countAge >= 30) {
+        result = [...arr];
+      } else if (countAge >= 20) {
+        result = [arr[0], arr[1]];
+        this.$store.dispatch("setProduct", {
+          key: "payment_limit",
+          value: "15"
+        });
+      } else if (countAge >= 15) {
+        result = [arr[0]];
+        this.$store.dispatch("setProduct", {
+          key: "payment_limit",
+          value: "15"
+        });
+      } else {
+      }
+      return result;
     },
     payTypes() {
       return product["缴费类型"];
     },
     lifelongs() {
-      return product["保费豁免"];
+      //投保人年龄大于=51保费豁免不能投保
+      var age = this.applicantAge;
+      var arr = product["保费豁免"];
+      if (age >= 51) {
+        this.$store.dispatch("setProduct", {
+          key: "is_lifelong",
+          value: "0"
+        });
+        return [arr[1]];
+      }
+      return arr;
     },
     fjqzhm() {
       return product["附加轻症及轻症豁免"];
@@ -393,8 +427,22 @@ export default {
         value: item.value
       });
     },
+    //购买模块关闭
     _modalClose() {
+      //每一步操作都设置了状态机中的值 所以不需要保存到session
       this.$emit("close");
+    },
+    //立即投保
+    _insureClick() {
+      //校验
+
+      if (paymentLimit + insuredAge > 70) {
+        this.$dialog.toast({
+          mes: "被保险人年龄+缴费年限必须<=70",
+          timeout: 1500
+        });
+        return;
+      }
     }
   }
 };
