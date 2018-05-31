@@ -23,7 +23,7 @@
       position: absolute;
       top: 0;
       left: rem(32);
-      right: rem(32);
+      right: rem(0);
       margin: auto;
       height: 1px;
       background: #d2d2d2;

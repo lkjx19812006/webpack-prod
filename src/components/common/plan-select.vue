@@ -11,7 +11,7 @@
     bottom: 0;
     margin: auto;
     left: rem(32);
-    right: rem(32);
+    right: rem(0);
     height: 1px;
     background: #d2d2d2;
   }
@@ -62,7 +62,7 @@
 </style>
 <template>
   <div class="plan-select flex row space item-center">
-    <div @click="_selected(index)" v-html="item.label" :class="[ selectCount === index ? 'active' : '']" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
+    <div @click="_selected(index)" v-html="item.label" :class="[ value === item.code ? 'active' : '']" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
     </div>
   </div>
 </template>
@@ -74,6 +74,7 @@ export default {
     };
   },
   props: {
+    value: "",
     planList: {
       type: Array,
       default: () => {
@@ -103,6 +104,7 @@ export default {
   methods: {
     _selected(index) {
       this.selectCount = index;
+      this.$emit("input", this.planList[index].code);
       this.$emit("change", { index: index, select: this.planList[index] });
     }
   }

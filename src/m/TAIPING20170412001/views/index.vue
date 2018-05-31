@@ -5,22 +5,14 @@
 <template>
   <yd-layout>
     <bannerCom :imgUrl="require('../productImg/banner@2x.png')"></bannerCom>
-    <!-- 
-      产品范围组件 属性
-      rangeList 产品范围数据源 类型 array  格式如下
-       [
-          { title: "承保范围", rang: "大陆地区" },
-          { title: "承保周期", rang: "一年" },
-          { title: "保障范围", rang: "企业" }
-       ]
-    -->
+
     <productRangeCom :rangeList="rangeList"></productRangeCom>
 
     <!--头部套餐选择组件  -->
-    <planSelect :planList="planList" @change="_planChange"></planSelect>
+    <planSelect v-model="productInfo.package_code" :planList="planList" @change="_planChange"></planSelect>
 
     <div class="bottom-after">
-      <limitCell v-model="limitNum" @change="_limitChange" :tabList="limitList"></limitCell>
+      <limitCell ref="limitCom" v-model="productInfo.base_premium" @change="_limitChange" :tabList="limitList"></limitCell>
     </div>
 
     <!-- 保障责任 -->
@@ -40,7 +32,7 @@
 
     <bottomTips></bottomTips>
 
-    <footerCom slot="bottom" themecolor="#E42F46" price="0.00" @insureClick="_insureClick"></footerCom>
+    <footerCom slot="bottom" themecolor="#E42F46" :price="total" @insureClick="_insureClick"></footerCom>
 
     <!-- 更多详情弹框 -->
     <yd-popup v-model="popup.more" position="right" width="100%" height="100%">
@@ -75,7 +67,7 @@
 
     <!-- 保险购买模板 -->
     <yd-popup class="buy-com" v-model="showBuy" position="bottom" height="72%">
-      <buyModalCom @close="showBuy = false"></buyModalCom>
+      <buyModalCom @close="_closeBuy"></buyModalCom>
     </yd-popup>
 
   </yd-layout>
@@ -123,8 +115,6 @@ export default {
   },
   data() {
     return {
-      packageName: "B款升级款",
-      limitNum: 50000,
       planList: product.packageName, //保险套餐配置
       rangeList: product.rangeList, //保障范围配置
       cellList: product.responsibility, //收获理赔等常见问题 弹窗相关配置
@@ -132,15 +122,23 @@ export default {
     };
   },
   computed: {
+    total() {
+      return this.$store.state.productState.total;
+    },
+    productInfo() {
+      return this.$store.state.productState.product;
+    },
     //保障责任列表
     bzzrList() {
-      var result = product.insured[this.packageName][this.limitNum];
-      var common = product.insured[this.packageName]["common"];
+      var result =
+        product.insured[this.productInfo.package_code][
+          this.productInfo.base_premium
+        ];
+      var common = product.insured[this.productInfo.package_code]["common"];
       return result.concat(common);
     },
     gdxqDoc() {
-      var packageName = this.packageName;
-      return product.doc[packageName];
+      return product.doc[this.productInfo.package_code];
     },
     cjwtDoc() {
       return product.doc["常见问题"];
@@ -152,7 +150,7 @@ export default {
       return product.doc["投保人声明"];
     },
     bxtkDoc() {
-      return product.doc["保险条款"][this.packageName];
+      return product.doc["保险条款"][this.productInfo.package_code];
     },
     limitList() {
       return product.limit;
@@ -167,7 +165,7 @@ export default {
       // 跳转到表单页面进行填写
       this.showBuy = true;
     },
-    // 显示弹窗信息
+    // 显示弹窗信息 主要市底部理赔问题以及其他的弹框信息中
     _showPopup(pid) {
       // 排他
       for (var key in this.popup) {
@@ -178,10 +176,20 @@ export default {
     },
     //保险计划改变
     _planChange(param) {
-      this.packageName = param.select.value;
+      this.$store.dispatch("setProduct", {
+        key: "package_code",
+        value: param.select.code
+      });
     },
     _limitChange(param) {
-      this.limitNum = param.value;
+      this.$store.dispatch("setProduct", {
+        key: "base_premium",
+        value: param.value
+      });
+    },
+    _closeBuy() {
+      this.showBuy = false;
+      this.$refs.limitCom.initPosition();
     }
   }
 };

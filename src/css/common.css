@@ -407,7 +407,7 @@ option {
   position: absolute;
   bottom: 0;
   left: 0.32rem;
-  right: 0.32rem;
+  right: 0rem;
   margin: auto;
   content: '';
   height: 1px;

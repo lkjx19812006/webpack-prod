@@ -55,7 +55,7 @@ export default {
       if (this.type === "sex") {
         return [{ label: "男", value: "0" }, { label: "女", value: "1" }];
       } else if (this.type === "radio") {
-        return [{ label: "是", value: true }, { label: "否", value: false }];
+        return [{ label: "是", value: "00" }, { label: "否", value: "" }];
       }
     }
   },

@@ -9,7 +9,7 @@
     position: absolute;
     bottom: 0;
     left: rem(32);
-    right: rem(32);
+    right: rem(0);
     bottom: 0;
     margin: auto;
     background: #d2d2d2;

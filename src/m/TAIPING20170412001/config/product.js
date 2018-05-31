@@ -46,7 +46,7 @@ var product = {
   ],
   //保险类型
   insured: {
-    "B款升级款": {
+    "A": {
       50000: [
         { label: '重大疾病保险金', value: '5万元' },
         { label: '身故保险金', value: '5万元' },
@@ -105,7 +105,7 @@ var product = {
         { label: '投保人失能豁免保险费', value: '豁免后期保险费' }
       ]
     },
-    "C款升级款": {
+    "B": {
       50000: [
         { label: '重大疾病保险金', value: '5万元' },
         { label: '轻症疾病保险金', value: '1.5万元' }
@@ -173,7 +173,7 @@ var product = {
 
   doc: {
     //保障责任
-    'B款升级款': {
+    'A': {
       title: '康乐一生重大疾病保险B款升级款-保障责任',
       lists: [
         {
@@ -233,7 +233,7 @@ var product = {
         }
       ]
     },
-    'C款升级款': {
+    'B': {
       title: '康乐一生重大疾病保险C款升级款-保障责任',
       lists: [
         {
@@ -341,7 +341,7 @@ var product = {
       ]
     },
     '保险条款': {
-      'B款升级款': [
+      'A': [
         {
           label: '复星联合康乐一生重大疾病保险（B款升级款）条款.pdf',
           value: '/static/doc/TAIPING20170412001/B/复星联合康乐一生重大疾病保险（B款升级款）条款.pdf'
@@ -355,7 +355,7 @@ var product = {
           value: '/static/doc/TAIPING20170412001/B/复星联合附加康乐一生投保人豁免重大疾病保险（升级款）条款.pdf'
         }
       ],
-      'C款升级款': [
+      'B': [
         {
           label: '复星联合康乐一生重大疾病保险（C款升级款）条款.pdf',
           value: '/static/doc/TAIPING20170412001/C/复星联合康乐一生重大疾病保险（C款升级款）条款.pdf'
@@ -494,24 +494,5 @@ var product = {
   ]
 }
 export default product
-
-
-var obj = {}; arr2.forEach(item => {
-  var pkey = item[0] + item[1];
-  var ckey = item[2] + item[3];
-  var dkey = item[4] + item[5];
-  if (item[0] && item[1] && item[2] && item[3] && item[4] && item[5] && !obj[pkey]) {
-    obj[pkey] = {};
-  }
-  if (item[0] && item[1] && item[2] && item[3] && item[4] && item[5] && !obj[pkey][ckey]) {
-    obj[pkey][ckey] = {};
-  }
-  if (item[0] && item[1] && item[2] && item[3] && item[4] && item[5] && !obj[pkey][ckey][dkey]) {
-    obj[pkey][ckey][dkey] = [];
-  }
-  if (item[0] && item[1] && item[2] && item[3] && item[4] && item[5]) {
-    obj[pkey][ckey][dkey].push({ s2: item[2] + item[3], t1: item[4], t2: item[5] })
-  }
-})
 
 
