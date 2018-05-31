@@ -62,7 +62,7 @@
 </style>
 <template>
   <div class="plan-select flex row space item-center">
-    <div @click="_selected(index)" v-html="item.name" :class="[ selectCount === index ? 'active' : '']" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
+    <div @click="_selected(index)" v-html="item.label" :class="[ selectCount === index ? 'active' : '']" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
     </div>
   </div>
 </template>
@@ -78,8 +78,16 @@ export default {
       type: Array,
       default: () => {
         return [
-          { code: "A", name: "全面款(￥298)" },
-          { code: "B", name: "全面款(￥298)" }
+          {
+            code: "B",
+            label: "<span>B款升级款</span><span>（含身故保障）</span>",
+            value: "B款升级款"
+          },
+          {
+            code: "C",
+            label: "<span>C款升级款</span><span>（不含身故保障）</span>",
+            value: "C款升级款"
+          }
         ];
       }
     },

@@ -1,6 +1,5 @@
 <style lang="scss" scoped>
 @import "../../../css/mixin.scss";
-// 售后及理赔
 //售后及理赔
 #shouhoulipei {
   position: relative;

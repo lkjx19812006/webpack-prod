@@ -123,7 +123,7 @@ export default {
   },
   data() {
     return {
-      packageName: "B款升级版",
+      packageName: "B款升级款",
       limitNum: 50000,
       planList: product.packageName, //保险套餐配置
       rangeList: product.rangeList, //保障范围配置
@@ -178,7 +178,7 @@ export default {
     },
     //保险计划改变
     _planChange(param) {
-      this.packageName = param.select.name;
+      this.packageName = param.select.value;
     },
     _limitChange(param) {
       this.limitNum = param.value;

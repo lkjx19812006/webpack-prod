@@ -13,6 +13,8 @@ import Http from '@/common/httpServer'
 import 'vue-ydui/dist/ydui.base.css'
 import 'vue-ydui/dist/ydui.rem.css'
 import '@/css/common.scss'
+import "./config/utils";
+import store from './store/index'
 
 Vue.use(VueWechatTitle);
 Vue.use(Router);
@@ -58,5 +60,6 @@ router.addRoutes(routeConfig);
 
 new Vue({
   router,
+  store,
   render: create => create(App)
 }).$mount('#product');

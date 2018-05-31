@@ -29,7 +29,7 @@
 </style>
 <template>
   <div class="button-radio flex row space item-center">
-    <div @click="_radioClick(item, index)" :class="[value === item.value ? 'active': '']" class="radio-item" v-for="(item, index) in radios" :key="index">
+    <div @click="_radioClick(item, index)" :class="[value == item.value ? 'active': '']" class="radio-item" v-for="(item, index) in radios" :key="index">
       <span class="radio-item-text">{{item.label}}</span>
     </div>
   </div>
@@ -53,7 +53,7 @@ export default {
     radios() {
       if (this.radioList && this.radioList.length) return this.radioList;
       if (this.type === "sex") {
-        return [{ label: "男", value: "1" }, { label: "女", value: "0" }];
+        return [{ label: "男", value: "0" }, { label: "女", value: "1" }];
       } else if (this.type === "radio") {
         return [{ label: "是", value: true }, { label: "否", value: false }];
       }
