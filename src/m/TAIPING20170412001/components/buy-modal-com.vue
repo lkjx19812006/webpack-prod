@@ -59,11 +59,11 @@
 </style>
 <template>
   <div class="buy-modal-com flex">
-    <anyiCellItem class="top" :noBorder="true">
+    <anyiCellItem class="top" :noBorder="true" v-show="model === 'index'">
       <span class="left-title" slot="left">保障计划</span>
       <span class="right-icon-close" slot="right" @click="_modalClose"></span>
     </anyiCellItem>
-    <div class="buy-content">
+    <div class="buy-content" v-show="model === 'index'">
       <div class="plan-select bottom-after flex row space">
         <div @click="_planSelect(item, index)" :class="[productInfo.package_code === item.code ? 'active' : '' ]" v-html="item.label" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
         </div>
@@ -134,7 +134,7 @@
         <span class="right-title" slot="right">{{lifelongYear}}</span>
       </anyiCellItem>
     </div>
-    <footerCom @insureClick="_insureClick" class="footer-com" :price="countPrice"></footerCom>
+    <footerCom @insureClick="_insureClick" :class="[model==='index'? 'footer-com' : '']" :price="countPrice"></footerCom>
   </div>
 </template>
 <script>
@@ -144,6 +144,12 @@ import buttonRadio from "@/components/common/buttonRadio";
 import product from "../config/product.js";
 import price from "../config/price";
 export default {
+  props: {
+    model: {
+      type: String,
+      default: "index" //购买组件的模式问题 index write confirm
+    }
+  },
   data() {
     return {
       planList: product.packageName //头部保险选项
@@ -196,20 +202,19 @@ export default {
     insured() {
       return this.$store.state.productState.insured;
     },
-
     //计算投保人年龄范围
     applicantStartTime() {
-      return Date.getDateByAge(55);
+      return this.$store.state.productState.otherData.applicantStartTime;
     },
     applicantEndTime() {
-      return Date.getDateByAge(18);
+      return this.$store.state.productState.otherData.applicantEndTime;
     },
     //被保人年龄范围30天到50周岁
     insuredStartTime() {
-      return Date.getDateByAge(50);
+      return this.$store.state.productState.otherData.insuredStartTime;
     },
     insuredEndTime() {
-      return Date.getDateByDay(30);
+      return this.$store.state.productState.otherData.insuredEndTime;
     },
     //投保人年龄
     applicantAge() {
@@ -262,8 +267,8 @@ export default {
 
     //保费豁免年限
     lifelongYear() {
-      if (!this.bfhm) return "不投保";
-      return this.payYear - 1 + "年";
+      if (this.productInfo.is_lifelong === "0") return "不投保";
+      return this.productInfo.payment_limit - 1 + "年";
     },
 
     //保费试算
@@ -354,10 +359,7 @@ export default {
       var age = this.applicantAge;
       var arr = product["保费豁免"];
       if (age >= 51) {
-        this.$store.dispatch("setProduct", {
-          key: "is_lifelong",
-          value: "0"
-        });
+        this.dispatchModule("setProduct", "is_lifelong", "0");
         return [arr[1]];
       }
       return arr;
@@ -381,51 +383,55 @@ export default {
   methods: {
     //初始化相关
     _initCom() {
+      //设置日期限制
+      //投保人日期选择开始时间
+      this.dispatchModule(
+        "setOtherData",
+        "applicantStartTime",
+        Date.getDateByAge(55)
+      );
+      //投保人日期选择结束时间
+      this.dispatchModule(
+        "setOtherData",
+        "applicantEndTime",
+        Date.getDateByAge(18)
+      );
+      //被保人日期选择开始时间
+      this.dispatchModule(
+        "setOtherData",
+        "insuredStartTime",
+        Date.getDateByAge(50)
+      );
+      //被保人日期选择结束时间
+      this.dispatchModule(
+        "setOtherData",
+        "insuredEndTime",
+        Date.getDateByDay(30)
+      );
       //设置投保人默认出生日期
-      this.$store.dispatch("setApplicant", {
-        key: "birthday",
-        value: Date.getDateByAge(18)
-      });
+      this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));
       //设置被保人默认出生日期
-      this.$store.dispatch("setInsured", {
-        key: "birthday",
-        value: Date.getDateByDay(30)
-      });
+      this.dispatchModule("setInsured", "birthday", Date.getDateByDay(30));
     },
     //投保人性别发生改变
     _applicantsexChange(param) {
-      this.$store.dispatch("setApplicant", {
-        key: "sex",
-        value: param.value
-      });
+      this.dispatchModule("setApplicant", "sex", param.value);
     },
     //保障计划选择
     _planSelect(item) {
-      this.$store.dispatch("setProduct", {
-        key: "package_code",
-        value: item.code
-      });
+      this.dispatchModule("setProduct", "package_code", item.code);
     },
     //附加轻症豁免选择改变
     _subClinicalChange(item) {
-      this.$store.dispatch("setProduct", {
-        key: "is_sub_clinical",
-        value: item.value
-      });
+      this.dispatchModule("setProduct", "is_sub_clinical", item.value);
       if (item.value === 0) {
         //不投保轻症 设置保费豁免为0 不投保
-        this.$store.dispatch("setProduct", {
-          key: "is_lifelong",
-          value: "0"
-        });
+        this.dispatchModule("setProduct", "is_lifelong", "0");
       }
     },
     //保费豁免
     _lifelongChange(item) {
-      this.$store.dispatch("setProduct", {
-        key: "is_lifelong",
-        value: item.value
-      });
+      this.dispatchModule("setProduct", "is_lifelong", item.value);
     },
     //购买模块关闭
     _modalClose() {
@@ -434,15 +440,26 @@ export default {
     },
     //立即投保
     _insureClick() {
-      //校验
-
-      if (paymentLimit + insuredAge > 70) {
-        this.$dialog.toast({
-          mes: "被保险人年龄+缴费年限必须<=70",
-          timeout: 1500
-        });
-        return;
+      //跳转到表单填写页面
+      if (this.model === "index") {
+        this.$emit("submit");
+      } else if (this.model === "write") {
+        // this.$emit("submit");
+      } else if (this.model === "confirm") {
       }
+    },
+
+    //分发模块
+    /**
+     * module
+     * key
+     * value
+     */
+    dispatchModule(moduleName, key, value) {
+      this.$store.dispatch(moduleName, {
+        key: key,
+        value: value
+      });
     }
   }
 };

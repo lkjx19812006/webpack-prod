@@ -104,7 +104,11 @@ export default {
   },
   computed: {
     healthDoc() {
-      return product.doc["健康告知"]["未豁免保费"];
+      var key =
+        this.$store.state.productState.product.is_lifelong === "1"
+          ? "豁免保费"
+          : "未豁免保费";
+      return product.doc["健康告知"][key];
     }
   },
   data() {
@@ -118,7 +122,15 @@ export default {
   },
   methods: {
     _closePopup() {
-      this.$emit("closePopup");
+      if (this.isHealth) {
+        //全否通过
+        this.$router.push("write");
+      } else {
+        this.$dialog.toast({
+          mes: "健康不通过，不能进行投保",
+          timeout: 2000
+        });
+      }
     }
   }
 };

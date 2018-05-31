@@ -43,7 +43,7 @@
 //     "不清楚": "2"
 // }
 const state = {
-	"total": 7200,
+	"total": 0,
 	"product": {
 		"id": "FOSUN20180522001",    //Y 核心产品ID
 		"name": "复星：康乐一生",    //N 产品名称
@@ -101,7 +101,15 @@ const state = {
 		"relation": "", //   与被保人关系
 	},
 	//附加的
-	"addtional": {}
+	"addtional": {},
+
+	//其他页面逻辑相关值限制参数
+	otherData: {
+		applicantStartTime: '',//投保人日期选择开始
+		applicantEndTime: '',//投保人日期选择结束
+		insuredStartTime: '',//被保人日期选择开始
+		insuredEndTime: '',//被保人日期选择结束
+	}
 }
 
 //计算状态 用于过滤等操作
@@ -145,6 +153,13 @@ const actions = {
 			commit('setBeneficiary', params)
 			resolve(params)
 		})
+	},
+	//设置其他限制信息
+	setOtherData({ commit, state }, params) {
+		return new Promise((resolve, reject) => {
+			commit('setOtherData', params)
+			resolve(params)
+		})
 	}
 }
 
@@ -166,6 +181,11 @@ const mutations = {
 	setInsured(state, params) {
 		state.insured[params.key] = params.value;
 	},
+	//设置其他限制信息
+	setOtherData(state, params) {
+		state.otherData[params.key] = params.value;
+	},
+
 	//设置受益人信息
 	setBeneficiary(state, params) {
 		//params type类型为add 或 del

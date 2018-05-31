@@ -67,7 +67,7 @@
 
     <!-- 保险购买模板 -->
     <yd-popup class="buy-com" v-model="showBuy" position="bottom" height="72%">
-      <buyModalCom @close="_closeBuy"></buyModalCom>
+      <buyModalCom model="index" @submit="_submit" @close="_closeBuy"></buyModalCom>
     </yd-popup>
 
   </yd-layout>
@@ -190,6 +190,10 @@ export default {
     _closeBuy() {
       this.showBuy = false;
       this.$refs.limitCom.initPosition();
+    },
+    _submit() {
+      console.log("asdfasdfasd");
+      this.$router.push("/health");
     }
   }
 };

@@ -53,7 +53,7 @@
       <span class="price-txt">元</span>
     </div>
     <slot></slot>
-    <yd-button type="primary" class="right-btn flex center " @click.native="_insureClick ">{{btntext}}</yd-button>
+    <yd-button type="primary"  class="right-btn flex center buy-com-btn-submit" @click.native="_insureClick ">{{btntext}}</yd-button>
   </footer>
 </template>
 <script>

@@ -366,7 +366,8 @@
       <yd-button type="danger" @click.native="popup.bxtk = false">Close Right Popup</yd-button>
     </yd-popup>
 
-    <footerCom v-submit="{formEl:'.write', eventEl: '.right-btn',submit: _insureClick}" slot="bottom" themecolor="#E42F46" :price="49.9"></footerCom>
+    <buyModalCom v-submit="{formEl:'.write', eventEl: '.buy-com-btn-submit',submit: _insureClick}" slot="bottom" model="write"></buyModalCom>
+    <!-- <footerCom v-submit="{formEl:'.write', eventEl: '.right-btn',submit: _insureClick}" slot="bottom" themecolor="#E42F46" :price="49.9"></footerCom> -->
   </yd-layout>
 </template>
 <script>
@@ -377,6 +378,8 @@ import cellItemCom from "@/components/common/cellItemCom";
 import accordion from "@/components/common/accordion";
 import product from "../config/product.js";
 import anyiRadio from "@/components/common/anyi-radio";
+import buyModalCom from "../components/buy-modal-com";
+
 export default {
   name: "Write",
   mixins: [mixinPopup],
@@ -385,40 +388,24 @@ export default {
     anyiCellItem,
     cellItemCom,
     accordion,
-    anyiRadio
+    anyiRadio,
+
+    buyModalCom
   },
   data() {
     return {
-      addtional: {
-        effect: "" // 生效日期
-      },
-
-      // 投保人
-      applicant: {
-        name: "",
-        card_type: "",
-        card_id: "",
-        phone: "",
-        email: "",
-        birthday: "1980-01-01",
-        sex: ""
-      },
-      // 被保险人
-      insured: {
-        name: "",
-        card_type: "",
-        card_id: "",
-        phone: "",
-        birthday: "1980-01-01",
-        job_code: "", // 职业类别
-        declaration_answern: "", // 健康告知是否全部通过，通过 1，不通过 0
-        sex: "",
-        relation: "00" // 与被保人关系
-      },
       radio: "" // 协议部分
     };
   },
   computed: {
+    //投保人信息
+    applicant() {
+      return this.$store.state.productState.applicant;
+    },
+    //被保人信息
+    insured() {
+      return this.$store.state.productState.insured;
+    },
     bxxx() {
       return [
         { label: "保障计划", value: "B款升级款" },
@@ -437,16 +424,18 @@ export default {
     }
   },
   methods: {
+    _submit() {},
     _insureClick(res) {
+      console.log(res);
       // 基本的表单校验
-      if (!res.valid) {
-        this.$dialog.toast({
-          mes: res.msg,
-          timeout: 2000
-        });
-        return;
-      }
-      this.$router.push("/confirm");
+      // if (!res.valid) {
+      //   this.$dialog.toast({
+      //     mes: res.msg,
+      //     timeout: 2000
+      //   });
+      //   return;
+      // }
+      // this.$router.push("/confirm");
     },
     _showPopup() {}
   }
