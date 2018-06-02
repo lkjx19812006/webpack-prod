@@ -69,9 +69,9 @@ const state = {
 		"city": "",       //市
 		"district": "",   //区/县
 
-		"bank_code": "",//银行代码
+		"bank_code": "9001",//银行代码
 		"account": "",//银行账号
-		"account_name": "",//银行名称
+		"account_name": "工商银行",//银行名称
 	},
 	"insured": {
 		"name": "",
@@ -81,7 +81,7 @@ const state = {
 		"card_id": "",
 		"birthday": "",
 		"sex": "0",
-		"relation": "",// 与被保人关系
+		"relation": "01",// 与被保人关系
 		"job_code": "",//职业代码
 
 		"height": "", //Y 身高
@@ -89,16 +89,16 @@ const state = {
 	},
 	//受益人
 	"beneficiary": {
-		"type": "2", //    受益方式   法定 1 指定 2
+		"type": "1", //    受益方式   法定 1 指定 2
 		"person": []
 	},
 	"beneficiaryTemplate": {
 		"name": "", //    受益人姓名
-		"certificate_type": "", //
+		"certificate_type": "01", //
 		"certificate_id": "", //
 		"percent": "", //    受益比例 相加必须等于1 按百分比来算即可
 		"priority": 1, //    受益优先级
-		"relation": "", //   与被保人关系
+		"relation": "01", //   与被保人关系
 	},
 	//附加的
 	"addtional": {},
@@ -168,7 +168,7 @@ const actions = {
 			resolve(params)
 		})
 	},
-	//设置被保人信息
+	//设置受益人信息
 	setBeneficiary({ commit, state }, params) {
 		return new Promise((resolve, reject) => {
 			commit('setBeneficiary', params)
@@ -210,10 +210,10 @@ const mutations = {
 	//设置受益人信息
 	setBeneficiary(state, params) {
 		//params type类型为add 或 del
-		// {type: 'add', value: addValue};
-		// {type: 'del', value: delIndex};
+		// {key: 'add', value: addValue};
+		// {key: 'del', value: delIndex};
 		if (params && typeof params === 'object') {
-			switch (params.type) {
+			switch (params.key) {
 				case 'add':
 					state.beneficiary.person.push(params.value);
 					break;

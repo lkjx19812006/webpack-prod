@@ -79,23 +79,23 @@ anyiDirective.install = function (Vue, options) {
       switch (arg) {
         case 'applicantname':// v-form:applicantname 校验投保人姓名
           validDef.required = (binding.value && binding.value.required) || '请输入投保人姓名';
-          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[\u4e00-\u9fa5]{2,50}|([A-Za-z]+\s?)*[A-Za-z]$/, errMsg: '投保人姓名格式错误' };
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[\u4e00-\u9fa5]{2,50}|([A-Za-z]+\s?)*[A-Za-z]$/, errMsg: '请输入2-50位中文、4-50位英文' };
           break;
         case 'insurename':// v-form:insurename 校验被保人姓名
           validDef.required = (binding.value && binding.value.required) || '请输入被保人姓名';
-          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[\u4e00-\u9fa5]{2,50}|([A-Za-z]+\s?)*[A-Za-z]$/, errMsg: '被保人姓名格式错误' };
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[\u4e00-\u9fa5]{2,50}|([A-Za-z]+\s?)*[A-Za-z]$/, errMsg: '请输入2-50位中文、4-50位英文' };
           break;
         case 'cardid':// v-form:cardid 简单校验身份证
           validDef.required = (binding.value && binding.value.required) || '请输入身份证号码';
-          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[1-9]\d{5}[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}(\d|x|X)$/, errMsg: '身份证格式错误' };
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[1-9]\d{5}[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}(\d|x|X)$/, errMsg: '身份证号格式错误' };
           break;
         case 'phone':// v-form:phone 校验手机
           validDef.required = (binding.value && binding.value.required) || '请输入手机号码';
-          validDef.valid = (binding.value && binding.value.valid) || { regex: /^1[345789]\d{9}$/, errMsg: '手机号码格式错误' };
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^1[345789]\d{9}$/, errMsg: '手机号码有误，请重新输入' };
           break;
         case 'email':// v-form:email 校验邮箱
           validDef.required = (binding.value && binding.value.required) || '请输入电子邮箱';
-          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[A-Za-zd0-9]+([-_.][A-Za-zd0-9]+)*@([A-Za-zd0-9]+[-.])+[A-Za-zd0-9]{2,5}$/, errMsg: '电子邮箱格式错误' };
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[A-Za-zd0-9]+([-_.][A-Za-zd0-9]+)*@([A-Za-zd0-9]+[-.])+[A-Za-zd0-9]{2,5}$/, errMsg: '邮箱格式不正确，请重新输入' };
           break;
         case 'account':// v-form:account 校验账号
           validDef.required = (binding.value && binding.value.required) || '请输入账号';
@@ -104,6 +104,10 @@ anyiDirective.install = function (Vue, options) {
         case 'pass':// v-form:account 校验密码
           validDef.required = (binding.value && binding.value.required) || '请输入密码';
           validDef.valid = (binding.value && binding.value.valid) || { regex: /^[0-9A-Za-z]{5,16}$/, errMsg: '密码格式错误' };
+          break
+        case 'bank':// v-form:bank 校验密码
+          validDef.required = (binding.value && binding.value.required) || '请输入银行卡号';
+          validDef.valid = (binding.value && binding.value.valid) || { regex: /^[0-9]{16,25}$/, errMsg: '银行卡号错误' };
           break
         default:
           break
@@ -157,9 +161,7 @@ anyiDirective.install = function (Vue, options) {
     },
     // 组件更新时调用
     componentUpdated(el, binding, vnode) {
-      setTimeout(function () {
-        _initInputData(el, binding, vnode);
-      })
+      _initInputData(el, binding, vnode);
     },
     //解除绑定时调用 必须要调用 不调用 v-if互斥条件的dom元素会有问题
     unbind(el, binding, vnode) {
@@ -220,10 +222,8 @@ anyiDirective.install = function (Vue, options) {
       })
     },
     componentUpdated(el, binding, vnode) {
-      setTimeout(function () {
-        var val = el.value;
-        el.value = val.toUpperCase()
-      })
+      var val = el.value;
+      el.value = val.toUpperCase()
     },
     unbind(el, binding, vnode) {
       el.removeEventListener('blur', toUp);
@@ -241,10 +241,8 @@ anyiDirective.install = function (Vue, options) {
       })
     },
     componentUpdated(el, binding, vnode) {
-      setTimeout(function () {
-        var val = el.value;
-        el.value = val.toLowerCase()
-      })
+      var val = el.value;
+      el.value = val.toLowerCase()
     },
     unbind(el, binding, vnode) {
       el.removeEventListener('blur', toLo);

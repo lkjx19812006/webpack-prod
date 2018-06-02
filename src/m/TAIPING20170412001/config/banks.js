@@ -28,7 +28,7 @@ export default [
   { label: '浙商银行', value: '9028' },
   { label: '城市商业银行', value: '9029' },
   { label: '农村商业银行', value: '9030' },
-  { label: '平安银行', value: '9039'
+  { label: '平安银行', value: '9039'}
 ]
 
 

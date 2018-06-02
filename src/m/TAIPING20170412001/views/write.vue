@@ -128,7 +128,7 @@
       <anyiCellItem v-if="applicant.card_type === '03'">
         <span slot="left" class="left-title">证件号码</span>
         <!-- 护照 -->
-        <input v-toUp v-model="applicant.card_id" slot="right" type="text" placeholder="请输入护照">
+        <input v-toUp v-model="applicant.card_id" slot="right" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -151,7 +151,7 @@
 
       <anyiCellItem>
         <span slot="left" class="left-title">联系地址</span>
-        <input slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
+        <input v-form:item="{required: '请输入详细地址便于联系和理赔'}" slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
       </anyiCellItem>
 
       <anyiCellItem>
@@ -196,8 +196,6 @@
       <anyiCellItem arrow>
         <span slot="left" class="left-title">与投保人关系</span>
         <select v-model="insured.relation" slot="right">
-          <option value="">请选择与投保关系</option>
-          <option value="00">本人</option>
           <option value="01">配偶</option>
           <option value="02">父母</option>
           <option value="03">子女</option>
@@ -205,113 +203,130 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">被保险人姓名</span>
-        <input slot="right" v-model="insured.name" type="text" placeholder="请输入">
+        <input v-form:insurename slot="right" v-model="insured.name" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
         <span slot="left" class="left-title">证件类型</span>
-        <select slot="right">
-          <option value="">身份证</option>
-          <option value="">护照</option>
+        <select v-model="insured.card_type" slot="right">
+          <option value="01">身份证</option>
+          <option value="03">护&nbsp;&nbsp;&nbsp;照</option>
         </select>
       </anyiCellItem>
 
-      <anyiCellItem>
+      <anyiCellItem v-if="insured.card_type === '01'">
         <span slot="left" class="left-title">证件号码</span>
-        <input slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
+        <input v-toUp v-form:cardid slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
       </anyiCellItem>
+
+      <anyiCellItem v-if="insured.card_type === '03'">
+        <span slot="left" class="left-title">证件号码</span>
+        <!-- 护照 -->
+        <input v-toUp v-model="insured.card_id" slot="right" type="text" placeholder="请输入">
+      </anyiCellItem>
+
       <anyiCellItem arrow>
         <span slot="left" class="left-title">性别</span>
-        <select slot="right">
-          <option value="">男</option>
-          <option value="">女</option>
+        <select v-model="insured.sex" slot="right">
+          <option value="0">男</option>
+          <option value="1">女</option>
         </select>
       </anyiCellItem>
+
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
-        <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
-      </anyiCellItem>
-
-      <anyiCellItem>
-        <span slot="left" class="left-title">居住城市</span>
-        <yd-datetime slot="right" v-model="insured.birthday" value="1988-08-08" start-date="1900-08-08" placeholder="请选择" :init-emit="false"></yd-datetime>
-      </anyiCellItem>
-
-      <anyiCellItem>
-        <span slot="left" class="left-title">联系地址</span>
-        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入详细地址便于联系和理赔">
+        <yd-datetime slot="right" v-model="insured.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">手机号码</span>
-        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
+        <input v-form:phone slot="right" v-model="insured.phone" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">电子邮箱</span>
-        <input slot="right" v-model="insured.phone" type="text" placeholder="请输入">
+        <input v-form:email slot="right" v-model="insured.email" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">身高（CM）</span>
-        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+        <input v-form:item="{required: '请输入身高'}" slot="right" v-model="insured.height" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">体重（KG）</span>
-        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+        <input v-form:item="{required: '请输入体重'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
         <span slot="left" class="left-title">职业</span>
-        <input slot="right" v-model="insured.phone" type="number" placeholder="请输入">
+        <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
+        <span @click="showJobSelect = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
+      </anyiCellItem>
+
+      <anyiCellItem noBorder>
+        <span slot="left" class="left-title">购买份数</span>
+        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
     <!-- 收益人信息 -->
+    <!-- 受益人最多为3个 B不能设置受益人 必须为法定受益人 -->
     <div class="group">
-      <accordion isOpenShowTopBorder :isCloseShowTopBorder="false" class="accordion">
-        <span slot="left" class="cut-icon"></span>
-        <span slot="left" class="left-title">受益人1</span>
-        <span slot="right" class="right-title name-tit">张三</span>
-        <span slot="right" class="right-title percent">50%</span>
-        <div class="accordion-content">
-          <anyiCellItem>
-            <span slot="left" class="left-title">姓名</span>
-            <input slot="right" v-model="insured.name" type="text" placeholder="请输入真实姓名">
-          </anyiCellItem>
-          <anyiCellItem arrow>
-            <span slot="left" class="left-title">受益人是被保险人的</span>
-            <select v-model="insured.relation" slot="right">
-              <option value="00">本人</option>
-              <option value="01">配偶</option>
-              <option value="02">父母</option>
-              <option value="03">子女</option>
-            </select>
-          </anyiCellItem>
-          <anyiCellItem arrow>
-            <span slot="left" class="left-title">证件类型</span>
-            <select slot="right">
-              <option value="">身份证</option>
-              <option value="">护照</option>
-            </select>
-          </anyiCellItem>
-          <anyiCellItem>
-            <span slot="left" class="left-title">证件号码</span>
-            <input slot="right" v-model="insured.name" type="text" placeholder="请输入有效的证件号码">
-          </anyiCellItem>
-          <anyiCellItem noBorder>
-            <span slot="left" class="left-title">受益比例（%）</span>
-            <input slot="right" v-model="insured.name" type="text" placeholder="请填写受益百分比">
-          </anyiCellItem>
-        </div>
-      </accordion>
+      <anyiCellItem :noBorder="productInfo.package_code === 'B' || beneficiary.type === '1'" arrow>
+        <span slot="left" class="left-title">受益人信息</span>
+        <select :disabled="productInfo.package_code === 'B'" v-model="beneficiary.type" slot="right">
+          <option value="1">法定受益人</option>
+          <option value="2">指定受益人</option>
+        </select>
+      </anyiCellItem>
+      <div class="beneficiary-list" v-if="productInfo.package_code === 'A' && beneficiary.person.length && beneficiary.type === '2'">
+        <accordion :key="index" v-for="(item, index) in beneficiary.person" :isOpenShowBottomBorder="index < beneficiary.person.length - 1" isOpenShowTopBorder :isCloseShowTopBorder="false" open class="accordion">
+          <span slot="left" class="cut-icon"></span>
+          <span slot="left" class="left-title">受益人{{index + 1}}</span>
+          <span slot="right" class="right-title name-tit" v-if="beneficiary.person[index].name">{{beneficiary.person[index].name}}</span>
+          <span slot="right" class="right-title percent" v-if="beneficiary.person[index].percent">{{beneficiary.person[index].percent}}%</span>
+          <div class="accordion-content">
+            <anyiCellItem>
+              <span slot="left" class="left-title">姓名</span>
+              <input v-form:item="{required: `请输入受益人${index + 1}姓名`}" slot="right" v-model="beneficiary.person[index].name" type="text" placeholder="请输入真实姓名">
+            </anyiCellItem>
+            <anyiCellItem arrow>
+              <span slot="left" class="left-title">受益人是被保险人的</span>
+              <select v-model="beneficiary.person[index].relation" slot="right">
+                <option value="01">配偶</option>
+                <option value="02">父母</option>
+                <option value="03">子女</option>
+              </select>
+            </anyiCellItem>
+            <anyiCellItem arrow>
+              <span slot="left" class="left-title">证件类型</span>
+              <select v-model="beneficiary.person[index].certificate_type" slot="right">
+                <option value="01">身份证</option>
+                <option value="03">护&nbsp;&nbsp;&nbsp;照</option>
+              </select>
+            </anyiCellItem>
+            <anyiCellItem v-if="beneficiary.person[index].certificate_type === '01'">
+              <span slot="left" class="left-title">证件号码</span>
+              <input v-toUp v-form:cardid slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
+            </anyiCellItem>
+            <anyiCellItem v-if="beneficiary.person[index].certificate_type === '03'">
+              <span slot="left" class="left-title">证件号码</span>
+              <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
+            </anyiCellItem>
+            <anyiCellItem noBorder>
+              <span slot="left" class="left-title">受益比例（%）</span>
+              <input v-form:item="{required: `请输入受益人${index + 1}受益比例`}" slot="right" v-model="beneficiary.person[index].percent" type="text" placeholder="请填写受益百分比">
+            </anyiCellItem>
+          </div>
+        </accordion>
+      </div>
 
     </div>
 
     <!-- 新增受益人 -->
-    <div class="add">
-      <div class="add-person flex row center">
+    <div class="add" v-if="productInfo.package_code === 'A' && beneficiary.type === '2'">
+      <div class="add-person flex row center" @click="_addBeneficiary">
         <span class="add-icon"></span>
         <span class="btn-txt">新增受益人</span>
       </div>
@@ -325,17 +340,17 @@
       </anyiCellItem>
       <anyiCellItem arrow>
         <span slot="left" class="left-title">开户银行</span>
-        <select v-model="insured.relation" slot="right">
-          <option :key="index" v-for="(item, index) in banks" :value="item.value">{{item.label}}</option>
+        <select placeholder="请选择" style="direction:rtl" v-model="applicant.bank_code" slot="right">
+          <option style="direction:rtl" :key="index" v-for="(item, index) in banks" :value="item.value">{{item.label}}</option>
         </select>
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">持卡人姓名</span>
-        <input slot="right" v-model="insured.phone" type="number" placeholder="需为投保人本人">
+        <input slot="right" class="r-color" disabled v-model="applicant.name" type="text" placeholder="需为投保人本人">
       </anyiCellItem>
       <anyiCellItem noBorder>
         <span slot="left" class="left-title">银行账号</span>
-        <input slot="right" v-model="insured.phone" type="number" placeholder="只支持银行储蓄卡">
+        <input v-form:bank slot="right" v-model="applicant.account" type="number" placeholder="只支持银行储蓄卡">
       </anyiCellItem>
     </div>
 
@@ -403,6 +418,8 @@ import buyModalCom from "../components/buy-modal-com";
 
 import address from "../config/address";
 import jobList from "../config/job";
+import banks from "../config/banks";
+
 export default {
   name: "Write",
   mixins: [mixinPopup],
@@ -421,12 +438,26 @@ export default {
       showAddress: false,
       showJobSelect: false,
       jobList: jobList,
+      banks: banks, //银行信息
       radio: "" // 协议部分
     };
   },
   watch: {
-    "applicant.card_type"(newVal, oldVal) {
-      this.dispatchModule("setApplicant", "card_type", newVal);
+    "beneficiary.type"(newVal, oldVal) {
+      if (newVal === "2" && this.beneficiary.person.length === 0) {
+        this._addBeneficiary();
+      } else if (newVal === "1") {
+        //法定受益人
+      }
+    },
+    "applicant.bank_code"(newVal, oldVal) {
+      for (var i = 0; i < this.banks.length; i++) {
+        var item = banks[i];
+        if (item.value === newVal) {
+          this.dispatchModule("setApplicant", "account_name", item.label);
+          return;
+        }
+      }
     }
   },
   computed: {
@@ -438,8 +469,13 @@ export default {
     insured() {
       return this.$store.state.productState.insured;
     },
+    //产品信息
     productInfo() {
       return this.$store.state.productState.product;
+    },
+    //受益人信息
+    beneficiary() {
+      return this.$store.state.productState.beneficiary;
     },
     otherData() {
       return this.$store.state.productState.otherData;
@@ -469,9 +505,6 @@ export default {
         });
       }
       return (arr.length && arr.join(",")) || "";
-    },
-    banks() {
-      return product.banks;
     }
   },
   mounted() {
@@ -480,7 +513,6 @@ export default {
   methods: {
     _submit() {},
     _insureClick(res) {
-      console.log(res);
       //基本的表单校验;
       if (!res.valid) {
         this.$dialog.toast({
@@ -489,7 +521,27 @@ export default {
         });
         return;
       }
+      //
       this.$router.push("/confirm");
+    },
+    //添加受益人信息
+    _addBeneficiary() {
+      if (this.beneficiary.person.length >= 3) {
+        this.$dialog.toast({
+          mes: "指定受益人最多为3个",
+          duration: 2000
+        });
+        return; //限制只添加3个受益人
+      }
+      var beneficiaryTemplate = {
+        name: "", //    受益人姓名
+        certificate_type: "01", //
+        certificate_id: "", //
+        percent: "", //    受益比例 相加必须等于1 按百分比来算即可
+        priority: 1, //    受益优先级
+        relation: "01" //   与被保人关系
+      };
+      this.dispatchModule("setBeneficiary", "add", beneficiaryTemplate);
     },
     _showAddressSelect(res) {
       //写入到投保人信息中
