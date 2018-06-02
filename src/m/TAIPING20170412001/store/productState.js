@@ -61,7 +61,7 @@ const state = {
 		"card_id": "",
 		"phone": "",
 		"email": "",
-		"birthday": "1981-12-01",
+		"birthday": "",
 		"sex": "0",
 
 		"address": "",     //详细地址
@@ -69,9 +69,9 @@ const state = {
 		"city": "",       //市
 		"district": "",   //区/县
 
-		"bank_code": "9002",//银行代码
-		"account": "20014567895260456",//银行账号
-		"account_name": "招商银行",//银行名称
+		"bank_code": "",//银行代码
+		"account": "",//银行账号
+		"account_name": "",//银行名称
 	},
 	"insured": {
 		"name": "",
@@ -79,13 +79,13 @@ const state = {
 		"email": "",
 		"card_type": "01",
 		"card_id": "",
-		"birthday": "1981-12-01",
+		"birthday": "",
 		"sex": "0",
 		"relation": "",// 与被保人关系
-		"job_code": "120103",//职业代码
+		"job_code": "",//职业代码
 
-		"height": "178", //Y 身高
-		"weight": "70",  //Y 体重
+		"height": "", //Y 身高
+		"weight": "",  //Y 体重
 	},
 	//受益人
 	"beneficiary": {
@@ -97,7 +97,7 @@ const state = {
 		"certificate_type": "", //
 		"certificate_id": "", //
 		"percent": "", //    受益比例 相加必须等于1 按百分比来算即可
-		"priority": 1, //    受益优先级 根据数组push 下标排
+		"priority": 1, //    受益优先级
 		"relation": "", //   与被保人关系
 	},
 	//附加的
@@ -109,6 +109,27 @@ const state = {
 		applicantEndTime: '',//投保人日期选择结束
 		insuredStartTime: '',//被保人日期选择开始
 		insuredEndTime: '',//被保人日期选择结束
+
+		//信息填写不能更改字段展示
+		labelPackageName: 'B款升级款',//保障计划	
+		labelBasePremium: '',//基本保额
+		labelLifeLimit: '',//保障期限
+		labelPaymentLimit: '',//缴费期限
+		labelPayType: '年缴',//缴费类型
+		labelSubClinical: '',//附加轻症及轻症豁免     
+		labelSubClinicalNum: '',//轻症疾病保额    
+		labelLifelong: '',//保费豁免
+		labelLifelongYear: '',//附加险缴费年限
+
+		//居住城市
+		labelProvince: '',
+		labelCity: '',
+		labelDistric: '',
+
+		//职业类别
+		labelJob1: '',
+		labelJob2: '',
+		labelJob3: ''
 	}
 }
 

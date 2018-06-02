@@ -74,7 +74,7 @@
       </anyiCellItem>
       <anyiCellItem>
         <span class="left-title" slot="left">投保人性别</span>
-        <buttonRadio type="sex" slot="right" @change="_applicantsexChange" v-model="applicant.sex"></buttonRadio>
+        <buttonRadio type="sex" slot="right" v-model="applicant.sex"></buttonRadio>
       </anyiCellItem>
       <anyiCellItem>
         <span class="left-title" slot="left">是否为本人投保</span>
@@ -123,7 +123,7 @@
           <span class="left-title">保费豁免</span>
           <span class="tips">注：投保人保费豁免</span>
         </div>
-        <buttonRadio :radioList="lifelongs" @change="_lifelongChange" slot="right" v-model="productInfo.is_lifelong"></buttonRadio>
+        <buttonRadio :radioList="lifelongs" slot="right" v-model="productInfo.is_lifelong"></buttonRadio>
       </anyiCellItem>
 
       <anyiCellItem :noBorder="true" v-if="isShowLifelong">
@@ -159,25 +159,10 @@ export default {
     "insured.relation"(newVal, oldVal) {
       //是否为本人投保
       if (newVal === "00") {
-        this.$store.dispatch("setInsured", {
-          key: "birthday",
-          value: this.applicant.birthday
-        });
-        this.$store.dispatch("setInsured", {
-          key: "sex",
-          value: this.applicant.sex
-        });
-        this.$store.dispatch("setInsured", {
-          key: "relation",
-          value: "00"
-        });
+        this.dispatchModule("setInsured", "birthday", this.applicant.birthday);
+        this.dispatchModule("setInsured", "sex", this.applicant.sex);
+        this.dispatchModule("setInsured", "relation", "00");
       }
-    },
-    "applicant.sex"(newVal, oldVal) {
-      this.$store.dispatch("setApplicant", {
-        key: "sex",
-        value: newVal
-      });
     }
   },
   computed: {
@@ -253,7 +238,7 @@ export default {
 
     //轻症疾病保额
     sub_clinical_num() {
-      if (!this.productInfo.is_sub_clinical === "0") return "不投保";
+      if (this.productInfo.is_sub_clinical === "0") return "不投保";
       if (this.productInfo.package_code === "A") {
         return product["insured"][this.productInfo.package_code][
           this.productInfo.base_premium
@@ -356,9 +341,10 @@ export default {
     },
     lifelongs() {
       //投保人年龄大于=51保费豁免不能投保
+      //被保人为本人时 不能投保保费豁免
       var age = this.applicantAge;
       var arr = product["保费豁免"];
-      if (age >= 51) {
+      if (age >= 51 || this.insured.relation === "00") {
         this.dispatchModule("setProduct", "is_lifelong", "0");
         return [arr[1]];
       }
@@ -377,61 +363,17 @@ export default {
     anyiCellItem,
     buttonRadio
   },
-  mounted() {
-    this._initCom();
-  },
   methods: {
-    //初始化相关
-    _initCom() {
-      //设置日期限制
-      //投保人日期选择开始时间
-      this.dispatchModule(
-        "setOtherData",
-        "applicantStartTime",
-        Date.getDateByAge(55)
-      );
-      //投保人日期选择结束时间
-      this.dispatchModule(
-        "setOtherData",
-        "applicantEndTime",
-        Date.getDateByAge(18)
-      );
-      //被保人日期选择开始时间
-      this.dispatchModule(
-        "setOtherData",
-        "insuredStartTime",
-        Date.getDateByAge(50)
-      );
-      //被保人日期选择结束时间
-      this.dispatchModule(
-        "setOtherData",
-        "insuredEndTime",
-        Date.getDateByDay(30)
-      );
-      //设置投保人默认出生日期
-      this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));
-      //设置被保人默认出生日期
-      this.dispatchModule("setInsured", "birthday", Date.getDateByDay(30));
-    },
-    //投保人性别发生改变
-    _applicantsexChange(param) {
-      this.dispatchModule("setApplicant", "sex", param.value);
-    },
     //保障计划选择
     _planSelect(item) {
       this.dispatchModule("setProduct", "package_code", item.code);
     },
     //附加轻症豁免选择改变
     _subClinicalChange(item) {
-      this.dispatchModule("setProduct", "is_sub_clinical", item.value);
-      if (item.value === 0) {
+      if (item.value === "0") {
         //不投保轻症 设置保费豁免为0 不投保
         this.dispatchModule("setProduct", "is_lifelong", "0");
       }
-    },
-    //保费豁免
-    _lifelongChange(item) {
-      this.dispatchModule("setProduct", "is_lifelong", item.value);
     },
     //购买模块关闭
     _modalClose() {
@@ -442,10 +384,29 @@ export default {
     _insureClick() {
       //跳转到表单填写页面
       if (this.model === "index") {
+        this.setOtherDataLabelStr();
         this.$emit("submit");
       } else if (this.model === "write") {
         // this.$emit("submit");
       } else if (this.model === "confirm") {
+      }
+    },
+
+    //统一写入填写保险信息的label对应的值
+    setOtherDataLabelStr() {
+      var info = this.productInfo;
+      var label = {};
+      label.labelPackageName = product["package_code"][info.package_code]; //保障计划
+      label.labelBasePremium = product["base_premium"][info.base_premium]; //基本保额
+      label.labelLifeLimit = product["life_limit"][info.life_limit]; //保障期限
+      label.labelPaymentLimit = info.payment_limit + "年"; //缴费期限
+      label.labelPayType = "年缴"; //缴费类型
+      label.labelSubClinical = product["sub_clinical"][info.is_sub_clinical]; //附加轻症及轻症豁免
+      label.labelSubClinicalNum = this.sub_clinical_num; //轻症疾病保额
+      label.labelLifelong = product["lifelong"][info.is_lifelong]; //保费豁免
+      label.labelLifelongYear = this.lifelongYear; //附加险缴费年限
+      for (var key in label) {
+        this.dispatchModule("setOtherData", key, label[key]);
       }
     },
 

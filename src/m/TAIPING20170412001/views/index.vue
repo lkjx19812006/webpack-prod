@@ -9,10 +9,10 @@
     <productRangeCom :rangeList="rangeList"></productRangeCom>
 
     <!--头部套餐选择组件  -->
-    <planSelect v-model="productInfo.package_code" :planList="planList" @change="_planChange"></planSelect>
+    <planSelect v-model="productInfo.package_code" :planList="planList"></planSelect>
 
     <div class="bottom-after">
-      <limitCell ref="limitCom" v-model="productInfo.base_premium" @change="_limitChange" :tabList="limitList"></limitCell>
+      <limitCell ref="limitCom" v-model="productInfo.base_premium" :tabList="limitList"></limitCell>
     </div>
 
     <!-- 保障责任 -->
@@ -128,6 +128,15 @@ export default {
     productInfo() {
       return this.$store.state.productState.product;
     },
+    applicant() {
+      return this.$store.state.productState.applicant;
+    },
+    insured() {
+      return this.$store.state.productState.insured;
+    },
+    otherData() {
+      return this.$store.state.productState.otherData;
+    },
     //保障责任列表
     bzzrList() {
       var result =
@@ -158,9 +167,54 @@ export default {
   },
 
   mounted() {
-    this._addEventPopState();
+    this._initDefault();
   },
   methods: {
+    //初始化默认值
+    _initDefault() {
+      //设置日期限制
+      //投保人日期选择开始时间
+      if (!this.otherData.applicantStartTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "applicantStartTime",
+          Date.getDateByAge(55)
+        );
+      }
+      //投保人日期选择结束时间
+      if (!this.otherData.applicantEndTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "applicantEndTime",
+          Date.getDateByAge(18)
+        );
+      }
+
+      //被保人日期选择开始时间
+      if (!this.otherData.insuredStartTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "insuredStartTime",
+          Date.getDateByAge(50)
+        );
+      }
+      //被保人日期选择结束时间
+      if (!this.otherData.insuredEndTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "insuredEndTime",
+          Date.getDateByDay(30)
+        );
+      }
+      //设置投保人默认出生日期
+      if (!this.applicant.birthday) {
+        this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));
+      }
+      //设置被保人默认出生日期
+      if (!this.insured.birthday) {
+        this.dispatchModule("setInsured", "birthday", Date.getDateByDay(30));
+      }
+    },
     _insureClick() {
       // 跳转到表单页面进行填写
       this.showBuy = true;
@@ -174,26 +228,24 @@ export default {
       // 显示当前弹框信息
       this.popup[pid] = true;
     },
-    //保险计划改变
-    _planChange(param) {
-      this.$store.dispatch("setProduct", {
-        key: "package_code",
-        value: param.select.code
-      });
-    },
-    _limitChange(param) {
-      this.$store.dispatch("setProduct", {
-        key: "base_premium",
-        value: param.value
-      });
-    },
     _closeBuy() {
       this.showBuy = false;
       this.$refs.limitCom.initPosition();
     },
     _submit() {
-      console.log("asdfasdfasd");
       this.$router.push("/health");
+    },
+    //分发模块
+    /**
+     * module
+     * key
+     * value
+     */
+    dispatchModule(moduleName, key, value) {
+      this.$store.dispatch(moduleName, {
+        key: key,
+        value: value
+      });
     }
   }
 };

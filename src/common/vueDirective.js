@@ -114,25 +114,21 @@ anyiDirective.install = function (Vue, options) {
   }
 
   //change事件时动态校验表单格式
-  var _inputChangeHandle = function (e, el, binding, vnode) {
-    var validRes = _setInputData(el, binding, vnode);//获取校验结果
+  var _inputChangeHandle = function (el, validRes, isScroll) {
     //获取父级元素
     var parentNode = el.parentNode;
-    var msgNode = parentNode.querySelector('.directive-valid-input-msg');//获取消息展示的盒子
     //拿到结果 对样式进行修改
     if (validRes.valid) {//校验成功 
-      if (msgNode) parentNode.removeChild(msgNode);
+      parentNode.classList.remove('directive-valid-input-msg');
     } else {//校验失败
-      if (msgNode) {//修改校验内容展示
-        msgNode.innerText = validRes.msg
-      } else {//创建一条信息展示内容
-        var div = document.createElement('div');
-        div.classList.add('directive-valid-input-msg');
-        div.innerText = validRes.msg;
-        parentNode.appendChild(div);
+      parentNode.classList.add('directive-valid-input-msg');
+      //页面滚动
+      if (isScroll) {
+        el.scrollIntoView(true);
+        el.scrollIntoViewIfNeeded();
       }
+      // el.focus()
     }
-    console.log(validRes)
   }
 
   // v-form:xxxx={required:, valid: {regex:,errMsg:''}}或者不传参数
@@ -141,7 +137,21 @@ anyiDirective.install = function (Vue, options) {
     inserted(el, binding, vnode) {
       setTimeout(function () {
         _initInputData(el, binding, vnode);
-        el.addEventListener('change', function (e) { _inputChangeHandle(e, el, binding, vnode) });
+        //失去焦点
+        el.onblur = function (e) {
+          var validRes = {};
+          validRes.valid = e.target.getAttribute('data-valid') === 'true' ? true : false;
+          validRes.msg = e.target.getAttribute('data-errMsg');
+          _inputChangeHandle(el, validRes, false);
+        }
+        // 前端统一 报错 点击立即投保时才校验表单
+        // el.onchange = function (e) {
+        //   _inputChangeHandle(e, el, binding, vnode)
+        // }
+        // el.onfocus = function () {
+        //   el.scrollIntoView(true);
+        //   el.scrollIntoViewIfNeeded();
+        // }
       })
 
     },
@@ -150,6 +160,15 @@ anyiDirective.install = function (Vue, options) {
       setTimeout(function () {
         _initInputData(el, binding, vnode);
       })
+    },
+    //解除绑定时调用 必须要调用 不调用 v-if互斥条件的dom元素会有问题
+    unbind(el, binding, vnode) {
+      el.setAttribute('data-valid', '');
+      el.setAttribute('data-errMsg', '');
+      el.onblur = null;
+      //清除错误提示
+      var parentNode = el.parentNode;
+      parentNode.classList.remove('directive-valid-input-msg');
     }
   })
 
@@ -175,9 +194,11 @@ anyiDirective.install = function (Vue, options) {
               if (isValid === 'false') {
                 validObj.msg = item.getAttribute('data-errMsg');
                 validObj.valid = false;
+                _inputChangeHandle(item, validObj, true)
                 binding.value.submit(validObj)
                 return;
               }
+              _inputChangeHandle(item, validObj, true);
             }
             binding.value.submit(validObj);
           }
@@ -187,5 +208,48 @@ anyiDirective.install = function (Vue, options) {
   })
 
   // ------------------------------自定义指令校验结束-------------------------------------
+  var toUp = function (e) {
+    var val = e.target.value;
+    e.target.value = val.toUpperCase()
+  }
+  //全部转成成大写
+  Vue.directive('toUp', {
+    inserted(el, binding, vnode) {
+      setTimeout(function () {
+        el.addEventListener('blur', toUp)
+      })
+    },
+    componentUpdated(el, binding, vnode) {
+      setTimeout(function () {
+        var val = el.value;
+        el.value = val.toUpperCase()
+      })
+    },
+    unbind(el, binding, vnode) {
+      el.removeEventListener('blur', toUp);
+    }
+  })
+  var toLo = function (e) {
+    var val = e.target.value;
+    e.target.value = val.toLowerCase()
+  }
+  //转换成小写
+  Vue.directive('toLo', {
+    inserted(el, binding, vnode) {
+      setTimeout(function () {
+        el.addEventListener('blur', toLo)
+      })
+    },
+    componentUpdated(el, binding, vnode) {
+      setTimeout(function () {
+        var val = el.value;
+        el.value = val.toLowerCase()
+      })
+    },
+    unbind(el, binding, vnode) {
+      el.removeEventListener('blur', toLo);
+    }
+  })
+
 }
 export default anyiDirective;
