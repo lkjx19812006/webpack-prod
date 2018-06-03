@@ -5,14 +5,14 @@
   .top {
     padding: rem(34) rem(32);
     position: relative;
-    /deep/ .left-title-line {
+    .left-title-line {
       border-left: rem(6) solid $itemTitleColor;
       height: rem(32);
       padding-left: rem(16);
       background: transparent;
       margin-bottom: rem(3);
     }
-    /deep/ .left {
+    .left {
       flex: 1;
       .icon {
         margin-right: rem(20);
@@ -26,7 +26,7 @@
         line-height: rem(42);
       }
     }
-    /deep/ .right {
+    .right {
       .right-title {
         flex: 0 0 auto;
         height: rem(42);

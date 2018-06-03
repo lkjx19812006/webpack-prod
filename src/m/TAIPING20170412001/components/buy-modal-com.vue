@@ -391,8 +391,8 @@ export default {
         this.setOtherDataLabelStr();
         this.$emit("submit");
       } else if (this.model === "write") {
-        // this.$emit("submit");
       } else if (this.model === "confirm") {
+        this.$emit("submit");
       }
     },
 

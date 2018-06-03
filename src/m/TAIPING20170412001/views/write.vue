@@ -24,16 +24,18 @@
       margin-right: rem(20);
     }
     .right-title {
-      color: $textColor !important;
+      color: $textColor;
       &.name-tit {
+       color: $textColor;
         margin-right: rem(100);
       }
       &.percent {
+        color: $textColor;
         margin-right: rem(30);
       }
     }
     .accordion-content {
-      padding: 0 !important;
+      padding: 0;
     }
   }
 
@@ -86,12 +88,12 @@
       </anyiCellItem>
     </div>
 
-    <!-- 投保人信息 -->
+    <!-- 保险信息 -->
     <div class="group">
       <!-- 标题样式 -->
       <anyiCellItem>
         <span slot="left" class="left-title-line"></span>
-        <span slot="left" class="left-title">保险信息</span>
+        <span slot="left" class="left-title top-title">保险信息</span>
       </anyiCellItem>
       <cellItemCom leftColor="#282828" rightColor="#282828" :cellList="planInfos" :hasMore="true" :showBeforeNum="2"></cellItemCom>
     </div>
@@ -273,6 +275,7 @@
     <!-- 受益人最多为3个 B不能设置受益人 必须为法定受益人 -->
     <div class="group">
       <anyiCellItem :noBorder="productInfo.package_code === 'B' || beneficiary.type === '1'" arrow>
+        <span slot="left" class="left-title-line"></span>
         <span slot="left" class="left-title">受益人信息</span>
         <select :disabled="productInfo.package_code === 'B'" v-model="beneficiary.type" slot="right">
           <option value="1">法定受益人</option>
@@ -315,7 +318,7 @@
             </anyiCellItem>
             <anyiCellItem noBorder>
               <span slot="left" class="left-title">受益比例（%）</span>
-              <input v-form:item="{required: `请输入受益人${index + 1}受益比例`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="text" placeholder="请填写受益百分比">
+              <input v-form:item="{required: `请输入受益人${index + 1}受益比例`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
             </anyiCellItem>
           </div>
         </accordion>
@@ -445,7 +448,7 @@ export default {
       showJobSelect: false,
       jobList: jobList,
       banks: banks, //银行信息
-      radio: "" // 协议部分
+      radio: false // 协议部分
     };
   },
   watch: {
@@ -553,7 +556,14 @@ export default {
       }
       //校验受益人比例
       if (!this._validBeneficiaryPercent()) return;
-      return;
+
+      //协议指定
+      if (!this.radio) {
+        this.$dialog.toast({
+          mes: "请勾选我已了解并同意相关协议"
+        });
+        return;
+      }
 
       this.$router.push("/confirm");
     },
@@ -614,7 +624,7 @@ export default {
     },
     //校验受益人比例
     _validBeneficiaryPercent() {
-      if(this.beneficiary.type === '1') return true;
+      if (this.beneficiary.type === "1") return true;
       var list = this.beneficiary.person;
       var percent = 0;
       list.forEach(item => {
