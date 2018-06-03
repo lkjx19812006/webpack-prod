@@ -56,12 +56,12 @@ const state = {
 		"pay_type": '年缴'//缴费类型没有字段注意
 	},
 	"applicant": {
-		"name": "",
+		"name": "殷谦",
 		"card_type": "01",
-		"card_id": "",
-		"phone": "",
-		"email": "",
-		"birthday": "",
+		"card_id": "430921199106111318",
+		"phone": "17763732365",
+		"email": "371516100@qq.com",
+		"birthday": "1991-06-11",
 		"sex": "0",
 
 		"address": "",     //详细地址
@@ -70,7 +70,7 @@ const state = {
 		"district": "",   //区/县
 
 		"bank_code": "9001",//银行代码
-		"account": "",//银行账号
+		"account": "6666666666666666",//银行账号
 		"account_name": "工商银行",//银行名称
 	},
 	"insured": {
@@ -81,7 +81,7 @@ const state = {
 		"card_id": "",
 		"birthday": "",
 		"sex": "0",
-		"relation": "01",// 与被保人关系
+		"relation": "00",// 与被保人关系
 		"job_code": "",//职业代码
 
 		"height": "", //Y 身高
@@ -101,7 +101,10 @@ const state = {
 		"relation": "01", //   与被保人关系
 	},
 	//附加的
-	"addtional": {},
+	"addtional": {
+		urgent_name: '',//紧急联系人
+		urgent_phone: '',//紧急联系人手机
+	},
 
 	//其他页面逻辑相关值限制参数
 	otherData: {

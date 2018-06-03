@@ -322,16 +322,20 @@ export default {
         result = [...arr];
       } else if (countAge >= 20) {
         result = [arr[0], arr[1]];
-        this.$store.dispatch("setProduct", {
-          key: "payment_limit",
-          value: "15"
-        });
+        if (this.model === "index") {
+          this.$store.dispatch("setProduct", {
+            key: "payment_limit",
+            value: "15"
+          });
+        }
       } else if (countAge >= 15) {
         result = [arr[0]];
-        this.$store.dispatch("setProduct", {
-          key: "payment_limit",
-          value: "15"
-        });
+        if (this.model === "index") {
+          this.$store.dispatch("setProduct", {
+            key: "payment_limit",
+            value: "15"
+          });
+        }
       } else {
       }
       return result;

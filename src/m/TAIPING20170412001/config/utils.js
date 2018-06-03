@@ -96,20 +96,74 @@
     return 0;
   }
 
+  var checkIdLast = function (Num) {
+    if (Num.length != 18)
+      return false;
+    var x = 0;
+    var y = '';
+    for (i = 18; i >= 2; i--)
+      x = x + (square(2, (i - 1)) % 11) * parseInt(Num.charAt(19 - i - 1));
+    x %= 11;
+    y = 12 - x;
+    if (x == 0)
+      y = '1';
+    if (x == 1)
+      y = '0';
+    if (x == 2)
+      y = 'X';
+    return y;
+  };
 
-/*
-* 判断obj是否为一个整数
-*/
+  // 求得x的y次方
+  function square(x, y) {
+    var i = 1;
+    for (j = 1; j <= y; j++)
+      i *= x;
+    return i;
+  }
+
+  //验证身份证包括年龄 性别 生日 等
+  Date.geCardInfooByCardId = function (val) {
+    if (!val) return null;
+    if (val.length != 18) return null;
+    var reg = /^[1-9]\d{5}[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))\d{3}(\d|x|X)$/;
+    if (!reg.test(val)) return null;
+    var last = val.substring(val.length - 1);
+    var lastNum = checkIdLast(val);
+    if (last.toUpperCase() != lastNum) return null;
+    var result = {};
+    var array = /^(\d{6})(\d{8})(\d{2})(\d{1})(\d{1}|x|X)$/.exec(val);
+    result.birth = array[2].replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3");//设置出生日期
+    result.sex = array[4] % 2 == 0 ? "1" : "0";//设置性别
+    var bArr = array[2].match(/^(\d{4})(\d{2})(\d{2})$/);
+    var date = new Date(bArr[1], bArr[2] - 1, bArr[3]);
+    var now = new Date();
+    var year = now.getFullYear() - date.getFullYear();
+    if (date.getMonth() > now.getMonth()) {
+      year--;
+    } else if (date.getMonth() == now.getMonth() && date.getDate() > now.getDate()) {
+      year--;
+    }
+    result.age = year;//设置年龄
+    return result;
+  };
+
+
+
+
+  /*
+  * 判断obj是否为一个整数
+  */
   function isInteger(obj) {
     return Math.floor(obj) === obj;
   }
 
-/*
-* 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
-* @param floatNum {number} 小数
-* @return {object}
-*   {times:100, num: 314}
-*/
+  /*
+  * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
+  * @param floatNum {number} 小数
+  * @return {object}
+  *   {times:100, num: 314}
+  */
   function toInteger(floatNum) {
     var ret = { times: 1, num: 0 };
     var isNegative = floatNum < 0;
@@ -130,16 +184,16 @@
     return ret;
   }
 
-/*
-* 核心方法，实现加减乘除运算，确保不丢失精度
-* 思路：把小数放大为整数（乘），进行算术运算，再缩小为小数（除）
-*
-* @param a {number} 运算数1
-* @param b {number} 运算数2
-* @param digits {number} 精度，保留的小数点数，比如 2, 即保留为两位小数
-* @param op {string} 运算类型，有加减乘除（add/subtract/multiply/divide）
-*
-*/
+  /*
+  * 核心方法，实现加减乘除运算，确保不丢失精度
+  * 思路：把小数放大为整数（乘），进行算术运算，再缩小为小数（除）
+  *
+  * @param a {number} 运算数1
+  * @param b {number} 运算数2
+  * @param digits {number} 精度，保留的小数点数，比如 2, 即保留为两位小数
+  * @param op {string} 运算类型，有加减乘除（add/subtract/multiply/divide）
+  *
+  */
   function operation(a, b, digits, op) {
     var o1 = toInteger(a);
     var o2 = toInteger(b);
