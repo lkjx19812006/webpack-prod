@@ -70,7 +70,8 @@
       </div>
       <anyiCellItem>
         <span class="left-title" slot="left">投保人出生日期</span>
-        <yd-datetime slot="right" type="date" v-model="applicant.birthday" :start-date="applicantStartTime" :end-date="applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime v-if="insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime v-else slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
       <anyiCellItem>
         <span class="left-title" slot="left">投保人性别</span>
@@ -80,11 +81,11 @@
         <span class="left-title" slot="left">是否为本人投保</span>
         <buttonRadio type="radio" slot="right" v-model="insured.relation"></buttonRadio>
       </anyiCellItem>
-      <anyiCellItem>
+      <anyiCellItem v-if="insured.relation !== '00'">
         <span class="left-title" slot="left">被保险人出生日期</span>
-        <yd-datetime slot="right" type="date" v-model="insured.birthday" :start-date="insuredStartTime" :end-date="insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime slot="right" type="date" v-model="insured.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
-      <anyiCellItem>
+      <anyiCellItem v-if="insured.relation !== '00'">
         <span class="left-title" slot="left">被保险人性别</span>
         <buttonRadio slot="right" v-model="insured.sex"></buttonRadio>
       </anyiCellItem>
@@ -104,7 +105,7 @@
       </anyiCellItem>
       <anyiCellItem>
         <span class="left-title" slot="left">缴费类型</span>
-        <buttonRadio :radioList="payTypes" slot="right" v-model="productInfo.pay_type"></buttonRadio>
+        <buttonRadio :radioList="payTypes" slot="right" v-model="otherData.pay_type"></buttonRadio>
       </anyiCellItem>
 
       <!-- 附加轻症只有B款升级款才有 -->
@@ -156,9 +157,29 @@ export default {
     };
   },
   watch: {
+    //套餐切换时
+    "productInfo.package_code"(newVal, oldVal) {
+      if (newVal === "B") {
+        this.dispatchModule("setProduct", "is_sub_clinical", '0');//不包含轻症
+      }
+    },
     "insured.relation"(newVal, oldVal) {
       //是否为本人投保
       if (newVal === "00") {
+        this.dispatchModule("setInsured", "birthday", this.applicant.birthday);
+        this.dispatchModule("setInsured", "sex", this.applicant.sex);
+        this.dispatchModule("setInsured", "relation", "00");
+      }
+    },
+    "applicant.birthday"(newVal, oldVal) {
+      if (this.insured.relation === "00") {
+        this.dispatchModule("setInsured", "birthday", this.applicant.birthday);
+        this.dispatchModule("setInsured", "sex", this.applicant.sex);
+        this.dispatchModule("setInsured", "relation", "00");
+      }
+    },
+    "applicant.sex"(newVal, oldVal) {
+      if (this.insured.relation === "00") {
         this.dispatchModule("setInsured", "birthday", this.applicant.birthday);
         this.dispatchModule("setInsured", "sex", this.applicant.sex);
         this.dispatchModule("setInsured", "relation", "00");
@@ -185,21 +206,11 @@ export default {
     },
     //被保人信息
     insured() {
-      return this.$store.state.productState.insured;
+      return this.$store.state.productState.insured[0];
     },
     //计算投保人年龄范围
-    applicantStartTime() {
-      return this.$store.state.productState.otherData.applicantStartTime;
-    },
-    applicantEndTime() {
-      return this.$store.state.productState.otherData.applicantEndTime;
-    },
-    //被保人年龄范围30天到50周岁
-    insuredStartTime() {
-      return this.$store.state.productState.otherData.insuredStartTime;
-    },
-    insuredEndTime() {
-      return this.$store.state.productState.otherData.insuredEndTime;
+    otherData() {
+      return this.$store.state.productState.otherData;
     },
     //投保人年龄
     applicantAge() {
@@ -265,44 +276,70 @@ export default {
       var insuredAgeKey = this.insuredAge; //被保险人年龄
       var applicantSexkey = this.applicant.sex == "0" ? "man" : "woman"; //投保人性别
       var applicantAgekey = this.applicantAge; //投保人年龄
-      var limitNum = this.productInfo.base_premium / 1000; //保额每1000 单位
 
       console.log("base", lifeKey, insuredSexKey, payYearKey, insuredAgeKey);
 
-      var base = price[codeKey]["base"]; //基础
-      var subClinical = price[codeKey]["sub_clinical"]; //轻症
-      var lifelong = price[codeKey]["lifelong"]; //保费豁免
+      //拿到产品费率
+      var base_list = price[codeKey]["base"]; //基础保费率表
+      var subClinical_list = price[codeKey]["sub_clinical"] || null; //轻症费率表
+      var lifelong_list = price[codeKey]["lifelong"]; //保费豁免费率表
 
-      var basePrice = base[lifeKey][insuredSexKey][payYearKey][insuredAgeKey]; //基础保费
-      var subClinicalPrice = 0; //轻症保费
-      var lifelongPrice = 0; //豁免保费
-      var total = Number.add(basePrice, 0); //总保费
+      var base_rate =
+        base_list[lifeKey][insuredSexKey][payYearKey][insuredAgeKey] * 100; //基础保费费率
+      var subClinical_rate = 0; //轻症保费费率
+      var lifelong_rate = 0; //豁免保费费率
+      var total = 0; //总保费
       switch (codeKey) {
         case "A":
           if (this.productInfo.is_sub_clinical === "1") {
             //选择了轻症
-            subClinicalPrice =
-              subClinical[lifeKey][insuredSexKey][payYearKey][insuredAgeKey];
-            subClinicalPrice = Number.add(subClinicalPrice, 0);
-            total = Number.add(total, subClinicalPrice);
+            subClinical_rate =
+              subClinical_list[lifeKey][insuredSexKey][payYearKey][
+                insuredAgeKey
+              ] * 100; //轻症费率
             if (this.productInfo.is_lifelong === "1") {
-              lifelongPrice =
-                lifelong[lifeKey][applicantSexkey][payYearKey][applicantAgekey];
-              lifelongPrice = Number.add(lifelongPrice, 0);
-              total = Number.add(total, lifelongPrice);
+              //选择了保费豁免
+              lifelong_rate =
+                lifelong_list[lifeKey][applicantSexkey][payYearKey][
+                  applicantAgekey
+                ] * 100; //豁免费率
             }
           }
           break;
         case "B":
           if (this.productInfo.is_lifelong === "1") {
-            lifelongPrice =
-              lifelong[lifeKey][applicantSexkey][payYearKey][applicantAgekey];
-            lifelongPrice = Number.add(lifelongPrice, 0);
-            total = Number.add(total, lifelongPrice);
+            //选择了保费豁免
+            lifelong_rate =
+              lifelong_list[lifeKey][applicantSexkey][payYearKey][
+                applicantAgekey
+              ] * 100;
           }
           break;
       }
-      total = Number.multiply(total, limitNum);
+      //计算保额
+      var base_num = this.productInfo.base_premium; //基本保额
+      var subClinical_num =
+        this.productInfo.base_premium /
+        5; /** 附加轻症保额，单位元；是主险保额的五分之一*/
+
+      //计算保费
+      var base_price = Number.multiply(base_num / 100 / 10, base_rate / 100); //基础保费
+      var subClinical_price = Number.multiply(
+        subClinical_num / 100 / 10,
+        subClinical_rate / 100
+      ); //轻症保费
+
+      var lifelong_num = Number.add(base_price, subClinical_price); //豁免保额 = 基础保费 + 轻症保费
+      var lifelong_price =
+        Math.round(
+          Number.multiply(lifelong_num / 100 / 10, lifelong_rate / 100) * 100
+        ) / 100; //豁免保费
+      //拿到费率 计算保费
+      var total = Number.add(
+        Number.add(base_price, subClinical_price),
+        lifelong_price
+      );
+      // total = Number.multiply(total, limitNum);
       this.$store.dispatch("setTotal", total); //设置计算后的值
       return total;
     },

@@ -64,6 +64,20 @@
     return new Date().toFormat('yyyy-MM-dd')
   }
 
+  //获取次日时间
+  Date.getDateByNextDay = function () {
+    var now = new Date();
+    now.setDate(now.getDate() + 1);
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    console.log(new Date(now).toFormat('yyyy-MM-dd hh:mm:ss'))
+    return new Date(now).toFormat('yyyy-MM-dd hh:mm:ss')
+  }
+
+
+
   //通过时间或年龄 静态方法
   Date.getAgeByDate = function (date) {
     if (date && typeof date === 'string') {

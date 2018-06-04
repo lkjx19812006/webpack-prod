@@ -50,7 +50,7 @@
       </anyiCellItem>
       <anyiCellItem noBorder>
         <span slot="left" class="left-title">起保日期</span>
-        <span slot="right" class="yd-datetime-input">默认为次日</span>
+        <span slot="right" class="yd-datetime-input">{{addtional.effect}}</span>
       </anyiCellItem>
     </div>
 
@@ -272,7 +272,7 @@
     </div>
 
     <!-- 紧急联系人 -->
-    <div class="group">
+    <div class="group" style="margin-bottom: 0">
       <accordion isOpenShowTopBorder :isCloseShowTopBorder="false" class="accordion">
         <span slot="left" class="left-title-line"></span>
         <span slot="left" class="left-title  top-title">紧急联系人</span>
@@ -280,11 +280,11 @@
         <div class="accordion-content">
           <anyiCellItem>
             <span slot="left" class="left-title">联系人姓名</span>
-            <span slot="right" class="right-title">{{addtional.urgent_name}}</span>
+            <span slot="right" class="right-title">{{contact.name}}</span>
           </anyiCellItem>
           <anyiCellItem noBorder>
             <span slot="left" class="left-title">联系人手机号</span>
-            <span slot="right" class="right-title">{{addtional.urgent_phone}}</span>
+            <span slot="right" class="right-title">{{contact.phone}}</span>
           </anyiCellItem>
         </div>
       </accordion>
@@ -324,16 +324,22 @@ export default {
   },
   mixins: [mixinPopup, authLogin],
   data() {
-    return {};
+    return {
+      isSendIng: false //发生数据中
+    };
   },
   computed: {
+    //总价
+    total() {
+      return this.$store.state.productState.total;
+    },
     //投保人信息
     applicant() {
       return this.$store.state.productState.applicant;
     },
     //被保人信息
     insured() {
-      return this.$store.state.productState.insured;
+      return this.$store.state.productState.insured[0];
     },
     //产品信息
     productInfo() {
@@ -349,6 +355,10 @@ export default {
     //附加的
     addtional() {
       return this.$store.state.productState.addtional;
+    },
+    //紧急联系人
+    contact() {
+      return this.$store.state.productState.contact;
     },
     //保障计划
     planInfos() {
@@ -371,7 +381,142 @@ export default {
   },
   methods: {
     _insureClick() {
-      console.log("asdfasdfasdf");
+      //该产品发布在云保和风险管家端
+      //云保地址测试http://open.anyitech.ltd
+      //云保地址生产http://open.anyi-tech.com
+      //风险管家地址http://test.m.anyi-tech.com
+      //风险管家生产http://m.anyi-tech.com
+      var hostConfig = {
+        "m.anyi-tech.com": {
+          env: "pro",
+          platform: "风险管家"
+        },
+        "test.m.anyi-tech.com": {
+          env: "dev",
+          platform: "风险管家"
+        },
+        "open.anyi-tech.com": {
+          env: "pro",
+          platform: "安逸云保"
+        },
+        "open.anyitech.ltd": {
+          env: "dev",
+          platform: "安逸云保"
+        }
+      };
+
+      var hostname = window.location.hostname;
+      var env = (hostConfig[hostname] && hostConfig[hostname].env) || "dev"; //环境
+      var platform =
+        (hostConfig[hostname] && hostConfig[hostname].platform) || "风险管家"; //平台
+      var ybId = "FOSUN20180522001-001"; //云保Id
+
+      if (platform === "风险管家" && !this.checkLogin()) {
+        //校验平台是否需要登陆
+        //需要登陆 校验登陆
+        this.showLogin();
+        return;
+      }
+
+      //云保不需要登陆 风险管家需要登陆 接口地址
+      var url =
+        platform === "风险管家"
+          ? "/spb/standard/product/insured.action"
+          : "/spb/standard/product/insuredWithoutLogin.action";
+
+      var total = this.total * 100; //产品总价
+      var product = this.copyObj(this.productInfo);
+      product.base_premium = product.base_premium * 100;
+      var applicant = this.applicant;
+      var insured = this.insured;
+      var addtional = this.addtional;
+      var beneficiary = {
+        type: "",
+        person: []
+      };
+      beneficiary.type = this.beneficiary.type;
+      for (var i = 0; i < this.beneficiary.person.length; i++) {
+        var obj = {};
+        var item = this.beneficiary.person[i];
+        for (var key in item) {
+          obj[key] = item[key];
+        }
+        obj.percent = Number.divide(obj.percent, 100); //处理比例
+        beneficiary.person.push(obj);
+      }
+
+      var sendData = {
+        total: total,
+        app_id: window.sessionStorage.getItem("appid") || "10000",
+        core_info: {
+          total: total,
+          product: product,
+          applicant: this.applicant,
+          insured: [this.insured],
+          beneficiary: beneficiary,
+          addtional: this.addtional,
+          contact: this.contact
+        },
+        product_id: ybId,
+        yb_applicant: {
+          //云保投保人信息
+          name: this.applicant.name, //投保人姓名
+          telephone: this.applicant.phone, //投保人手机号码
+          email: this.applicant.email //投保人联系邮箱
+        }
+      };
+      console.log(sendData);
+
+      if (!this.isSendIng) {
+        this.isSendIng = true;
+        this.$http
+          .post({
+            url: url,
+            data: sendData,
+            loading: true
+          })
+          .then(res => {
+            this.isSendIng = false;
+            if (res.code === "80001") {
+              this.$dialog.toast({
+                mes: res.msg,
+                duration: 2000
+              });
+            } else if (res.code === "1") {
+              this.loadScript(res.data);
+            }
+            console.log(res);
+          })
+          .catch(err => {
+            this.isSendIng = false;
+            this.$dialog.toast({
+              mes: err.toString(),
+              duration: 2000
+            });
+          });
+      }
+    },
+    checkLogin() {
+      return !!this.$http.getCookie("sso_token");
+    },
+    //复制一个对象
+    copyObj(oldObj) {
+      var newObj = {};
+      if (oldObj && typeof oldObj === "object") {
+        for (var key in oldObj) {
+          if (oldObj.hasOwnProperty(key)) {
+            newObj[key] = oldObj[key];
+          }
+        }
+      }
+      return newObj;
+    },
+    loadScript(scriptstr) {
+      var strContent = scriptstr.match(/<script>(\S*)<\/script>/)[1];
+      var script = window.document.createElement("script");
+      script.type = "text/javascript";
+      script.innerText = strContent;
+      document.body.appendChild(script);
     }
   }
 };

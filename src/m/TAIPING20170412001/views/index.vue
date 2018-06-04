@@ -132,7 +132,7 @@ export default {
       return this.$store.state.productState.applicant;
     },
     insured() {
-      return this.$store.state.productState.insured;
+      return this.$store.state.productState.insured[0];
     },
     otherData() {
       return this.$store.state.productState.otherData;
@@ -172,6 +172,10 @@ export default {
   methods: {
     //初始化默认值
     _initDefault() {
+      //是否为本人投保 填写页也需要同样处理
+      if (this.insured.relation != "00") {
+        this.dispatchModule("setInsured", "relation", "");
+      }
       //设置日期限制
       //投保人日期选择开始时间
       if (!this.otherData.applicantStartTime) {
@@ -212,7 +216,9 @@ export default {
       }
       //设置被保人默认出生日期
       if (!this.insured.birthday) {
-        this.dispatchModule("setInsured", "birthday", Date.getDateByDay(30));
+        console.log(this.insured.birthday);
+        console.log("sadfasdf");
+        this.dispatchModule("setInsured", "birthday", Date.getDateByAge(18));
       }
     },
     _insureClick() {

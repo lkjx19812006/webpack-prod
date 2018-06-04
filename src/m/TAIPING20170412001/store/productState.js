@@ -52,16 +52,16 @@ const state = {
 		"life_limit": "life_70",    //Y 保障期限 life_70 life_80 life_all
 		"payment_limit": "15",       //Y 缴费年限 15 20 30
 		"is_sub_clinical": "1",     //N 是否包含附加轻症 是 1，否 0；套餐A是，必传
-		"is_lifelong": "1",         //Y 是否保费豁免 是 1，否 0；
-		"pay_type": '年缴'//缴费类型没有字段注意
+		"is_lifelong": "1"        //Y 是否保费豁免 是 1，否 0；
+
 	},
 	"applicant": {
-		"name": "殷谦",
+		"name": "",
 		"card_type": "01",
-		"card_id": "430921199106111318",
-		"phone": "17763732365",
-		"email": "371516100@qq.com",
-		"birthday": "1991-06-11",
+		"card_id": "",
+		"phone": "",
+		"email": "",
+		"birthday": "",
 		"sex": "0",
 
 		"address": "",     //详细地址
@@ -69,11 +69,11 @@ const state = {
 		"city": "",       //市
 		"district": "",   //区/县
 
-		"bank_code": "9001",//银行代码
-		"account": "6666666666666666",//银行账号
-		"account_name": "工商银行",//银行名称
+		"bank_code": "",//银行代码
+		"account": "",//银行账号
+		"account_name": "",//银行名称
 	},
-	"insured": {
+	"insured": [{
 		"name": "",
 		"phone": "",
 		"email": "",
@@ -81,12 +81,12 @@ const state = {
 		"card_id": "",
 		"birthday": "",
 		"sex": "0",
-		"relation": "00",// 与被保人关系
+		"relation": "",// 与被保人关系
 		"job_code": "",//职业代码
 
 		"height": "", //Y 身高
 		"weight": "",  //Y 体重
-	},
+	}],
 	//受益人
 	"beneficiary": {
 		"type": "1", //    受益方式   法定 1 指定 2
@@ -102,12 +102,18 @@ const state = {
 	},
 	//附加的
 	"addtional": {
-		urgent_name: '',//紧急联系人
-		urgent_phone: '',//紧急联系人手机
+		effect: ''//生效日期
+	},
+	//紧急联系人
+	contact: {
+		name: '',
+		phone: ''
 	},
 
 	//其他页面逻辑相关值限制参数
 	otherData: {
+		"pay_type": '年缴',//缴费类型没有字段注意
+
 		applicantStartTime: '',//投保人日期选择开始
 		applicantEndTime: '',//投保人日期选择结束
 		insuredStartTime: '',//被保人日期选择开始
@@ -203,7 +209,7 @@ const mutations = {
 	},
 	//设置被保人信息
 	setInsured(state, params) {
-		state.insured[params.key] = params.value;
+		state.insured[0][params.key] = params.value;
 	},
 	//设置其他限制信息
 	setOtherData(state, params) {

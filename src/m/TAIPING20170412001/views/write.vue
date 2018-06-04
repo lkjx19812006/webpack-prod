@@ -26,7 +26,7 @@
     .right-title {
       color: $textColor;
       &.name-tit {
-       color: $textColor;
+        color: $textColor;
         margin-right: rem(100);
       }
       &.percent {
@@ -84,7 +84,7 @@
       </anyiCellItem>
       <anyiCellItem noBorder>
         <span slot="left" class="left-title">起保日期</span>
-        <span slot="right" class="yd-datetime-input r-color">默认为次日</span>
+        <span slot="right" class="yd-datetime-input r-color">{{addtional.effect}}</span>
       </anyiCellItem>
     </div>
 
@@ -138,7 +138,8 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
-        <yd-datetime :readonly="applicant.card_type === '01'" slot="right" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+        <yd-datetime :readonly="applicant.card_type === '01'" v-if="insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime :readonly="applicant.card_type === '01'" v-else slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -342,7 +343,9 @@
       </anyiCellItem>
       <anyiCellItem arrow>
         <span slot="left" class="left-title">开户银行</span>
+        <input v-form:item="{required: '请选择开户银行'}" type="text" slot="right" style="display: none" v-model="applicant.bank_code">
         <select placeholder="请选择" style="direction:rtl" v-model="applicant.bank_code" slot="right">
+          <option value="" style="direction:rtl" class="r-color">请选择</option>
           <option style="direction:rtl" :key="index" v-for="(item, index) in banks" :value="item.value">{{item.label}}</option>
         </select>
       </anyiCellItem>
@@ -365,11 +368,11 @@
         <div class="accordion-content">
           <anyiCellItem>
             <span slot="left" class="left-title">联系人姓名</span>
-            <input slot="right" v-model="addtional.urgent_name" type="text" placeholder="请输入">
+            <input slot="right" v-model="contact.name" type="text" placeholder="请输入">
           </anyiCellItem>
           <anyiCellItem noBorder>
             <span slot="left" class="left-title">联系人手机号</span>
-            <input slot="right" v-model="addtional.urgent_phone" type="phone" placeholder="请输入有效手机号，便于联系">
+            <input slot="right" v-model="contact.phone" type="phone" placeholder="请输入有效手机号，便于联系">
           </anyiCellItem>
         </div>
       </accordion>
@@ -484,7 +487,7 @@ export default {
     },
     //被保人信息
     insured() {
-      return this.$store.state.productState.insured;
+      return this.$store.state.productState.insured[0];
     },
     //产品信息
     productInfo() {
@@ -500,6 +503,10 @@ export default {
     //附加的
     addtional() {
       return this.$store.state.productState.addtional;
+    },
+    //紧急联系人
+    contact() {
+      return this.$store.state.productState.contact;
     },
     //保障计划
     planInfos() {
@@ -528,8 +535,41 @@ export default {
   },
   mounted() {
     console.log(this.$store.state.productState);
+    this._initDefault();
   },
   methods: {
+    _initDefault() {
+      //设置默认次日生效
+      if (!this.addtional.effect) {
+        this.addtional.effect = Date.getDateByNextDay();
+      }
+
+      if (this.productInfo.package_code === "B") {
+        this.dispatchModule("setProduct", "is_sub_clinical", "0"); //不包含轻症
+      }
+
+      if (this.insured.relation !== "00") {
+        this.dispatchModule("setInsured", "relation", "01");
+      }
+      //设置被保人出生日期性别通过身份证
+      if (this.insured.card_type === "01" && this.insured.card_id) {
+        //身份证的时候手动设置生日和性别
+        var result = Date.geCardInfooByCardId(this.insured.card_id);
+        if (result) {
+          this.dispatchModule("setInsured", "birthday", result.birth);
+          this.dispatchModule("setInsured", "sex", result.sex);
+          this._countPriceIsSelf();
+        }
+      }
+      if (this.applicant.card_type === "01" && this.applicant.card_id) {
+        //身份证的时候手动设置生日和性别
+        var result = Date.geCardInfooByCardId(this.applicant.card_id);
+        if (result) {
+          this.dispatchModule("setApplicant", "birthday", result.birth);
+          this.dispatchModule("setApplicant", "sex", result.sex);
+        }
+      }
+    },
     _insureClick(res) {
       //基本的表单校验;
       if (!res.valid) {
@@ -539,6 +579,12 @@ export default {
         });
         return;
       }
+      //是否是本人
+      this._countPriceIsSelf();
+
+      //判断被保人年龄区间值 对应基本保额
+      if (!this._validAgeBaseNum()) return;
+
       //基本校验通过， 业务逻辑校验 校验年龄和缴费期限
       if (!this._validAgeAndPayment()) return;
       //校验身高和体重
@@ -566,6 +612,35 @@ export default {
       }
 
       this.$router.push("/confirm");
+    },
+    //判断被保人年龄区间值 对应基本保额
+    _validAgeBaseNum() {
+      var age = Date.getAgeByDate(this.insured.birthday);
+      var base_num = this.productInfo.base_premium;
+      var ageFlag = false;
+      var errAgeMsg = "";
+      //0-17岁 最高 20W
+      //18-40岁 最高 50w
+      //41-45岁 最高 40W
+      //46-50岁 最高 30w
+      if (age <= 17 && base_num > 200000) {
+        ageFlag = true;
+        errAgeMsg = "被保险人为未成年人时，基本保额最高限20万元";
+      } else if (age > 40 && age <= 45) {
+        ageFlag = true;
+        errAgeMsg = "被保险人年龄在41-45周岁，基本保额最高限40万元";
+      } else if (age > 45 && age <= 50) {
+        ageFlag = true;
+        errAgeMsg = "被保险人年龄在46-50周岁，基本保额最高限30万元";
+      }
+      if (ageFlag) {
+        this.$dialog.toast({
+          mes: errAgeMsg,
+          duration: 2000
+        });
+        return false;
+      }
+      return true;
     },
     //校验年龄和缴费期限
     _validAgeAndPayment() {
@@ -646,6 +721,7 @@ export default {
         //设置投保人性别和出生日期
         this.dispatchModule("setApplicant", "birthday", cardInfo.birth);
         this.dispatchModule("setApplicant", "sex", cardInfo.sex);
+        this._countPriceIsSelf();
       }
     },
     _insuredCardBlur(e) {
@@ -653,8 +729,8 @@ export default {
       var cardInfo = Date.geCardInfooByCardId(val);
       if (cardInfo) {
         //设置投保人性别和出生日期
-        this.dispatchModule("setProduct", "birthday", cardInfo.birth);
-        this.dispatchModule("setProduct", "sex", cardInfo.sex);
+        this.dispatchModule("setInsured", "birthday", cardInfo.birth);
+        this.dispatchModule("setInsured", "sex", cardInfo.sex);
       }
     },
     _countPriceIsSelf() {
@@ -705,7 +781,21 @@ export default {
     _showJobSelect(res) {
       //写入被保人职业信息
       var job_code = res.itemValue3.split("-"); //000102-1-2;
-
+      var authNum = Number(job_code[1]);
+      if (authNum === 0) {
+        this.$dialog.toast({
+          mes: "您选择的职业不在承保范围内",
+          duration: 2000
+        });
+        return;
+      }
+      if (this.productInfo.package_code === "A" && authNum > 4) {
+        this.$dialog.toast({
+          mes: "您选择的职业不在承保范围内",
+          duration: 2000
+        });
+        return;
+      }
       this.dispatchModule("setInsured", "job_code", job_code[0]);
       this.dispatchModule("setOtherData", "labelJob1", res.itemName1);
       this.dispatchModule("setOtherData", "labelJob2", res.itemName2);
