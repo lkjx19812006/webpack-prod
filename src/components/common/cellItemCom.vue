@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 //------------- 迭代YDUI样式 -----------------
 .yd-cell-item {
   display: flex;
@@ -13,7 +13,7 @@
 }
 .yd-cell-left {
   font-size: 0.3rem;
-  font-family: PingFangSC-Medium;
+  font-weight: 500;
   color: rgba(112, 112, 112, 1);
   display: flex;
   flex-direction: row;
@@ -26,7 +26,6 @@
 .yd-cell-right {
   flex: 1;
   font-size: 0.3rem;
-  font-family: PingFangSC-Regular;
   color: rgba(112, 112, 112, 1);
   display: flex;
   flex-direction: row;
@@ -53,15 +52,14 @@
   }
   .left-title {
     height: 0.45rem;
-    font-size: 0.32rem;
-    font-family: PingFangSC-Medium;
+    font-size: 0.30rem;
     color: rgba(31, 31, 31, 1);
     line-height: 0.45rem;
   }
   .right-title {
     height: 0.42rem;
     font-size: 0.3rem;
-    font-family: PingFangSC-Regular;
+
     color: rgba(112, 112, 112, 1);
     line-height: 0.42rem;
   }
@@ -88,50 +86,50 @@ export default {
       default: () => {
         return [
           {
-            isLeftLine: true, //是否显示左边得竖线
-            leftText: "保障责任", //左边文字内容
-            leftColor: "#282828",
-            rightText: "更多详情", //右边文字内容
-            rightColor: "#707070",
-            arrow: true, //是否显示箭头
-            popupId: "more"
+            isLeftLine: true, // 是否显示左边得竖线
+            leftText: '保障责任', // 左边文字内容
+            leftColor: '#282828',
+            rightText: '更多详情', // 右边文字内容
+            rightColor: '#707070',
+            arrow: true, // 是否显示箭头
+            popupId: 'more'
           },
           {
-            type: "item", //类型项目
-            leftText: "意外身故，残疾",
-            rightText: "2万",
-            alink: "",
-            hash: ""
+            type: 'item', // 类型项目
+            leftText: '意外身故，残疾',
+            rightText: '2万',
+            alink: '',
+            hash: ''
           },
           {
-            type: "item", //类型
-            leftText: "意外医疗费用",
-            rightText: "0.1万",
-            alink: "",
-            hash: ""
+            type: 'item', // 类型
+            leftText: '意外医疗费用',
+            rightText: '0.1万',
+            alink: '',
+            hash: ''
           },
           {
-            type: "item", //类型
-            leftText: "个人第三者责任",
-            rightText: "2万",
-            alink: "",
-            hash: ""
+            type: 'item', // 类型
+            leftText: '个人第三者责任',
+            rightText: '2万',
+            alink: '',
+            hash: ''
           },
           {
-            type: "item", //类型
-            leftText: "第三者责任意外医疗",
-            rightText: "0.1万",
-            alink: "",
-            hash: ""
+            type: 'item', // 类型
+            leftText: '第三者责任意外医疗',
+            rightText: '0.1万',
+            alink: '',
+            hash: ''
           }
         ];
       }
     }
   },
   methods: {
-    _showPopup(item) {
+    _showPopup (item) {
       if (item.popupId) {
-        this.$emit("showPopup", item.popupId);
+        this.$emit('showPopup', item.popupId);
       }
     }
   }

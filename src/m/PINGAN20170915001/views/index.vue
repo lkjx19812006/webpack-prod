@@ -9,7 +9,7 @@
       imgUrl 图片地址 类型  string  可以是本地图片地址或网络地址
       height 图片高度 类型  number  按750设计图算的高度 内部默认有转换
      -->
-    <bannerCom :imgUrl="require('@/img/bg@2x.png')" :height="361"></bannerCom>
+    <bannerCom :imgUrl="require('../images/banner@2x.png')" :height="361"></bannerCom>
     <!--
       产品范围组件 属性
       rangeList 产品范围数据源 类型 array  格式如下

@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 //底部立即投保按钮
 //-----------flex布局开始-------------
 .flex {
@@ -31,7 +31,7 @@
       margin-top: 0.1rem;
       height: 0.9rem;
       font-size: 0.64rem;
-      font-family: PingFangSC-Medium;
+      font-weight: 500;
       line-height: 0.9rem;
     }
     .price-txt {
@@ -39,7 +39,7 @@
       margin-left: 0.16rem;
       height: 0.45rem;
       font-size: 0.32rem;
-      font-family: PingFangSC-Regular;
+
       line-height: 0.45rem;
     }
   }
@@ -50,7 +50,7 @@
     width: 3rem;
     height: 1.09rem;
     font-size: 0.32rem;
-    font-family: PingFangSC-Medium;
+    font-weight: 500;
     color: rgba(255, 255, 255, 1);
     line-height: 0.45rem;
   }

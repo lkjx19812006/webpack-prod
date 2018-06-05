@@ -1,4 +1,4 @@
-<style lang="scss" >
+<style lang="scss" scoped >
 //底部立即投保按钮
 //-----------flex布局开始-------------
 .flex {

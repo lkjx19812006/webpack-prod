@@ -9,7 +9,7 @@
     z-index: 9;
     height: 1.09rem;
     font-size: 0.32rem;
-    font-family: PingFangSC-Medium;
+    font-weight: 500;
     color: rgba(255, 255, 255, 1);
     line-height: 1.09rem;
   }

@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 //底部立即投保按钮
 //-----------flex布局开始-------------
 .flex {
@@ -29,14 +29,14 @@
       .range-title {
         height: 0.33rem;
         font-size: 0.24rem;
-        font-family: PingFangSC-Medium;
+        font-weight: 500;
         color: rgba(112, 112, 112, 1);
         line-height: 0.33rem;
       }
       .range {
         height: 0.42rem;
         font-size: 0.3rem;
-        font-family: PingFangSC-Medium;
+        font-weight: 500;
         color: rgba(31, 40, 59, 1);
         line-height: 0.42rem;
       }
