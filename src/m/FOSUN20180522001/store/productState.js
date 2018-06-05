@@ -220,7 +220,8 @@ const mutations = {
 			state.total = session.total;
 			state.product = session.product;
 			state.applicant = session.applicant;
-			state.insured = [session.insured];
+
+			state.insured = session.insured;
 			state.beneficiary = session.beneficiary;
 			state.addtional = session.addtional;
 			state.contact = session.contact;
