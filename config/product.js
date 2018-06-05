@@ -6,8 +6,8 @@
  */
 
 module.exports = {
-  'ANXIN20180206': {
-    name: '安心住院保'
+  'PINGAN20170915001': {
+    name: '金色夕阳老人意外险'
   },
   'GBG20171026002': {
     name: 'GBG神州优选'
