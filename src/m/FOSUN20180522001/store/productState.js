@@ -209,14 +209,7 @@ const mutations = {
 		if (session && session != 'null' && !state.hasData) {
 			state.hasData = true;
 			session = JSON.parse(session);
-			// total: total,
-			// product: product,
-			// applicant: this.applicant,
-			// insured: [this.insured],
-			// beneficiary: beneficiary,
-			// addtional: this.addtional,
-			// contact: this.contact
-			//设置状态值
+
 			state.total = session.total;
 			state.product = session.product;
 			state.applicant = session.applicant;
