@@ -428,17 +428,15 @@ export default {
           : "/spb/standard/product/insuredWithoutLogin.action";
 
       var total = this.total * 100; //产品总价
-      var product = this.copyObj(this.productInfo);
-      product.base_premium = product.base_premium * 100;
-      var applicant = this.applicant;
-      var insured = this.insured;
-      var addtional = this.addtional;
-      var beneficiary = {
-        type: "",
-        person: []
-      };
-      beneficiary.type = this.beneficiary.type;
+      var product = this.copyObj(this.productInfo); //复制产品信息
+      product.base_premium = product.base_premium * 100; //基本保费处理
+      var applicant = this.applicant; //投保人信息
+      var insured = this.insured; //被保人信息
+      var addtional = this.addtional; //其他信息
+      var beneficiary = { type: "", person: [] }; //受益人处理百分比
+      beneficiary.type = this.beneficiary.type; //设置受益人类型
       for (var i = 0; i < this.beneficiary.person.length; i++) {
+        //处理受益人百分比
         var obj = {};
         var item = this.beneficiary.person[i];
         for (var key in item) {
@@ -447,6 +445,16 @@ export default {
         obj.percent = Number.divide(obj.percent, 100); //处理比例
         beneficiary.person.push(obj);
       }
+      var views = {
+        city_name:
+          this.otherData.labelProvince +
+          this.otherData.labelCity +
+          this.otherData.labelDistric,
+        profession_name:
+          this.otherData.labelJob1 +
+          this.otherData.labelJob2 +
+          this.otherData.labelJob3
+      };
 
       var sendData = {
         total: total,
@@ -458,7 +466,8 @@ export default {
           insured: [this.insured],
           beneficiary: beneficiary,
           addtional: this.addtional,
-          contact: this.contact
+          contact: this.contact,
+          views: views
         },
         product_id: ybId,
         yb_applicant: {
