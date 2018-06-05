@@ -160,7 +160,7 @@ export default {
     //套餐切换时
     "productInfo.package_code"(newVal, oldVal) {
       if (newVal === "B") {
-        this.dispatchModule("setProduct", "is_sub_clinical", '0');//不包含轻症
+        this.dispatchModule("setProduct", "is_sub_clinical", "0"); //不包含轻症
       }
     },
     "insured.relation"(newVal, oldVal) {
@@ -340,8 +340,8 @@ export default {
         lifelong_price
       );
       // total = Number.multiply(total, limitNum);
-      this.$store.dispatch("setTotal", total); //设置计算后的值
-      return total;
+      this.$store.dispatch("setTotal", total || 0); //设置计算后的值
+      return total || 0;
     },
 
     period() {

@@ -216,8 +216,6 @@ export default {
       }
       //设置被保人默认出生日期
       if (!this.insured.birthday) {
-        console.log(this.insured.birthday);
-        console.log("sadfasdf");
         this.dispatchModule("setInsured", "birthday", Date.getDateByAge(18));
       }
     },

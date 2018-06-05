@@ -377,7 +377,8 @@ export default {
     }
   },
   mounted() {
-    console.log(this);
+    //获取session值
+    this.dispatchModule("setStateBySession");
   },
   methods: {
     _insureClick() {
@@ -483,6 +484,21 @@ export default {
                 duration: 2000
               });
             } else if (res.code === "1") {
+              //将当前表单值存到session中
+              var session = {
+                total: this.total,
+                product: this.productInfo,
+                applicant: this.applicant,
+                insured: [this.insured],
+                beneficiary: this.beneficiary,
+                addtional: this.addtional,
+                contact: this.contact,
+                otherData: this.otherData
+              };
+              sessionStorage.setItem(
+                this.productInfo.id,
+                JSON.stringify(session)
+              );
               this.loadScript(res.data);
             }
             console.log(res);
@@ -517,6 +533,12 @@ export default {
       script.type = "text/javascript";
       script.innerText = strContent;
       document.body.appendChild(script);
+    },
+    dispatchModule(moduleName, key, value) {
+      this.$store.dispatch(moduleName, {
+        key: key,
+        value: value
+      });
     }
   }
 };

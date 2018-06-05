@@ -43,7 +43,8 @@
 //     "不清楚": "2"
 // }
 const state = {
-	"total": 0,
+	"hasData": false,
+	"total": '0',
 	"product": {
 		"id": "FOSUN20180522001",    //Y 核心产品ID
 		"name": "复星：康乐一生",    //N 产品名称
@@ -149,6 +150,13 @@ const getters = {
 }
 
 const actions = {
+	setStateBySession({ commit, state }) {
+		return new Promise((resolve, reject) => {
+			commit('setStateBySession')
+			resolve()
+		})
+	},
+
 	//设置total
 	setTotal({ commit, state }, param) {
 		return new Promise((resolve, reject) => {
@@ -195,6 +203,32 @@ const actions = {
 
 //执行 执行同步操作
 const mutations = {
+	//从session中拿数据
+	setStateBySession(state) {
+		var session = sessionStorage.getItem(state.product.id);//通过产品ID 取session值
+		if (session && session != 'null' && !state.hasData) {
+			state.hasData = true;
+			session = JSON.parse(session);
+			// total: total,
+			// product: product,
+			// applicant: this.applicant,
+			// insured: [this.insured],
+			// beneficiary: beneficiary,
+			// addtional: this.addtional,
+			// contact: this.contact
+			//设置状态值
+			state.total = session.total;
+			state.product = session.product;
+			state.applicant = session.applicant;
+			state.insured = [session.insured];
+			state.beneficiary = session.beneficiary;
+			state.addtional = session.addtional;
+			state.contact = session.contact;
+			state.otherData = session.otherData;
+		}
+	},
+
+
 	//设置总数
 	setTotal(state, param) {
 		state.total = param;
@@ -231,7 +265,7 @@ const mutations = {
 					break;
 			}
 		}
-	},
+	}
 }
 
 //暴露成员 实现模块化
