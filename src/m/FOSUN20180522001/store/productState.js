@@ -223,10 +223,7 @@ const mutations = {
 			state.insured = [session.insured];
 			state.beneficiary = session.beneficiary;
 			state.addtional = session.addtional;
-			state.contact = session.contact || {
-				name: '',
-				phone: ''
-			};
+			state.contact = session.contact;
 			state.otherData = session.otherData;
 		}
 	},

@@ -20,5 +20,8 @@ module.exports = {
   },
   'GBG20171026004': {
     name: 'GBG华夏住院'
+  },
+  'FOSUN20180522001': {
+    name: '复星康乐一生'
   }
 }
