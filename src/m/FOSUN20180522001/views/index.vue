@@ -172,6 +172,12 @@ export default {
   methods: {
     //初始化默认值
     _initDefault() {
+      //设置appid
+      try {
+        var appid = this.$http.getUrlParam("appid");
+        if (appid) sessionStorage.setItem("appid", appid);
+      } catch (error) {}
+
       //是否为本人投保 填写页也需要同样处理
       if (this.insured.relation != "00") {
         this.dispatchModule("setInsured", "relation", "");
