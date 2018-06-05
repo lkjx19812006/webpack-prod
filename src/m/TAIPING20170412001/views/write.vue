@@ -1,6 +1,137 @@
-<style lang="scss" scoped src="../../../css/product/write.scss"></style>
-<style lang="scss" scoped >
-  // 产品私有样式
+<style lang="scss">
+//------------- 迭代YDUI样式 -----------------
+.yd-scrollview:after {
+  height: 0;
+}
+
+.yd-cell-item {
+  display: flex;
+  position: relative;
+  height: 1.1rem;
+  padding-left: 0.32rem;
+  padding-right: 0.32rem;
+  overflow: hidden;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.yd-cell-left {
+  font-size: 0.3rem;
+  font-family: PingFangSC-Medium;
+  color: rgba(112, 112, 112, 1);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  span {
+    line-height: 0.3rem;
+  }
+}
+.yd-cell-right {
+  flex: 1;
+  font-size: 0.3rem;
+  font-family: PingFangSC-Regular;
+  color: rgba(112, 112, 112, 1);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  span {
+    line-height: 0.3rem;
+  }
+}
+.yd-cell-arrow:after {
+  font-size: 0.3rem;
+  height: 0.3rem;
+  color: rgba(151, 151, 151, 1);
+  content: "\E608";
+}
+
+.yd-datetime-input {
+  font-size: 0.3rem !important;
+  color: #282828 !important;
+  height: 0.45rem !important;
+  text-align: right !important;
+  font-family: PingFangSC-Regular !important;
+  justify-content: flex-end !important;
+}
+.yd-datetime-placeholder {
+  font-size: 0.3rem !important;
+  color: #b7b7b7 !important;
+  outline: none;
+  font-family: PingFangSC-Regular !important;
+}
+//------------- 迭代YDUI样式EDN -----------------
+
+//--------------迭代input 样式 ------------------
+input,
+select,
+option {
+  font-size: 0.3rem !important;
+  color: #282828 !important;
+  height: 0.45rem !important;
+  text-align: right !important;
+  font-family: PingFangSC-Regular !important;
+}
+input::placeholder {
+  font-size: 0.3rem !important;
+  color: #b7b7b7 !important;
+  outline: none;
+  font-family: PingFangSC-Regular !important;
+}
+select,
+option {
+  direction: rtl; //设置文字对齐方式
+  text-align: right;
+}
+//--------------迭代input 样式END ------------------
+
+//保障计划
+.write {
+  .time-icon {
+    height: 0.28rem;
+    width: 0.28rem;
+    margin-left: 0.2rem;
+  }
+
+  .left-title-line {
+    width: 0.04rem;
+    height: 0.32rem;
+    background: #282828;
+    margin-right: 0.2rem;
+  }
+  .left-title {
+    height: 0.45rem;
+    font-size: 0.30rem;
+    color: #282828;
+    line-height: 0.45rem;
+  }
+  .right-title {
+    height: 0.45rem;
+    font-size: 0.3rem;
+    color: #282828;
+    line-height: 0.42rem;
+  }
+
+  //-------------协议样式-------------------
+  .yd-radio-group {
+    padding: 0 0.32rem;
+    font-size: 0.28rem;
+    color: rgba(40, 40, 40, 1);
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    .xieyi {
+      color: #e3263a;
+      flex: 0 0 auto;
+    }
+  }
+  //-------------协议样式END----------------
+}
 </style>
 <template>
   <yd-layout class="write">
