@@ -100,6 +100,8 @@ const state = {
 		"percent": "", //    受益比例 相加必须等于1 按百分比来算即可
 		"priority": 1, //    受益优先级
 		"relation": "01", //   与被保人关系
+		"sex": '',
+		"birthday": ''
 	},
 	//附加的
 	"addtional": {

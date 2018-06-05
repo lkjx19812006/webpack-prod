@@ -243,6 +243,15 @@
               <span slot="left" class="left-title">证件号码</span>
               <span slot="right" class="right-title">{{beneficiary.person[index].certificate_id}}</span>
             </anyiCellItem>
+            <anyiCellItem>
+              <span slot="left" class="left-title">性别</span>
+              <span slot="right" class="right-title" v-if="beneficiary.person[index].sex === '0'">男</span>
+              <span slot="right" class="right-title" v-if="beneficiary.person[index].sex === '1'">女</span>
+            </anyiCellItem>
+            <anyiCellItem>
+              <span slot="left" class="left-title">出生日期</span>
+              <span slot="right" class="right-title">{{beneficiary.person[index].birthday}}</span>
+            </anyiCellItem>
             <anyiCellItem noBorder>
               <span slot="left" class="left-title">受益比例（%）</span>
               <span slot="right" class="right-title">{{beneficiary.person[index].percent}}</span>

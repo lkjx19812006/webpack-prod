@@ -311,12 +311,27 @@
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '01'">
               <span slot="left" class="left-title">证件号码</span>
-              <input v-toUp v-form:cardid slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
+              <input @blur="_beneficiaryBlur(beneficiary.person[index], index)" v-toUp v-form:cardid slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '03'">
               <span slot="left" class="left-title">证件号码</span>
               <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
             </anyiCellItem>
+
+            <anyiCellItem arrow>
+              <span slot="left" class="left-title">性别</span>
+              <select :disabled="beneficiary.person[index].certificate_type === '01'" v-model="beneficiary.person[index].sex" slot="right">
+                <option value="0">男</option>
+                <option value="1">女</option>
+              </select>
+            </anyiCellItem>
+
+            <anyiCellItem>
+              <span slot="left" class="left-title">出生日期</span>
+              <input v-form:item="{required: `请选择受益人${index + 1}出生日期`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
+              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+            </anyiCellItem>
+
             <anyiCellItem noBorder>
               <span slot="left" class="left-title">受益比例（%）</span>
               <input v-form:item="{required: `请输入受益人${index + 1}受益比例`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
@@ -760,9 +775,21 @@ export default {
         certificate_id: "", //
         percent: "", //    受益比例 相加必须等于1 按百分比来算即可
         priority: 1, //    受益优先级
-        relation: "01" //   与被保人关系
+        relation: "01", //   与被保人关系
+        sex: "0",
+        birthday: ""
       };
       this.dispatchModule("setBeneficiary", "add", beneficiaryTemplate);
+    },
+    //受益人身份证失去焦点
+    _beneficiaryBlur(item, index) {
+      if (item.certificate_type === "01") {
+        var cardInfo = Date.geCardInfooByCardId(item.certificate_id);
+        if(cardInfo){
+          item.birthday = cardInfo.birth;
+          item.sex = cardInfo.sex
+        }
+      }
     },
     //删除受益人
     _delBeneficiary(index) {
