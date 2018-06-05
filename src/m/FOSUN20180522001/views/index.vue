@@ -216,6 +216,24 @@ export default {
           Date.getDateByDay(30)
         );
       }
+
+      //受益人日期开始
+      if (!this.otherData.beneficiaryStartTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "beneficiaryStartTime",
+          Date.getDateByAge(100)
+        );
+      }
+      //受益人日期结束
+      if (!this.otherData.beneficiaryEndTime) {
+        this.dispatchModule(
+          "setOtherData",
+          "beneficiaryEndTime",
+          Date.getDateByDay(0)
+        );
+      }
+
       //设置投保人默认出生日期
       if (!this.applicant.birthday) {
         this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));

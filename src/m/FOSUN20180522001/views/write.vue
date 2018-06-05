@@ -329,7 +329,7 @@
             <anyiCellItem>
               <span slot="left" class="left-title">出生日期</span>
               <input v-form:item="{required: `请选择受益人${index + 1}出生日期`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
-              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
             </anyiCellItem>
 
             <anyiCellItem noBorder>
@@ -777,7 +777,7 @@ export default {
         priority: 1, //    受益优先级
         relation: "01", //   与被保人关系
         sex: "0",
-        birthday: ""
+        birthday: "1981-12-01"
       };
       this.dispatchModule("setBeneficiary", "add", beneficiaryTemplate);
     },
@@ -785,9 +785,9 @@ export default {
     _beneficiaryBlur(item, index) {
       if (item.certificate_type === "01") {
         var cardInfo = Date.geCardInfooByCardId(item.certificate_id);
-        if(cardInfo){
+        if (cardInfo) {
           item.birthday = cardInfo.birth;
-          item.sex = cardInfo.sex
+          item.sex = cardInfo.sex;
         }
       }
     },

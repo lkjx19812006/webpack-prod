@@ -120,7 +120,10 @@ const state = {
 		applicantStartTime: '',//投保人日期选择开始
 		applicantEndTime: '',//投保人日期选择结束
 		insuredStartTime: '',//被保人日期选择开始
-		insuredEndTime: '',//被保人日期选择结束
+		insuredEndTime: '',//被保人日期选择结束		
+		beneficiaryStartTime: '',//受益人日期开始
+		beneficiaryEndTime: '',//受益人日期结束
+
 
 		//信息填写不能更改字段展示
 		labelPackageName: 'B款升级款',//保障计划	
@@ -250,12 +253,16 @@ const mutations = {
 	setBeneficiary(state, params) {
 		//params type类型为add 或 del
 		// {key: 'add', value: addValue};
+		// {key: 'update', value: delIndex, updatekey};
 		// {key: 'del', value: delIndex};
 		if (params && typeof params === 'object') {
 			switch (params.key) {
 				case 'add':
 					state.beneficiary.person.push(params.value);
 					break;
+				case 'update':
+
+					break
 				case 'del':
 					state.beneficiary.person.splice(params.value, 1);
 					break;
