@@ -61,10 +61,7 @@ module.exports.styleLoaders = function (options) {
     const loader = loaders[extension]
     output.push({
       test: new RegExp('\\.' + extension + '$'),
-      use: loader,
-      exclude: [
-        path.resolve(__dirname, '../src/html/**/*.css')
-      ]
+      use: loader
     })
   }
   return output

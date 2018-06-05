@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Toast, Loading } from 'vue-ydui/dist/lib.rem/dialog';
 
 export default class HttpServer {
-  constructor () {
+  constructor() {
     // 个人中心基础 sso 模块的相关数据地址
     this.url = {
       imgPreUrl: location.protocol + '//' + (process.env.NODE_ENV === 'development' ? 'oss.anyitech.ltd' : 'oss.airiskeys.com'),
@@ -19,7 +19,7 @@ export default class HttpServer {
      * @param {loading} 是否执行加载图标
      * @returns {Promise} 异步对象
      */
-  post (params) {
+  post(params) {
     /* if (/^\/ws_sso\//.test(params.url)) {
             params.url = this.baseUrl + params.url
         } */
@@ -53,16 +53,7 @@ export default class HttpServer {
         Loading.close();
         if (res.status === 200 || res.status === 304 || (res.status > 200 && res.status < 400)) {
           // 请求成功
-          if (res.data.code === 0) {
-            // Toast({
-            //     mes: res.result,
-            //     icon: 'success',
-            //     timeout: 2000
-            // });
-            reject(res.data);
-          } else {
-            resolve(res.data);
-          }
+          resolve(res.data);
         } else if (res.status >= 400) {
           Toast({
             mes: '服务器错误',
@@ -104,7 +95,7 @@ export default class HttpServer {
      * @param {loading} 是否执行加载图标
      * @returns {Promise} 异步对象
      */
-  get (params) {
+  get(params) {
     /* if (/^\/ws_sso\//.test(params.url)) {
             params.url = this.baseUrl + params.url
         } */
@@ -160,7 +151,7 @@ export default class HttpServer {
      * @param name 参数名称
      * @returns {*}
      */
-  getUrlParam (name) {
+  getUrlParam(name) {
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
     let r = window.location.search.substr(1).match(reg);
     if (r !== null) return decodeURIComponent(r[2]);
@@ -178,7 +169,7 @@ export default class HttpServer {
      * @param days
      * @returns {*}
      */
-  getCookie (name, value, days) {
+  getCookie(name, value, days) {
     if (arguments.length == 1) {
       var nameEQ = name + '=';
       var ca = document.cookie.split(';');
@@ -199,7 +190,7 @@ export default class HttpServer {
      * @param {string} value 键值
      * @param {integer} days cookie周期
      */
-  setCookie (name, value, days) {
+  setCookie(name, value, days) {
     if (days) {
       var date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -214,7 +205,7 @@ export default class HttpServer {
      * 移除cookie
      * @param name
      */
-  removeCookie (name) {
+  removeCookie(name) {
     this.setCookie(name, '', -1);
   };
 
@@ -223,7 +214,7 @@ export default class HttpServer {
      * @param {*} params
      * @returns {*}
      */
-  filterObjNull (params) {
+  filterObjNull(params) {
     if (params && typeof params === 'object') {
       var obj = {};
       Object.keys(params).forEach((item) => {
@@ -241,7 +232,7 @@ export default class HttpServer {
      * @param {*} params
      */
   // 获取用户信息
-  getUserInfo (params) {
+  getUserInfo(params) {
     params = params || {};
     params.url = '/ws_cloud_service/sales/user/getUserWalletInfo';
     // params.url = "/ws_cloud_service/sales/wechatOauth/mockLogin"; //测试用

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:old": "echo \"已使用新方案，集成到了build中\"",
-    "build:test": "cross-env NODE_ENV=production webpack --config ./build/webpack.test.conf.js --mode production",
+    "build:test": "cross-env NODE_ENV=production node anyiprod.js test",
     "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.prod.conf.js --mode production",
     "dev": "node anyiprod.js dev -p TAIPING20170412001",
     "prod": "node anyiprod.js dev",

@@ -1,16 +1,17 @@
-const utils = require('./utils')
 const path = require('path')
 const webpack = require('webpack')
-const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const history = require('connect-history-api-fallback')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // 用于把请求代理转发到其他服务器的中间件。具体自行搜索
 const proxy = require('http-proxy-middleware')
 // koa 中间件必须
 const convert = require('koa-connect')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const utils = require('./utils')
+const config = require('../config')
 const env = process.env.NODE_ENV || 'development'
 const cfg = config[env]
 

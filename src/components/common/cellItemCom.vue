@@ -1,135 +1,131 @@
 <style lang="scss" scoped>
-//------------- 迭代YDUI样式 -----------------
-.yd-cell-item {
-  display: flex;
-  position: relative;
-  height: 1.1rem;
-  padding-left: 0.32rem;
-  padding-right: 0.32rem;
-  overflow: hidden;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-.yd-cell-left {
-  font-size: 0.3rem;
-  font-weight: 500;
-  color: rgba(112, 112, 112, 1);
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  span {
-    line-height: 0.3rem;
-  }
-}
-.yd-cell-right {
-  flex: 1;
-  font-size: 0.3rem;
-  color: rgba(112, 112, 112, 1);
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0;
-  span {
-    line-height: 0.3rem;
-  }
-}
-.yd-cell-arrow:after {
-  font-size: 0.3rem;
-  height: 0.3rem;
-  color: rgba(151, 151, 151, 1);
-  content: "\E608";
-}
-//------------- 迭代YDUI样式EDN -----------------
+@import "../../css/mixin.scss";
 .cell-item-com {
-  .left-title-line {
-    width: 0.04rem;
-    height: 0.32rem;
-    background: rgba(40, 40, 40, 1);
-    margin-right: 0.2rem;
-  }
-  .left-title {
-    height: 0.45rem;
-    font-size: 0.30rem;
-    color: rgba(31, 31, 31, 1);
-    line-height: 0.45rem;
-  }
-  .right-title {
-    height: 0.42rem;
-    font-size: 0.3rem;
-
-    color: rgba(112, 112, 112, 1);
-    line-height: 0.42rem;
+  //点击展示更多
+  .show-list-more {
+    background: #fff;
+    position: relative;
+    height: rem(79);
+    .more-icon {
+      padding: rem(20);
+      height: rem(72);
+      width: rem(56);
+      transform: rotateZ(90deg);
+      transition: all 0.3s ease-in-out;
+    }
+    &.show-more {
+      .more-icon {
+        transform: rotateZ(270deg);
+      }
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: rem(32);
+      right: rem(0);
+      margin: auto;
+      height: 1px;
+      background: #d2d2d2;
+    }
   }
 }
 </style>
 <template>
-  <yd-cell-group class="cell-item-com">
-    <!-- 标题样式 -->
-
-    <yd-cell-item @click.native="_showPopup(item)" :arrow="item.arrow" :type="item.popupId ? 'label' : 'div'" v-for="item,index in cellList" :key="index">
+  <div class="cell-item-com">
+    <anyiCellItem :noBorder="countNoBorder(index)" v-show="showList(index)" class="anyi-cell-item" @click.native="_showPopup(item)" :arrow="item.arrow" v-for="(item,index) in cellList" :key="index">
       <!-- 标题样式 -->
-      <span :style="{background: item.leftLineColor || item.leftColor || '#707070'}" slot="left" class="left-title-line" v-if="item.leftText && item.isLeftLine"></span>
-      <span :style="{color: item.leftColor || '#707070'}" slot="left" class="left-title" v-if="item.leftText">{{item.leftText}}</span>
-      <span :style="{color: item.rightColor || '#707070'}" slot="right" class="right-title" v-if="item.rightText">{{item.rightText}}</span>
-    </yd-cell-item>
-
-  </yd-cell-group>
+      <span :style="{color: leftColor}" slot="left" class="left-title" :class="[item.type === 'title' ? 'top-title' : '']">{{item.label}}</span>
+      <span :style="{color: rightColor}" slot="right" class="right-title">{{item.value}}</span>
+    </anyiCellItem>
+    <div v-if='hasMore' class="show-list-more flex center" :class="[hasShowMore ? 'show-more' : '']">
+      <img @click="_showMore" class="more-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAaCAMAAACw0Z1uAAAAclBMVEUAAACZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkjQ/XgAAAAJnRSTlMA7ujdVDIi5Ne2NikbBgTBu51tXhQK066njnpyZTjKyK2af2NHQjJC6wcAAAB5SURBVBjTXc9LFoMgEERRukEBxfDRaBI1/+x/ixlSbc3ueaNSMQcFy3SdgNObhc83+wrCnIVXe2nBw8rSxS49etMefRqPdr5BG512YZcUrJ0JFJ5UoC1UhipPn9r6RFtVE2kEPdiA7qhutl+Q41/VrnVXZRilosNbfw4XBeFnOhPGAAAAAElFTkSuQmCC" alt="加载更多">
+    </div>
+  </div>
 </template>
 <script>
+import anyiCellItem from "@/components/common/anyi-cell-item";
 export default {
+  data() {
+    return {
+      hasShowMore: false
+    };
+  },
+  computed: {},
+  components: {
+    anyiCellItem
+  },
   props: {
     cellList: {
       type: Array,
       default: () => {
         return [
           {
-            isLeftLine: true, // 是否显示左边得竖线
-            leftText: '保障责任', // 左边文字内容
-            leftColor: '#282828',
-            rightText: '更多详情', // 右边文字内容
-            rightColor: '#707070',
-            arrow: true, // 是否显示箭头
-            popupId: 'more'
+            label: "售后及理赔",
+            value: "测试数据",
+            arrow: true,
+            popupId: "shjlp"
           },
           {
-            type: 'item', // 类型项目
-            leftText: '意外身故，残疾',
-            rightText: '2万',
-            alink: '',
-            hash: ''
-          },
-          {
-            type: 'item', // 类型
-            leftText: '意外医疗费用',
-            rightText: '0.1万',
-            alink: '',
-            hash: ''
-          },
-          {
-            type: 'item', // 类型
-            leftText: '个人第三者责任',
-            rightText: '2万',
-            alink: '',
-            hash: ''
-          },
-          {
-            type: 'item', // 类型
-            leftText: '第三者责任意外医疗',
-            rightText: '0.1万',
-            alink: '',
-            hash: ''
+            label: "售后及理赔",
+            value: "测试数据",
+            arrow: true,
+            popupId: "shjlp"
           }
         ];
       }
+    },
+    leftColor: {
+      type: String,
+      default: "#707070"
+    },
+    rightColor: {
+      type: String,
+      default: "#707070"
+    },
+    showBeforeNum: {
+      //显示前面几条数据 默认显示10条 如果需要控制显示数量 需要传递 hasMore 和 showBeforeNum 两个参数共同控制
+      type: Number,
+      default: 10
+    },
+    hasMore: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-    _showPopup (item) {
+    _showPopup(item) {
       if (item.popupId) {
-        this.$emit('showPopup', item.popupId);
+        this.$emit("showPopup", item.popupId);
+      }
+    },
+    //展示更多
+    _showMore() {
+      this.hasShowMore = !this.hasShowMore;
+    },
+    //计算当前显示
+    showList(index) {
+      if (this.hasShowMore) return true;
+      if (index <= this.showBeforeNum - 1) return true;
+      return false;
+    },
+    //计算显示底部边框
+    countNoBorder(index) {
+      if (this.hasShowMore) {
+        if (index > this.cellList.length - 2) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (!this.hasMore && index >= this.cellList.length - 1) {
+          return true;
+        }
+        if (index >= this.showBeforeNum - 1) {
+          return true;
+        } else {
+          return false;
+        }
       }
     }
   }
