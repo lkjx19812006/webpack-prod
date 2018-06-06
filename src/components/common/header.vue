@@ -1,4 +1,4 @@
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .header {
   height: 1.4266666667rem;
   background: rgba(0, 0, 0, 0.85);

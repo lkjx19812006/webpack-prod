@@ -8,7 +8,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const config = require('../config')
 const utils = require('./utils.js')
-const env = process.env.NODE_ENV || 'development'
+const env = process.env.NODE_ENV || 'production'
 const cfg = config[env]
 
 module.exports = merge(baseWebpackConfig, {
@@ -27,6 +27,7 @@ module.exports = merge(baseWebpackConfig, {
   },
   optimization: {
     runtimeChunk: {
+      // name: entrypoint => `${entrypoint.name}/js/runtime`
       name: 'manifest'
     },
     splitChunks: {
@@ -40,29 +41,11 @@ module.exports = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[chunkhash:8].css',
-      chunkFilename: 'css/[id].[chunkhash:8].css' // use contenthash *
-    }),
+
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
         to: cfg.assetsSubDirectory,
-        ignore: ['.*']
-      },
-      {
-        from: path.resolve(__dirname, '../src/html'),
-        to: '',
-        ignore: ['cloud.core.js'],
-        cache: true
-      },
-      {
-        from: path.resolve(__dirname, '../src/html/**/cloud.core.js'),
-        to: '',
-        context: path.resolve(__dirname, '../src/html'),
-        transform (content, path) {
-          return content.toString().replace(/self\.config\s*=\s*"dev";/gi, 'self.config= "prod";')
-        },
         ignore: ['.*']
       }
     ])

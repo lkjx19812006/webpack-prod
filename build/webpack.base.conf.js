@@ -51,7 +51,8 @@ module.exports = {
         include: [resolve('src')],
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: 'm/FOSUN20180522001/images/[name].[hash:7].[ext]'
+          // name: utils.assetsPath('images/[name].[hash:7].[ext]')
         }
       },
       {
@@ -59,7 +60,8 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: 'm/FOSUN20180522001/fonts/[name].[hash:7].[ext]'
+          // name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       }
     ]
