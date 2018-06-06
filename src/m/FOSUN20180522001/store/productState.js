@@ -59,60 +59,39 @@ const state = {
 	"applicant": {
 		"name": "殷谦",
 		"card_type": "01",
-		"card_id": "430921199106111318",
-		"phone": "17763732365",
-		"email": "371516100@qq.com",
-		"birthday": "1991-08-09",
+		"card_id": "",
+		"phone": "",
+		"email": "",
+		"birthday": "",
 		"sex": "0",
 
-		"address": "详细地址详细地小区",     //详细地址
-		"province": "440000",   //省
-		"city": "440600",       //市
-		"district": "120103",   //区/县
+		"address": "",     //详细地址
+		"province": "",   //省
+		"city": "",       //市
+		"district": "",   //区/县
 
-		"bank_code": "9002",//银行代码
-		"account": "20014567895260456",//银行账号
-		"account_name": "招商银行",//银行名称
+		"bank_code": "",//银行代码
+		"account": "",//银行账号
+		"account_name": "",//银行名称
 	},
 	"insured": [{
-		"name": "张测试",
-		"phone": "15112345678",
-		"email": "qi.wang@anyi-tech.com",
+		"name": "",
+		"phone": "",
+		"email": "",
 		"card_type": "01",
-		"card_id": "110101200201010170",
-		"birthday": "1981-12-01",
+		"card_id": "",
+		"birthday": "",
 		"sex": "0",
-		"relation": "03",// 与被保人关系
-		"job_code": "120103",//职业代码
+		"relation": "",// 与被保人关系
+		"job_code": "",//职业代码
 
-		"height": "178", //Y 身高
-		"weight": "70",  //Y 体重
+		"height": "", //Y 身高
+		"weight": "",  //Y 体重
 	}],
 	//受益人
 	"beneficiary": {
 		"type": "1", //    受益方式   法定 1 指定 2
-		"person": [
-			{
-				"name": "受益人姓名", //	受益人姓名
-				"certificate_type": "01", //
-				"certificate_id": "110101200201010058", //
-				"percent": 58, //	受益比例
-				"priority": 2, //	受益优先级
-				"relation": "03", //	与被保人关系
-				"birthday": "1981-12-01",
-				"sex": "0",
-			},
-			{
-				"name": "受益人姓名2", //	受益人姓名
-				"certificate_type": "01", //
-				"certificate_id": "110101200201010082", //
-				"percent": 42, //	受益比例
-				"priority": 2, //	受益优先级
-				"relation": "03", //	与被保人关系
-				"birthday": "1981-12-01",
-				"sex": "0",
-			}
-		]
+		"person": []
 	},
 	"beneficiaryTemplate": {
 		"name": "", //    受益人姓名
