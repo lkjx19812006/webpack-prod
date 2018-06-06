@@ -59,11 +59,11 @@
 </style>
 <template>
   <div class="buy-modal-com flex">
-    <anyiCellItem class="top" :noBorder="true" v-show="model === 'index'">
+    <anyiCellItem class="top" :noBorder="true" v-if="model === 'index'">
       <span class="left-title" slot="left">保障计划</span>
       <span class="right-icon-close" slot="right" @click="_modalClose"></span>
     </anyiCellItem>
-    <div class="buy-content" v-show="model === 'index'">
+    <div class="buy-content" v-if="model === 'index'">
       <div class="plan-select bottom-after flex row space">
         <div @click="_planSelect(item, index)" :class="[productInfo.package_code === item.code ? 'active' : '' ]" v-html="item.label" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
         </div>

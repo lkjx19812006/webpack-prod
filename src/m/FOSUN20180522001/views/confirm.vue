@@ -11,6 +11,7 @@
     }
     .right-title {
       color: $itemSubTitleColor;
+      max-width: rem(500);
     }
     margin-bottom: rem(26);
 
@@ -23,6 +24,7 @@
       }
       .right-title {
         color: $itemSubTitleColor;
+        max-width: rem(500);
         &.name-tit {
           margin-right: rem(100);
           color: $itemSubTitleColor;
