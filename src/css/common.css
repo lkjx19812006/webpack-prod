@@ -93,6 +93,11 @@ input, select, textarea, button {
   font-family: PingFangSC-Regular;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .flex {
   display: flex;
   flex-direction: column;

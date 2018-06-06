@@ -107,7 +107,7 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">投保人姓名</span>
-        <input v-form:applicantname slot="right" v-model="applicant.name" type="text" placeholder="请输入">
+        <input v-form:applicantname="{required: '投保人姓名为空'}" slot="right" v-model="applicant.name" type="text" placeholder="请输入">
       </anyiCellItem>
       <anyiCellItem arrow>
         <span slot="left" class="left-title">证件类型</span>
@@ -120,13 +120,13 @@
       <anyiCellItem v-if="applicant.card_type === '01'">
         <span slot="left" class="left-title">证件号码</span>
         <!-- 身份证 -->
-        <input @blur="_applicantCardBlur" v-toUp v-form:cardid slot="right" v-model="applicant.card_id" type="text" placeholder="请输入">
+        <input @blur="_applicantCardBlur" v-toUp v-form:cardid="{required: '投保人身份证为空'}" slot="right" v-model="applicant.card_id" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem v-if="applicant.card_type === '03'">
         <span slot="left" class="left-title">证件号码</span>
         <!-- 护照 -->
-        <input v-toUp v-model="applicant.card_id" slot="right" type="text" placeholder="请输入">
+        <input v-toUp v-model="applicant.card_id" v-form:item="{required: '投保人护照为空'}" slot="right" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -138,45 +138,46 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
+        <input v-form:item="{required: '投保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="applicant.birthday">
         <yd-datetime :readonly="applicant.card_type === '01'" v-if="insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
         <yd-datetime :readonly="applicant.card_type === '01'" v-else slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem arrow>
         <span slot="left" class="left-title">居住城市</span>
-        <input v-form:item="{required: '请选择居住城市'}" type="text" slot="right" style="display: none" v-model="applicant.district">
+        <input v-form:item="{required: '居住城市为空'}" type="text" slot="right" style="display: none" v-model="applicant.district">
         <span @click="showAddress = true" slot="right" class="right-title r-color" v-if="!applicant.province || !applicant.city || !applicant.district">请输选择</span>
         <span @click="showAddress = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelProvince}}、{{otherData.labelCity}}、{{otherData.labelDistric}}</span>
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">联系地址</span>
-        <input v-form:item="{required: '请输入详细地址便于联系和理赔'}" slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
+        <input v-form:item="{required: '详细地址为空'}" slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">手机号码</span>
-        <input v-form:phone slot="right" v-model="applicant.phone" type="text" placeholder="请输入">
+        <input v-form:phone="{required: '投保人手机号码为空'}" slot="right" v-model="applicant.phone" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem :noBorder="insured.relation !== '00'">
         <span slot="left" class="left-title">电子邮箱</span>
-        <input v-form:email slot="right" v-model="applicant.email" type="text" placeholder="请输入">
+        <input v-form:email="{required:'投保人邮箱为空'}" slot="right" v-model="applicant.email" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem v-if="insured.relation === '00'">
         <span slot="left" class="left-title">身高（CM）</span>
-        <input v-form:item="{required: '请输入身高'}" slot="right" v-model="insured.height" type="number" placeholder="请输入">
+        <input v-form:item="{required: '被保人身高为空'}" slot="right" v-model="insured.height" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem v-if="insured.relation === '00'">
         <span slot="left" class="left-title">体重（KG）</span>
-        <input v-form:item="{required: '请输入体重'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
+        <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow v-if="insured.relation === '00'">
         <span slot="left" class="left-title">职业</span>
-        <input v-form:item="{required: '请选择职业'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
+        <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
         <span @click="showJobSelect = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
       </anyiCellItem>
@@ -204,7 +205,7 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">被保险人姓名</span>
-        <input v-form:insurename slot="right" v-model="insured.name" type="text" placeholder="请输入">
+        <input v-form:insurename="{required: '被保人姓名为空'}" slot="right" v-model="insured.name" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -217,13 +218,13 @@
 
       <anyiCellItem v-if="insured.card_type === '01'">
         <span slot="left" class="left-title">证件号码</span>
-        <input @blur="_insuredCardBlur" v-toUp v-form:cardid slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
+        <input @blur="_insuredCardBlur" v-toUp v-form:cardid="{required: '被保人身份证为空'}" slot="right" v-model="insured.card_id" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem v-if="insured.card_type === '03'">
         <span slot="left" class="left-title">证件号码</span>
         <!-- 护照 -->
-        <input v-toUp v-model="insured.card_id" slot="right" type="text" placeholder="请输入">
+        <input v-toUp v-model="insured.card_id" v-form:item="{required: '被保人护照为空'}" slot="right" type="text" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -236,6 +237,7 @@
 
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
+        <input v-form:item="{required: '被保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="insured.birthday">
         <yd-datetime :readonly="insured.card_type === '01'" slot="right" v-model="insured.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
@@ -245,23 +247,18 @@
       </anyiCellItem>
 
       <anyiCellItem>
-        <span slot="left" class="left-title">电子邮箱</span>
-        <input v-form:email slot="right" v-model="insured.email" type="text" placeholder="请输入">
-      </anyiCellItem>
-
-      <anyiCellItem>
         <span slot="left" class="left-title">身高（CM）</span>
-        <input v-form:item="{required: '请输入身高'}" slot="right" v-model="insured.height" type="number" placeholder="请输入">
+        <input v-form:item="{required: '被保人身高为空'}" slot="right" v-model="insured.height" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem>
         <span slot="left" class="left-title">体重（KG）</span>
-        <input v-form:item="{required: '请输入体重'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
+        <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
       <anyiCellItem arrow>
         <span slot="left" class="left-title">职业</span>
-        <input v-form:item="{required: '请选择职业'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
+        <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
         <span @click="showJobSelect = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
       </anyiCellItem>
@@ -292,7 +289,7 @@
           <div class="accordion-content">
             <anyiCellItem>
               <span slot="left" class="left-title">姓名</span>
-              <input v-form:applicantname="{required: `请输入受益人${index + 1}姓名`}" slot="right" v-model="beneficiary.person[index].name" type="text" placeholder="请输入真实姓名">
+              <input v-form:applicantname="{required: `受益人${index + 1}姓名为空`}" slot="right" v-model="beneficiary.person[index].name" type="text" placeholder="请输入真实姓名">
             </anyiCellItem>
             <anyiCellItem arrow>
               <span slot="left" class="left-title">受益人是被保险人的</span>
@@ -311,11 +308,11 @@
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '01'">
               <span slot="left" class="left-title">证件号码</span>
-              <input @blur="_beneficiaryBlur(beneficiary.person[index], index)" v-toUp v-form:cardid slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
+              <input @blur="_beneficiaryBlur(beneficiary.person[index], index)" v-toUp v-form:cardid="{required:'受益人身份证为空'}" slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '03'">
               <span slot="left" class="left-title">证件号码</span>
-              <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" type="text" placeholder="请输入有效的证件号码">
+              <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" v-form:item="{required:'受益人护照为空'}" type="text" placeholder="请输入有效的证件号码">
             </anyiCellItem>
 
             <anyiCellItem arrow>
@@ -328,13 +325,13 @@
 
             <anyiCellItem>
               <span slot="left" class="left-title">出生日期</span>
-              <input v-form:item="{required: `请选择受益人${index + 1}出生日期`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
+              <input v-form:item="{required: `受益人${index + 1}出生日期为空`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
               <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
             </anyiCellItem>
 
             <anyiCellItem noBorder>
               <span slot="left" class="left-title">受益比例（%）</span>
-              <input v-form:item="{required: `请输入受益人${index + 1}受益比例`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
+              <input v-form:item="{required: `受益人${index + 1}受益比例为空`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
             </anyiCellItem>
           </div>
         </accordion>
@@ -358,7 +355,7 @@
       </anyiCellItem>
       <anyiCellItem arrow>
         <span slot="left" class="left-title">开户银行</span>
-        <input v-form:item="{required: '请选择开户银行'}" type="text" slot="right" style="display: none" v-model="applicant.bank_code">
+        <input v-form:item="{required: '开户银行为空'}" type="text" slot="right" style="display: none" v-model="applicant.bank_code">
         <select placeholder="请选择" style="direction:rtl" v-model="applicant.bank_code" slot="right">
           <option value="" style="direction:rtl" class="r-color">请选择</option>
           <option style="direction:rtl" :key="index" v-for="(item, index) in banks" :value="item.value">{{item.label}}</option>
@@ -366,7 +363,7 @@
       </anyiCellItem>
       <anyiCellItem>
         <span slot="left" class="left-title">持卡人姓名</span>
-        <input slot="right" class="r-color" disabled v-model="applicant.name" type="text" placeholder="需为投保人本人">
+        <input slot="right" disabled v-model="applicant.name" type="text" placeholder="需为投保人本人">
       </anyiCellItem>
       <anyiCellItem noBorder>
         <span slot="left" class="left-title">银行账号</span>

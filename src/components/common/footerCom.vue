@@ -31,11 +31,11 @@
     border-radius: 0;
     flex: 0 0 auto;
     width: rem(300);
-    height: rem(109);
+    height: rem(110);
     font-size: rem(32);
     font-family: PingFangSC-Medium;
     color: rgba(255, 255, 255, 1);
-    line-height: rem(42);
+    line-height: rem(110);
     background: $themeColor !important;
   }
   .right-btn:hover {
@@ -53,7 +53,7 @@
       <span class="price-txt">元</span>
     </div>
     <slot></slot>
-    <yd-button type="primary"  class="right-btn flex center buy-com-btn-submit" @click.native="_insureClick ">{{btntext}}</yd-button>
+    <yd-button type="primary" class="right-btn flex center buy-com-btn-submit" @click.native="_insureClick ">{{btntext}}</yd-button>
   </footer>
 </template>
 <script>

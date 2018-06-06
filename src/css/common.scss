@@ -18,6 +18,12 @@ $bodybgc: #F5F5F5;//body的背景色
 * {
   font-family: PingFangSC-Regular;
 }
+//ios 去掉点击阴影背景
+*{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color:transparent;
+}
+
 .flex {
   display: flex;
   flex-direction: column;

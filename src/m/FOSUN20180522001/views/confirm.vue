@@ -183,10 +183,10 @@
         <span slot="right" class="right-title">{{insured.phone}}</span>
       </anyiCellItem>
 
-      <anyiCellItem>
+      <!-- <anyiCellItem>
         <span slot="left" class="left-title">电子邮箱</span>
         <span slot="right" class="right-title">{{insured.email}}</span>
-      </anyiCellItem>
+      </anyiCellItem> -->
 
       <anyiCellItem>
         <span slot="left" class="left-title">身高（CM）</span>

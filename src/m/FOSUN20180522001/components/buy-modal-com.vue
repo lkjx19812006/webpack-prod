@@ -2,6 +2,13 @@
 @import "../../../css/mixin.scss";
 .buy-modal-com {
   background: $bodybgc;
+  height: rem(110);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  &.isIndex {
+    height: 72vh;
+  }
   .top {
     flex: 0 0 auto;
   }
@@ -13,8 +20,7 @@
     background-size: rem(38) rem(38);
   }
   .buy-content {
-    min-height: 100%;
-    padding-bottom: rem(128);
+    padding-bottom: rem(20);
     flex: 1;
     overflow: hidden;
     overflow-y: auto;
@@ -42,10 +48,7 @@
     }
   }
   .footer-com {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    left: 0;
+    flex: 0 0 rem(110);
   }
 
   //局部样式修改
@@ -58,12 +61,12 @@
 }
 </style>
 <template>
-  <div class="buy-modal-com flex">
-    <anyiCellItem class="top" :noBorder="true" v-if="model === 'index'">
-      <span class="left-title" slot="left">保障计划</span>
-      <span class="right-icon-close" slot="right" @click="_modalClose"></span>
-    </anyiCellItem>
+  <div class="buy-modal-com" :class="[model === 'index'? 'isIndex': '']">
     <div class="buy-content" v-if="model === 'index'">
+      <anyiCellItem class="top" :noBorder="true">
+        <span class="left-title" slot="left">保障计划</span>
+        <span class="right-icon-close" slot="right" @click="_modalClose"></span>
+      </anyiCellItem>
       <div class="plan-select bottom-after flex row space">
         <div @click="_planSelect(item, index)" :class="[productInfo.package_code === item.code ? 'active' : '' ]" v-html="item.label" class="plan-select-item flex center" v-for="(item, index) in planList" :key="index">
         </div>
@@ -135,7 +138,7 @@
         <span class="right-title" slot="right">{{lifelongYear}}</span>
       </anyiCellItem>
     </div>
-    <footerCom @insureClick="_insureClick" :class="[model==='index'? 'footer-com' : '']" :price="countPrice"></footerCom>
+    <footerCom class="footer-com " @insureClick="_insureClick" :price="countPrice"></footerCom>
   </div>
 </template>
 <script>
