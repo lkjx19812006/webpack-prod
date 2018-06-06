@@ -41,10 +41,7 @@ module.exports = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[chunkhash:8].css',
-      chunkFilename: 'css/[id].[chunkhash:8].css' // use contenthash *
-    }),
+
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),

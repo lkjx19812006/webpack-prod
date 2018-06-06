@@ -16,8 +16,9 @@ const path = require('path');
 // webpack html 打包
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // css 分开打包
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // node --inspect --inspect-brk anyiprod.js dev
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /**
  * 根据入口文件获取产品相关配置
@@ -103,10 +104,27 @@ const buildTest = function (productId) {
   const webpack = require('webpack');
   let config = require('./build/webpack.test.conf');
   config.entry = entryConfig.entry;
-  config.plugins.push.apply(config.plugins, entryConfig.plugins);
   const outPath = products[0].entry;
+  // 文档中没有使用loader，必须放入doc文件夹中
+  entryConfig.plugins.push(
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'src/' + outPath + '/doc'),
+        to: outPath + '/doc',
+        ignore: ['.*']
+      }
+    ])
+  );
+  entryConfig.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: outPath + '/css/[name].[chunkhash:8].css',
+      chunkFilename: outPath + '/css/[id].[chunkhash:8].css' // use contenthash *
+    })
+  )
+  config.plugins.push.apply(config.plugins, entryConfig.plugins);
   config.output.filename = outPath + '/js/[name].[chunkhash:8].js';
   config.output.chunkFilename = outPath + '/js/[id].[chunkhash:8].js';
+
   // console.log(config);
   const compiler = webpack(config);
   compiler.run((err, stats) => {
@@ -132,6 +150,17 @@ const runDev = function (productId) {
   // webpack server
   const serve = require('webpack-serve');
   let config = require('./build/anyiprod.dev.conf.js');
+  const outPath = products[0].entry;
+  // 文档中没有使用loader，必须放入doc文件夹中
+  entryConfig.plugins.push(
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'src/' + outPath + '/doc'),
+        to: outPath + '/doc',
+        ignore: ['.*']
+      }
+    ])
+  );
   config.entry = entryConfig.entry;
   config.plugins.push.apply(config.plugins, entryConfig.plugins);
   if (products.length === 1) {
