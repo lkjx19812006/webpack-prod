@@ -1,3 +1,9 @@
+/*
+ * 技术上可以支持多入口打包
+ * 从产品业务角度来看，不宜使用多入口打包
+ * 一次只打包一个文件夹
+ */
+
 // debugger;
 // 命令行开发
 const program = require('commander');
@@ -78,7 +84,7 @@ const getEntryConfig = function (products) {
   });
   return {
     entry: entry,
-    plugins: plugins,
+    plugins: plugins
   }
 };
 
@@ -98,6 +104,9 @@ const buildTest = function (productId) {
   let config = require('./build/webpack.test.conf');
   config.entry = entryConfig.entry;
   config.plugins.push.apply(config.plugins, entryConfig.plugins);
+  const outPath = products[0].entry;
+  config.output.filename = outPath + '/js/[name].[chunkhash:8].js';
+  config.output.chunkFilename = outPath + '/js/[id].[chunkhash:8].js';
   // console.log(config);
   const compiler = webpack(config);
   compiler.run((err, stats) => {
@@ -107,8 +116,6 @@ const buildTest = function (productId) {
     // 处理完成
   })
 };
-
-
 
 /**
  * 运行测试服务器
@@ -155,7 +162,8 @@ program
     }
     if (!prod || !inProd) {
       let choices = [];
-      choices.push({name: '所有产品', value: 'all'});
+      // 产品场景并不适合多入口，虽然可以打包，但打包后的文件不好管理。
+      // choices.push({name: '所有产品', value: 'all'});
       products.forEach(p => {
         choices.push({ name: p.name, value: p.value });
       });
@@ -175,7 +183,6 @@ program
       runDev(prod);
     }
   });
-
 
 program
   .command('test')

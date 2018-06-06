@@ -27,6 +27,7 @@ module.exports = merge(baseWebpackConfig, {
   },
   optimization: {
     runtimeChunk: {
+      // name: entrypoint => `${entrypoint.name}/js/runtime`
       name: 'manifest'
     },
     splitChunks: {
