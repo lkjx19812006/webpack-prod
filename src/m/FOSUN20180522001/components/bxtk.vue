@@ -27,7 +27,8 @@
       </anyiCellItem>
       <anyiCellItem :noBorder="index >= docInfos.length - 1" class="anyi-cell-item" arrow v-for="(item, index) in docInfos" :key="index">
         <a v-if="plateform === 'iphone'" slot="left" class="left-title text-overflow" :href="item.value" :download="item.label">{{item.label}}</a>
-        <a v-if="plateform === 'android'" slot="left" class="left-title text-overflow" :href="item.value">{{item.label}}</a>
+        <a v-else-if="plateform === 'android'" slot="left" class="left-title text-overflow" :href="item.value">{{item.label}}</a>
+        <a v-else slot="left" class="left-title text-overflow" :href="item.value" :download="item.label">{{item.label}}</a>
       </anyiCellItem>
     </div>
     <yd-button class="popup-close-btn" slot="bottom" @click.native="_closePopup">{{btnText}}</yd-button>
