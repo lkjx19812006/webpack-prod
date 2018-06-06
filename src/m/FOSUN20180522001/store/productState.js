@@ -57,41 +57,62 @@ const state = {
 
 	},
 	"applicant": {
-		"name": "",
+		"name": "殷谦",
 		"card_type": "01",
-		"card_id": "",
-		"phone": "",
-		"email": "",
-		"birthday": "",
+		"card_id": "430921199106111318",
+		"phone": "17763732365",
+		"email": "371516100@qq.com",
+		"birthday": "1991-08-09",
 		"sex": "0",
 
-		"address": "",     //详细地址
-		"province": "",   //省
-		"city": "",       //市
-		"district": "",   //区/县
+		"address": "详细地址详细地小区",     //详细地址
+		"province": "440000",   //省
+		"city": "440600",       //市
+		"district": "120103",   //区/县
 
-		"bank_code": "",//银行代码
-		"account": "",//银行账号
-		"account_name": "",//银行名称
+		"bank_code": "9002",//银行代码
+		"account": "20014567895260456",//银行账号
+		"account_name": "招商银行",//银行名称
 	},
 	"insured": [{
-		"name": "",
-		"phone": "",
-		"email": "",
+		"name": "张测试",
+		"phone": "15112345678",
+		"email": "qi.wang@anyi-tech.com",
 		"card_type": "01",
-		"card_id": "",
-		"birthday": "",
+		"card_id": "110101200201010170",
+		"birthday": "1981-12-01",
 		"sex": "0",
-		"relation": "",// 与被保人关系
-		"job_code": "",//职业代码
+		"relation": "03",// 与被保人关系
+		"job_code": "120103",//职业代码
 
-		"height": "", //Y 身高
-		"weight": "",  //Y 体重
+		"height": "178", //Y 身高
+		"weight": "70",  //Y 体重
 	}],
 	//受益人
 	"beneficiary": {
 		"type": "1", //    受益方式   法定 1 指定 2
-		"person": []
+		"person": [
+			{
+				"name": "受益人姓名", //	受益人姓名
+				"certificate_type": "01", //
+				"certificate_id": "110101200201010058", //
+				"percent": 58, //	受益比例
+				"priority": 2, //	受益优先级
+				"relation": "03", //	与被保人关系
+				"birthday": "1981-12-01",
+				"sex": "0",
+			},
+			{
+				"name": "受益人姓名2", //	受益人姓名
+				"certificate_type": "01", //
+				"certificate_id": "110101200201010082", //
+				"percent": 42, //	受益比例
+				"priority": 2, //	受益优先级
+				"relation": "03", //	与被保人关系
+				"birthday": "1981-12-01",
+				"sex": "0",
+			}
+		]
 	},
 	"beneficiaryTemplate": {
 		"name": "", //    受益人姓名
@@ -155,6 +176,12 @@ const getters = {
 }
 
 const actions = {
+	setDefaultDate({ commit, state }) {
+		return new Promise((resolve, reject) => {
+			commit('setDefaultDate')
+			resolve()
+		})
+	},
 	setStateBySession({ commit, state }) {
 		return new Promise((resolve, reject) => {
 			commit('setStateBySession')
@@ -208,6 +235,32 @@ const actions = {
 
 //执行 执行同步操作
 const mutations = {
+	//设置迷人值
+	setDefaultDate(state) {
+		//设置日期限制
+		//投保人日期选择开始时间
+		if (!state.otherData.applicantStartTime) state.otherData.applicantStartTime = Date.getDateSection(18, 55).startDate;
+		//投保人日期选择结束时间
+		if (!state.otherData.applicantEndTime) state.otherData.applicantEndTime = Date.getDateSection(18, 55).endDate;
+
+		//被保人日期选择开始时间
+		if (!state.otherData.insuredStartTime) state.otherData.insuredStartTime = Date.getDateSection(18, 50).startDate
+		//被保人日期选择结束时间
+		if (!state.otherData.insuredEndTime) state.otherData.insuredEndTime = Date.getDateByDay(30);
+
+		//受益人日期开始
+		if (!state.otherData.beneficiaryStartTime) state.otherData.beneficiaryStartTime = Date.getDateByAge(100);
+		//受益人日期结束
+		if (!state.otherData.beneficiaryEndTime) state.otherData.beneficiaryEndTime = Date.getDateByDay(0);
+
+
+		//设置投保人默认出生日期
+		if (!state.applicant.birthday) state.applicant.birthday = Date.getDateByAge(18)
+		//设置被保人默认出生日期
+		if (!state.insured[0].birthday) state.insured[0].birthday = Date.getDateByAge(18)
+	},
+
+
 	//从session中拿数据
 	setStateBySession(state) {
 		var session = sessionStorage.getItem(state.product.id);//通过产品ID 取session值

@@ -54,6 +54,30 @@
     return new Date().toFormat('yyyy-MM-dd')
   }
 
+  Date.getDateSection = function (startAge, endAge) {
+    var timeObj = {
+      startDate: '1900-01-01',
+      endDate: '2020-01-01'
+    };
+    if (!startAge || !endAge) {
+      return timeObj;
+    } else {
+      var startDate = new Date();
+      startDate.setYear(startDate.getFullYear() - endAge - 1)
+      startDate.setDate(startDate.getDate() + 1);
+      startDate = startDate.toFormat('yyyy-MM-dd');
+      timeObj.startDate = startDate;
+
+      var endDate = new Date();
+      endDate.setYear(endDate.getFullYear() - startAge)
+      endDate = endDate.toFormat('yyyy-MM-dd');
+      timeObj.endDate = endDate;
+      return timeObj;
+    }
+  }
+
+
+
   //获取时间通过天数 静态方法
   Date.getDateByDay = function (day) {
     if (day && typeof day === 'number') {

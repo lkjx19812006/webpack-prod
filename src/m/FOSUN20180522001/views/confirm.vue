@@ -390,6 +390,7 @@ export default {
   mounted() {
     //获取session值
     this.dispatchModule("setStateBySession");
+    this.dispatchModule("setDefaultDate");
   },
   methods: {
     _insureClick() {
@@ -436,7 +437,7 @@ export default {
           ? "/spb/standard/product/insured.action"
           : "/spb/standard/product/insuredWithoutLogin.action";
 
-      var total = this.total * 100; //产品总价
+      var total = Number.multiply(this.total, 100); //产品总价
       var product = this.copyObj(this.productInfo); //复制产品信息
       product.base_premium = product.base_premium * 100; //基本保费处理
       var applicant = this.applicant; //投保人信息

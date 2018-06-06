@@ -152,7 +152,7 @@
 
       <anyiCellItem>
         <span slot="left" class="left-title">联系地址</span>
-        <input v-form:item="{required: '详细地址为空'}" slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
+        <input v-form:item="{required: '详细地址为空', valid: {regex: /[0-9a-zA-Z[\u2E80-\u9FFF]{8,}/, errMsg:'请尽量详细地址到具体门牌号，以便理赔和投保'}}" slot="right" v-model="applicant.address" type="text" placeholder="请输入详细地址便于联系和理赔">
       </anyiCellItem>
 
       <anyiCellItem>
@@ -548,6 +548,7 @@ export default {
   mounted() {
     console.log(this.$store.state.productState);
     this._initDefault();
+    this.dispatchModule("setDefaultDate");
   },
   methods: {
     _initDefault() {
@@ -563,6 +564,7 @@ export default {
       if (this.insured.relation !== "00") {
         this.dispatchModule("setInsured", "relation", "01");
       }
+
       //设置被保人出生日期性别通过身份证
       if (this.insured.card_type === "01" && this.insured.card_id) {
         //身份证的时候手动设置生日和性别
@@ -594,11 +596,12 @@ export default {
       //是否是本人
       this._countPriceIsSelf();
 
+      //基本校验通过， 业务逻辑校验 校验年龄和缴费期限
+      if (!this._validAgeAndPayment()) return;
+
       //判断被保人年龄区间值 对应基本保额
       if (!this._validAgeBaseNum()) return;
 
-      //基本校验通过， 业务逻辑校验 校验年龄和缴费期限
-      if (!this._validAgeAndPayment()) return;
       //校验身高和体重
       if (this.insured.weight < 3 || this.insured.weight > 120) {
         this.$dialog.toast({
@@ -635,13 +638,13 @@ export default {
       //18-40岁 最高 50w
       //41-45岁 最高 40W
       //46-50岁 最高 30w
-      if (age <= 17 && base_num > 200000) {
+      if (age <= 17 && base_num > 300000) {
         ageFlag = true;
-        errAgeMsg = "被保险人为未成年人时，基本保额最高限20万元";
-      } else if (age > 40 && age <= 45) {
+        errAgeMsg = "被保险人为未成年人时，基本保额最高限30万元";
+      } else if (age > 40 && age <= 45 && base_num > 400000) {
         ageFlag = true;
         errAgeMsg = "被保险人年龄在41-45周岁，基本保额最高限40万元";
-      } else if (age > 45 && age <= 50) {
+      } else if (age > 45 && age <= 50 && base_num > 300000) {
         ageFlag = true;
         errAgeMsg = "被保险人年龄在46-50周岁，基本保额最高限30万元";
       }
@@ -656,14 +659,36 @@ export default {
     },
     //校验年龄和缴费期限
     _validAgeAndPayment() {
+      debugger;
       //1缴费期限为15年时投保人年龄不能超过55&被保险人年龄不能超过50周岁。
       //1缴费期限为20年时投保人年龄不能超过50&被保险人年龄不能超过50周岁。
       //1缴费期限为30年时投保人年龄不能超过40&被保险人年龄不能超过40周岁。
-      var applicantAge = Date.getAgeByDate(this.applicant.birthday);
-      var insuredAge = Date.getAgeByDate(this.insured.birthday);
-      var paymentLimit = this.productInfo.payment_limit;
+      //投保人生日年龄
+      var applicantAge, abirth, insuredAge, ibirth;
       var ageFlag = false;
       var errAgeMsg = "";
+      var paymentLimit = this.productInfo.payment_limit;
+      if (this.applicant.card_type === "01") {
+        //身份证
+        var aCardInfo = Date.geCardInfooByCardId(this.applicant.card_id);
+        applicantAge = aCardInfo.age;
+        abirth = aCardInfo.birth;
+      } else {
+        applicantAge = Date.getAgeByDate(this.applicant.birthday);
+        abirth = this.applicant.birthday;
+      }
+
+      //被保人生日年龄
+      if (this.insured.card_type === "01") {
+        //身份证
+        var iCardInfo = Date.geCardInfooByCardId(this.insured.card_id);
+        insuredAge = iCardInfo.age;
+        ibirth = iCardInfo.birth;
+      } else {
+        insuredAge = Date.getAgeByDate(this.insured.birthday);
+        ibirth = this.insured.birthday;
+      }
+
       switch (paymentLimit) {
         case "15":
           if (applicantAge > 55) {
@@ -699,7 +724,6 @@ export default {
           }
           break;
       }
-      console.log(insuredAge, applicantAge);
       if (ageFlag) {
         this.$dialog.toast({
           mes: errAgeMsg,

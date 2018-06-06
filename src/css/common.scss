@@ -13,17 +13,56 @@ $itemSubTitleColor: #282828;//列表子标题颜色
 
 $bodybgc: #F5F5F5;//body的背景色
 //------主题色rem计算相关与浮动清除---------
-@import "./mixin.scss";
-//------主题色rem计算相关与浮动清除end------
-* {
-  font-family: PingFangSC-Regular;
-}
-//ios 去掉点击阴影背景
-*{
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-tap-highlight-color:transparent;
+//------------------字体相关配置---------------------
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 100;
+  src: local("PingFang SC Thin");
 }
 
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 300;
+  src: local("PingFang SC Light");
+}
+
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 400;
+  src: local("PingFang SC Regular");
+}
+
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 500;
+  src: local("PingFang SC Medium");
+}
+
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 700;
+  src: local("PingFang SC Semibold");
+}
+
+@font-face {
+  font-family: "PingFang-SC";
+  font-weight: 800;
+  src: local("PingFang SC Heavy");
+}
+
+body {
+  font-family: system, -apple-system, BlinkMacSystemFont,
+  "PingFang SC", "Segoe UI", "Microsoft YaHei", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+  "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input,select,textarea,button {
+  font-family: system, -apple-system, BlinkMacSystemFont,
+  "PingFang SC", "Segoe UI", "Microsoft YaHei", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+  "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+//------------------字体相关配置end------------------
+//------------------flex布局样式---------------------
 .flex {
   display: flex;
   flex-direction: column;
@@ -60,6 +99,19 @@ $bodybgc: #F5F5F5;//body的背景色
 .f-1 {
   flex: 1;
 }
+//------------------flex布局样式end------------------
+
+@import "./mixin.scss";
+//------主题色rem计算相关与浮动清除end------
+* {
+  font-family: PingFangSC-Regular;
+}
+//ios 去掉点击阴影背景
+*{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color:transparent;
+}
+
 .fz-24 {
   font-size: 0.32rem;
   line-height: 0.32rem;
@@ -161,19 +213,19 @@ input,
 select,
 textarea,
 option {
-  font-size: rem(30);
+  font-size: rem(30) !important;
   color: $itemSubTitleColor;
   height:rem(45);
   text-align: right;
-  font-family: PingFangSC-Regular;
+  font-family: PingFangSC-Regular !important;
   border: 0 none;
   outline-style: none;
 }
 select::placeholder,textarea::placeholder,input::placeholder {
-  font-size: rem(30);
+  font-size: rem(30) !important;
   color: #b7b7b7;
   outline: none;
-  font-family: PingFangSC-Regular;
+  font-family: PingFangSC-Regular !important;
 }
 select,
 option {

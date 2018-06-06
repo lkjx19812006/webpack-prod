@@ -168,6 +168,7 @@ export default {
 
   mounted() {
     this._initDefault();
+    this.dispatchModule("setDefaultDate");
   },
   methods: {
     //初始化默认值
@@ -177,71 +178,73 @@ export default {
         var appid = this.$http.getUrlParam("appid");
         if (appid) sessionStorage.setItem("appid", appid);
       } catch (error) {}
-
-      //是否为本人投保 填写页也需要同样处理
       if (this.insured.relation != "00") {
         this.dispatchModule("setInsured", "relation", "");
       }
-      //设置日期限制
-      //投保人日期选择开始时间
-      if (!this.otherData.applicantStartTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "applicantStartTime",
-          Date.getDateByAge(55)
-        );
-      }
-      //投保人日期选择结束时间
-      if (!this.otherData.applicantEndTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "applicantEndTime",
-          Date.getDateByAge(18)
-        );
-      }
+      // //是否为本人投保 填写页也需要同样处理
+      // if (this.insured.relation != "00") {
+      //   this.dispatchModule("setInsured", "relation", "");
+      // }
+      // //设置日期限制
+      // //投保人日期选择开始时间
+      // if (!this.otherData.applicantStartTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "applicantStartTime",
+      //     Date.getDateSection(18, 55).startDate
+      //   );
+      // }
+      // //投保人日期选择结束时间
+      // if (!this.otherData.applicantEndTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "applicantEndTime",
+      //     Date.getDateSection(18, 55).endDate
+      //   );
+      // }
 
-      //被保人日期选择开始时间
-      if (!this.otherData.insuredStartTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "insuredStartTime",
-          Date.getDateByAge(50)
-        );
-      }
-      //被保人日期选择结束时间
-      if (!this.otherData.insuredEndTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "insuredEndTime",
-          Date.getDateByDay(30)
-        );
-      }
+      // //被保人日期选择开始时间
+      // if (!this.otherData.insuredStartTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "insuredStartTime",
+      //     Date.getDateSection(18, 50).startDate
+      //   );
+      // }
+      // //被保人日期选择结束时间
+      // if (!this.otherData.insuredEndTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "insuredEndTime",
+      //     Date.getDateByDay(30)
+      //   );
+      // }
 
-      //受益人日期开始
-      if (!this.otherData.beneficiaryStartTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "beneficiaryStartTime",
-          Date.getDateByAge(100)
-        );
-      }
-      //受益人日期结束
-      if (!this.otherData.beneficiaryEndTime) {
-        this.dispatchModule(
-          "setOtherData",
-          "beneficiaryEndTime",
-          Date.getDateByDay(0)
-        );
-      }
+      // //受益人日期开始
+      // if (!this.otherData.beneficiaryStartTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "beneficiaryStartTime",
+      //     Date.getDateByAge(100)
+      //   );
+      // }
+      // //受益人日期结束
+      // if (!this.otherData.beneficiaryEndTime) {
+      //   this.dispatchModule(
+      //     "setOtherData",
+      //     "beneficiaryEndTime",
+      //     Date.getDateByDay(0)
+      //   );
+      // }
 
-      //设置投保人默认出生日期
-      if (!this.applicant.birthday) {
-        this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));
-      }
-      //设置被保人默认出生日期
-      if (!this.insured.birthday) {
-        this.dispatchModule("setInsured", "birthday", Date.getDateByAge(18));
-      }
+      // //设置投保人默认出生日期
+      // if (!this.applicant.birthday) {
+      //   this.dispatchModule("setApplicant", "birthday", Date.getDateByAge(18));
+      // }
+      // //设置被保人默认出生日期
+      // if (!this.insured.birthday) {
+      //   this.dispatchModule("setInsured", "birthday", Date.getDateByAge(18));
+      // }
     },
     _insureClick() {
       // 跳转到表单页面进行填写

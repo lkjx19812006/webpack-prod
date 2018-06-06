@@ -98,53 +98,6 @@ input, select, textarea, button {
   -webkit-tap-highlight-color: transparent;
 }
 
-.flex {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.row {
-  flex-direction: row;
-}
-
-.column {
-  flex-direction: column;
-}
-
-.start {
-  justify-content: flex-start;
-}
-
-.end {
-  justify-content: flex-end;
-}
-
-.space {
-  justify-content: space-between;
-}
-
-.center {
-  justify-content: center;
-  align-items: center;
-}
-
-.content-center {
-  justify-content: center;
-}
-
-.item-center {
-  align-items: center;
-}
-
-.f-0 {
-  flex: 0 0 auto;
-}
-
-.f-1 {
-  flex: 1;
-}
-
 .fz-24 {
   font-size: 0.32rem;
   line-height: 0.32rem;
@@ -259,20 +212,20 @@ input,
 select,
 textarea,
 option {
-  font-size: 0.3rem;
+  font-size: 0.3rem !important;
   color: #282828;
   height: 0.45rem;
   text-align: right;
-  font-family: PingFangSC-Regular;
+  font-family: PingFangSC-Regular !important;
   border: 0 none;
   outline-style: none;
 }
 
 select::placeholder, textarea::placeholder, input::placeholder {
-  font-size: 0.3rem;
+  font-size: 0.3rem !important;
   color: #b7b7b7;
   outline: none;
-  font-family: PingFangSC-Regular;
+  font-family: PingFangSC-Regular !important;
 }
 
 select,
