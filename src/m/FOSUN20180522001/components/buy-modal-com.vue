@@ -113,7 +113,7 @@
 
       <!-- 附加轻症只有B款升级款才有 -->
       <anyiCellItem v-if="productInfo.package_code==='A'">
-        <span class="left-title" slot="left">附加轻症及轻症豁免</span>
+        <span class="left-title" slot="left">附加轻症及轻症豁免(可选)</span>
         <buttonRadio :radioList="fjqzhm" slot="right" @change="_subClinicalChange" v-model="productInfo.is_sub_clinical"></buttonRadio>
       </anyiCellItem>
       <anyiCellItem :noBorder="!isShowLifelong" v-if="productInfo.package_code==='A'">
@@ -124,7 +124,7 @@
       <!-- 保费豁免根据选择 -->
       <anyiCellItem v-if="isShowLifelong">
         <div class="flex" slot="left">
-          <span class="left-title">保费豁免</span>
+          <span class="left-title">保费豁免(可选)</span>
           <span class="tips">注：投保人保费豁免</span>
         </div>
         <buttonRadio :radioList="lifelongs" slot="right" v-model="productInfo.is_lifelong"></buttonRadio>
@@ -363,6 +363,7 @@ export default {
           });
         }
       } else {
+        result = [...arr];
       }
       return result;
     },

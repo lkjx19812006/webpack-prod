@@ -1,10 +1,54 @@
 <style lang="scss" scoped>
-.limit-select {
+@import "../../../css/mixin.scss";
+.top-title {
+  .title {
+    margin-left: rem(44);
+    font-size: rem(36);
+    color: $titleColor;
+    line-height: rem(50);
+    font-family: PingFang-SC-Heavy;
+    font-weight: 600;
+    margin-top: rem(56);
+    margin-bottom: rem(43);
+  }
+  .info {
+    p {
+      .left {
+        margin-left: rem(44);
+        height: rem(8);
+        width: rem(8);
+        background: $themeColor;
+        margin-right: rem(6);
+        border-radius: rem(8);
+      }
+      font-size: rem(24);
+      font-family: PingFang-SC-Medium;
+      color: $titleColor;
+      line-height: rem(40);
+    }
+  }
 }
 </style>
 <template>
   <yd-layout>
-    <bannerCom :imgUrl="require('../productImg/banner@2x.png')"></bannerCom>
+    <bannerCom class="top-title" :imgUrl="require('../productImg/banner@2x.png')">
+      <h1 class="title">康乐一生重大疾病保险</h1>
+      <div class="info">
+        <p class="flex row item-center">
+          <span class="left"></span>
+          <span class="info-text">80种重疾+35种轻症保障</span>
+        </p>
+        <p class="flex row item-center">
+          <span class="left"></span>
+          <span class="info-text">贴心豁免保障</span>
+        </p>
+        <p class="flex row item-center">
+          <span class="left"></span>
+          <span class="info-text">交费灵活，保障期限可自选</span>
+        </p>
+      </div>
+
+    </bannerCom>
 
     <productRangeCom :rangeList="rangeList"></productRangeCom>
 
@@ -23,8 +67,8 @@
     </anyiCellItem>
     <cellItemCom :cellList="bzzrList" :hasMore="true" :showBeforeNum="4" @showPopup="_showPopup"></cellItemCom>
 
-    <bannerCom :imgUrl="require('../productImg/Bitmap@2x.png')"></bannerCom>
-    <bannerCom :imgUrl="require('../productImg/BitmapCopy7@2x.png')"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/banner2.jpg')"></bannerCom>
+    <bannerCom :imgUrl="require('../productImg/banner3.jpg')"></bannerCom>
     <bannerCom :imgUrl="require('../productImg/BitmapCopy8@2x.png')"></bannerCom>
     <bannerCom :imgUrl="require('../productImg/BitmapCopy9@2x.png')"></bannerCom>
 

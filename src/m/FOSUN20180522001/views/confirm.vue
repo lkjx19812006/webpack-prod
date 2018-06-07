@@ -127,14 +127,9 @@
         <span slot="right" class="right-title">{{insured.weight}}</span>
       </anyiCellItem>
 
-      <anyiCellItem v-if="insured.relation === '00'">
+      <anyiCellItem noBorder v-if="insured.relation === '00'">
         <span slot="left" class="left-title">职业</span>
         <span slot="right" class="right-title text-overflow">{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
-      </anyiCellItem>
-
-      <anyiCellItem :noBorder="true" v-if="insured.relation === '00'">
-        <span slot="left" class="left-title">购买份数</span>
-        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
@@ -183,11 +178,6 @@
         <span slot="right" class="right-title">{{insured.phone}}</span>
       </anyiCellItem>
 
-      <!-- <anyiCellItem>
-        <span slot="left" class="left-title">电子邮箱</span>
-        <span slot="right" class="right-title">{{insured.email}}</span>
-      </anyiCellItem> -->
-
       <anyiCellItem>
         <span slot="left" class="left-title">身高（CM）</span>
         <span slot="right" class="right-title">{{insured.height}}</span>
@@ -198,14 +188,9 @@
         <span slot="right" class="right-title">{{insured.weight}}</span>
       </anyiCellItem>
 
-      <anyiCellItem>
+      <anyiCellItem noBorder>
         <span slot="left" class="left-title">职业</span>
         <span slot="right" class="right-title text-overflow">{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
-      </anyiCellItem>
-
-      <anyiCellItem noBorder>
-        <span slot="left" class="left-title">购买份数</span>
-        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
@@ -238,6 +223,7 @@
               <span slot="left" class="left-title">证件类型</span>
               <span slot="right" class="right-title" v-if="beneficiary.person[index].certificate_type === '01'">身份证</span>
               <span slot="right" class="right-title" v-if="beneficiary.person[index].certificate_type === '03'">护照</span>
+              <span slot="right" class="right-title" v-if="beneficiary.person[index].certificate_type === '11'">出生证</span>
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '01'">
               <span slot="left" class="left-title">证件号码</span>

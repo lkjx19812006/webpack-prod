@@ -139,8 +139,9 @@
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
         <input v-form:item="{required: '投保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="applicant.birthday">
-        <yd-datetime :readonly="applicant.card_type === '01'" v-if="insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
-        <yd-datetime :readonly="applicant.card_type === '01'" v-else slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <span class="right-title yd-datetime-input" v-if="applicant.card_type === '01'" slot="right">{{applicant.birthday}}</span>
+        <yd-datetime :readonly="applicant.card_type === '01'" v-if="applicant.card_type !== '01' && insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime :readonly="applicant.card_type === '01'" v-if="applicant.card_type !== '01' && insured.relation === '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -175,16 +176,11 @@
         <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
-      <anyiCellItem arrow v-if="insured.relation === '00'">
+      <anyiCellItem :noBorder="true" arrow v-if="insured.relation === '00'">
         <span slot="left" class="left-title">职业</span>
         <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
         <span @click="showJobSelect = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
-      </anyiCellItem>
-
-      <anyiCellItem :noBorder="true" v-if="insured.relation === '00'">
-        <span slot="left" class="left-title">购买份数</span>
-        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
@@ -238,7 +234,8 @@
       <anyiCellItem>
         <span slot="left" class="left-title">出生日期</span>
         <input v-form:item="{required: '被保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="insured.birthday">
-        <yd-datetime :readonly="insured.card_type === '01'" slot="right" v-model="insured.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+        <span class="right-title yd-datetime-input" v-if="insured.card_type === '01'" slot="right">{{insured.birthday}}</span>
+        <yd-datetime :readonly="insured.card_type === '01'" v-if="insured.card_type !== '01'" slot="right" v-model="insured.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem>
@@ -256,16 +253,11 @@
         <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
-      <anyiCellItem arrow>
+      <anyiCellItem arrow noBorder>
         <span slot="left" class="left-title">职业</span>
         <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
         <span @click="showJobSelect = true" slot="right" class="right-title text-overflow" v-else>{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
-      </anyiCellItem>
-
-      <anyiCellItem noBorder>
-        <span slot="left" class="left-title">购买份数</span>
-        <span slot="right" class="right-title">1</span>
       </anyiCellItem>
     </div>
 
@@ -304,6 +296,7 @@
               <select v-model="beneficiary.person[index].certificate_type" slot="right">
                 <option value="01">身份证</option>
                 <option value="03">护&nbsp;&nbsp;&nbsp;照</option>
+                <option value="11">出生证</option>
               </select>
             </anyiCellItem>
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '01'">
@@ -313,6 +306,10 @@
             <anyiCellItem v-if="beneficiary.person[index].certificate_type === '03'">
               <span slot="left" class="left-title">证件号码</span>
               <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" v-form:item="{required:'受益人护照为空'}" type="text" placeholder="请输入有效的证件号码">
+            </anyiCellItem>
+            <anyiCellItem v-if="beneficiary.person[index].certificate_type === '11'">
+              <span slot="left" class="left-title">证件号码</span>
+              <input v-toUp slot="right" v-model="beneficiary.person[index].certificate_id" v-form:item="{required:'受益出生证为空'}" type="text" placeholder="请输入有效的证件号码">
             </anyiCellItem>
 
             <anyiCellItem arrow>
@@ -326,7 +323,8 @@
             <anyiCellItem>
               <span slot="left" class="left-title">出生日期</span>
               <input v-form:item="{required: `受益人${index + 1}出生日期为空`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
-              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+              <span class="right-title yd-datetime-input" v-if="beneficiary.person[index].card_type === '01'" slot="right">{{beneficiary.person[index].birthday}}</span>
+              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" v-else slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
             </anyiCellItem>
 
             <anyiCellItem noBorder>
@@ -753,7 +751,12 @@ export default {
       var val = e.target.value; //获取值设置出生日期，buy组件中会自动计算保费
       var cardInfo = Date.geCardInfooByCardId(val);
       if (cardInfo) {
-        //设置投保人性别和出生日期
+        if (cardInfo.age > 55) {
+          this.$dialog.toast({
+            mes: "投保人最大年限为55周岁",
+            duration: 2000
+          });
+        }
         this.dispatchModule("setApplicant", "birthday", cardInfo.birth);
         this.dispatchModule("setApplicant", "sex", cardInfo.sex);
         this._countPriceIsSelf();
@@ -763,6 +766,12 @@ export default {
       var val = e.target.value; //获取值设置出生日期，buy组件中会自动计算保费
       var cardInfo = Date.geCardInfooByCardId(val);
       if (cardInfo) {
+        if (cardInfo.age > 50) {
+          this.$dialog.toast({
+            mes: "被保人最大年限为50周岁",
+            duration: 2000
+          });
+        }
         //设置投保人性别和出生日期
         this.dispatchModule("setInsured", "birthday", cardInfo.birth);
         this.dispatchModule("setInsured", "sex", cardInfo.sex);
