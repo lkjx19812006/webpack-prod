@@ -340,8 +340,8 @@ export default {
       //1.投保人年龄 + 缴费年限<=70 被保险人年龄+缴费年限<=70
       var result = [];
       var arr = product["缴费年限"];
-      var applicantAge = Date.getAgeByDate(this.applicant.birthday);
-      var insuredAge = Date.getAgeByDate(this.insured.birthday);
+      var applicantAge = this.applicantAge;
+      var insuredAge = this.insuredAge;
       var countAge =
         70 - (applicantAge > insuredAge ? applicantAge : insuredAge);
       if (countAge >= 30) {
@@ -394,7 +394,7 @@ export default {
     buttonRadio
   },
   created() {
-    this.setOtherDataLabelStr();
+    this.setOtherDataLabelStr(); //初始化展示文字
   },
   methods: {
     //保障计划选择
