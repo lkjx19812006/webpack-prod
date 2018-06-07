@@ -57,7 +57,7 @@ const state = {
 
 	},
 	"applicant": {
-		"name": "殷谦",
+		"name": "",
 		"card_type": "01",
 		"card_id": "",
 		"phone": "",

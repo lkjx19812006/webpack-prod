@@ -235,7 +235,7 @@
         <span slot="left" class="left-title">出生日期</span>
         <input v-form:item="{required: '被保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="insured.birthday">
         <span class="right-title yd-datetime-input" v-if="insured.card_type === '01'" slot="right">{{insured.birthday}}</span>
-        <yd-datetime :readonly="insured.card_type === '01'" v-if="insured.card_type !== '01'" slot="right" v-model="insured.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+        <yd-datetime :readonly="insured.card_type === '01'" v-if="insured.card_type !== '01'" slot="right" v-model="insured.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem>
@@ -594,6 +594,9 @@ export default {
       //是否是本人
       this._countPriceIsSelf();
 
+      //判断投保人未成年 被保人小于30天； 投保人大于55 被保人大于50
+      if (!this._validAge()) return;
+
       //基本校验通过， 业务逻辑校验 校验年龄和缴费期限
       if (!this._validAgeAndPayment()) return;
 
@@ -626,6 +629,91 @@ export default {
 
       this.$router.push("/confirm");
     },
+    //判断年龄
+    _validAge() {
+      var applicantAge = 0,
+        abirth = "",
+        insuredAge = 0,
+        ibirth = "";
+      if (this.applicant.card_type === "01") {
+        //身份证
+        var aCardInfo = Date.geCardInfooByCardId(this.applicant.card_id);
+        if (aCardInfo) {
+          applicantAge = aCardInfo.age;
+          abirth = aCardInfo.birth;
+        } else {
+          this.$dialog.toast({
+            mes: "投保人证件号码错误",
+            duration: 2000
+          });
+          return false;
+        }
+      } else {
+        applicantAge = Date.getAgeByDate(this.applicant.birthday);
+        abirth = this.applicant.birthday;
+      }
+
+      if (applicantAge > 55) {
+        this.$dialog.toast({
+          mes: "投保人年龄上限为55周岁",
+          duration: 2000
+        });
+        return false;
+      } else if (applicantAge < 18) {
+        this.$dialog.toast({
+          mes: "投保人不能为未成年人",
+          duration: 2000
+        });
+        return false;
+      }
+
+      //被保人生日年龄
+      if (this.insured.card_type === "01") {
+        //身份证
+        var iCardInfo = Date.geCardInfooByCardId(this.insured.card_id);
+        if (iCardInfo) {
+          insuredAge = iCardInfo.age;
+          ibirth = iCardInfo.birth;
+        } else {
+          this.$dialog.toast({
+            mes: "被保人证件号码错误",
+            duration: 2000
+          });
+          return;
+        }
+      } else {
+        insuredAge = Date.getAgeByDate(this.insured.birthday);
+        ibirth = this.insured.birthday;
+      }
+
+      if (insuredAge > 50) {
+        this.$dialog.toast({
+          mes: "被保人年龄上限为50周岁",
+          duration: 2000
+        });
+        return false;
+      }
+      var now = new Date(); //当前时间
+      now.setDate(now.getDate() + 30);
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
+      now.setMilliseconds(0);
+      var insuDate = new Date(ibirth || "");
+      insuDate.setHours(0);
+      insuDate.setMinutes(0);
+      insuDate.setSeconds(0);
+      insuDate.setMilliseconds(0);
+      if (now.getTime() < insuDate.getTime()) {
+        this.$dialog.toast({
+          mes: "被保人必须满30天",
+          duration: 2000
+        });
+        return false;
+      }
+      return true;
+    },
+
     //判断被保人年龄区间值 对应基本保额
     _validAgeBaseNum() {
       var age = Date.getAgeByDate(this.insured.birthday);
@@ -754,6 +842,11 @@ export default {
         if (cardInfo.age > 55) {
           this.$dialog.toast({
             mes: "投保人最大年限为55周岁",
+            duration: 2000
+          });
+        } else if (cardInfo.age < 18) {
+          this.$dialog.toast({
+            mes: "投保人不能为未成年人",
             duration: 2000
           });
         }

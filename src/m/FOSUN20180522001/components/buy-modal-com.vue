@@ -22,8 +22,7 @@
   .buy-content {
     padding-bottom: rem(20);
     flex: 1;
-    overflow: hidden;
-    overflow-y: auto;
+    overflow: scroll;
     -webkit-overflow-scrolling: touch;
     .plan-select {
       background: #fff;

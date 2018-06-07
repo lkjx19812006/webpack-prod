@@ -1,54 +1,65 @@
 <style lang="scss" scoped>
 @import "../../../css/mixin.scss";
-.top-title {
-  .title {
-    margin-left: rem(44);
-    font-size: rem(36);
-    color: $titleColor;
-    line-height: rem(50);
-    font-family: PingFang-SC-Heavy;
-    font-weight: 600;
-    margin-top: rem(56);
-    margin-bottom: rem(43);
-  }
-  .info {
-    p {
-      .left {
-        margin-left: rem(44);
-        height: rem(8);
-        width: rem(8);
-        background: $themeColor;
-        margin-right: rem(6);
-        border-radius: rem(8);
-      }
-      font-size: rem(24);
-      font-family: PingFang-SC-Medium;
+.top-title-banner {
+  position: relative;
+  width: 100%;
+  height: rem(360);
+  background: url("../productImg/banner@2x.png") no-repeat center;
+  background-size: 100%;
+  .img-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .title {
+      margin-left: rem(44);
+      font-size: rem(36);
       color: $titleColor;
-      line-height: rem(40);
+      line-height: rem(50);
+      font-family: PingFang-SC-Heavy;
+      font-weight: 600;
+      margin-top: rem(56);
+      margin-bottom: rem(43);
+    }
+    .info {
+      p {
+        .left {
+          margin-left: rem(44);
+          height: rem(8);
+          width: rem(8);
+          background: $themeColor;
+          margin-right: rem(6);
+          border-radius: rem(8);
+        }
+        font-size: rem(24);
+        font-family: PingFang-SC-Medium;
+        color: $titleColor;
+        line-height: rem(40);
+      }
     }
   }
 }
 </style>
 <template>
   <yd-layout>
-    <bannerCom class="top-title" :imgUrl="require('../productImg/banner@2x.png')">
-      <h1 class="title">康乐一生重大疾病保险</h1>
-      <div class="info">
-        <p class="flex row item-center">
-          <span class="left"></span>
-          <span class="info-text">80种重疾+35种轻症保障</span>
-        </p>
-        <p class="flex row item-center">
-          <span class="left"></span>
-          <span class="info-text">贴心豁免保障</span>
-        </p>
-        <p class="flex row item-center">
-          <span class="left"></span>
-          <span class="info-text">交费灵活，保障期限可自选</span>
-        </p>
+    <div class="top-title-banner">
+      <div class="img-text">
+        <h1 class="title">康乐一生重大疾病保险</h1>
+        <div class="info">
+          <p class="flex row item-center">
+            <span class="left"></span>
+            <span class="info-text">80种重疾+35种轻症保障</span>
+          </p>
+          <p class="flex row item-center">
+            <span class="left"></span>
+            <span class="info-text">贴心豁免保障</span>
+          </p>
+          <p class="flex row item-center">
+            <span class="left"></span>
+            <span class="info-text">交费灵活，保障期限可自选</span>
+          </p>
+        </div>
       </div>
-
-    </bannerCom>
+    </div>
 
     <productRangeCom :rangeList="rangeList"></productRangeCom>
 
