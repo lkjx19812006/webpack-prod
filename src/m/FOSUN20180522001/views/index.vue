@@ -76,12 +76,14 @@
       <span class="left-title top-title" slot="left">保障责任</span>
       <span @click="popup.more = true" class="right-title" slot="right" style="color: #707070">更多详情</span>
     </anyiCellItem>
-    <cellItemCom :cellList="bzzrList" :hasMore="true" :showBeforeNum="4" @showPopup="_showPopup"></cellItemCom>
+    <cellItemCom :cellList="bzzrList" :hasMore="true" :showBeforeNum="3" @showPopup="_showPopup"></cellItemCom>
 
     <bannerCom :imgUrl="require('../productImg/banner2.jpg')"></bannerCom>
     <bannerCom :imgUrl="require('../productImg/banner3.jpg')"></bannerCom>
     <bannerCom :imgUrl="require('../productImg/BitmapCopy8@2x.png')"></bannerCom>
-    <bannerCom :imgUrl="require('../productImg/BitmapCopy9@2x.png')"></bannerCom>
+
+    <bannerCom v-if="productInfo.package_code === 'A'" :imgUrl="require('../productImg/BitmapCopy9@2x.png')"></bannerCom>
+    <bannerCom v-if="productInfo.package_code === 'B'" :imgUrl="require('../productImg/banner-c.jpg')"></bannerCom>
 
     <cellItemCom leftColor="#282828" :cellList="cellList" @showPopup="_showPopup"></cellItemCom>
 

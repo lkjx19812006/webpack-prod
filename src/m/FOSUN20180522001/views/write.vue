@@ -520,18 +520,29 @@ export default {
     },
     //保障计划
     planInfos() {
-      var self = this;
-      return [
-        { label: "保障计划", value: self.otherData.labelPackageName },
-        { label: "基本保额", value: self.otherData.labelBasePremium },
-        { label: "保障期限", value: self.otherData.labelLifeLimit },
-        { label: "缴费年限", value: self.otherData.labelPaymentLimit },
-        { label: "缴费类型", value: self.otherData.labelPayType },
-        { label: "附加轻症及轻症豁免", value: self.otherData.labelSubClinical },
-        { label: "轻症疾病保额", value: self.otherData.labelSubClinicalNum },
-        { label: "保费豁免", value: self.otherData.labelLifelong },
-        { label: "附加险缴费年限", value: self.otherData.labelLifelongYear }
-      ];
+      if (this.productInfo.package_code === "A") {
+        return [
+          { label: "保障计划", value: this.otherData.labelPackageName },
+          { label: "基本保额", value: this.otherData.labelBasePremium },
+          { label: "保障期限", value: this.otherData.labelLifeLimit },
+          { label: "缴费年限", value: this.otherData.labelPaymentLimit },
+          { label: "缴费类型", value: this.otherData.labelPayType },
+          { label: "附加轻症及轻症豁免",value: this.otherData.labelSubClinical},
+          { label: "轻症疾病保额", value: this.otherData.labelSubClinicalNum },
+          { label: "保费豁免", value: this.otherData.labelLifelong },
+          { label: "附加险缴费年限", value: this.otherData.labelLifelongYear }
+        ];
+      }else if(this.productInfo.package_code === "B"){
+        return [
+          { label: "保障计划", value: this.otherData.labelPackageName },
+          { label: "基本保额", value: this.otherData.labelBasePremium },
+          { label: "保障期限", value: this.otherData.labelLifeLimit },
+          { label: "缴费年限", value: this.otherData.labelPaymentLimit },
+          { label: "缴费类型", value: this.otherData.labelPayType },
+          { label: "保费豁免", value: this.otherData.labelLifelong },
+          { label: "附加险缴费年限", value: this.otherData.labelLifelongYear }
+        ];
+      }
     },
     tbxzDoc() {
       return product.doc["投保须知"];
@@ -604,7 +615,7 @@ export default {
       if (!this._validAgeBaseNum()) return;
 
       //校验身高和体重
-      if (this.insured.weight < 3 || this.insured.weight > 120) {
+      if (this.insured.weight < 2.5 || this.insured.weight > 120) {
         this.$dialog.toast({
           mes: "体重不在合理范围内"
         });

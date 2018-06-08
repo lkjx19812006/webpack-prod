@@ -165,6 +165,24 @@ export default {
         this.dispatchModule("setInsured", "sex", this.applicant.sex);
         this.dispatchModule("setInsured", "relation", "00");
       }
+    },
+    "productInfo.package_code"(newVal, oldVal) {
+      if (newVal === "B") {//C款升级款 默认投保轻症 后台会算费 所以设置轻症为0 避免算费误差
+        this.dispatchModule("setProduct", "is_sub_clinical", "0"); //不投轻症
+        if (this.insured.relation === "00") {//被保人关系为本人 不能投保豁免
+          this.dispatchModule("setProduct", "is_lifelong", "0");
+        } else {
+          this.dispatchModule("setProduct", "is_lifelong", "1");
+        }
+      } else if (newVal === "A") {
+        if (this.insured.relation === "00") {
+          this.dispatchModule("setProduct", "is_lifelong", "0"); //不能投保保费豁免
+          this.dispatchModule("setProduct", "is_sub_clinical", "1");
+        } else {
+          this.dispatchModule("setProduct", "is_lifelong", "1");
+          this.dispatchModule("setProduct", "is_sub_clinical", "1");
+        }
+      }
     }
   },
   computed: {
