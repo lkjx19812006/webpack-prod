@@ -7,6 +7,13 @@
 
 //保障计划
 .write {
+  /deep/ .anyi-cell-item {
+    &:last-child {
+      &:after {
+        content: none;
+      }
+    }
+  }
   .group {
     margin-bottom: rem(26);
   }
@@ -79,23 +86,81 @@
       <!-- 标题样式 -->
       <anyiCellItem>
         <span slot="left" class="left-title">为谁投保</span>
-        <span slot="right" class="right-title r-color" v-if="insured.relation === '00'">本人</span>
-        <span slot="right" class="right-title r-color" v-else>他人</span>
+        <span slot="right" class="right-title">{{insured.relation === '00'? '本人' : '他人'}}</span>
+        <anyiSwitch v-model="insured.relation" trueValue="00" slot="right"></anyiSwitch>
       </anyiCellItem>
-      <anyiCellItem noBorder>
+      <anyiCellItem>
         <span slot="left" class="left-title">起保日期</span>
         <span slot="right" class="yd-datetime-input r-color">{{addtional.effect}}</span>
       </anyiCellItem>
     </div>
 
     <!-- 保险信息 -->
-    <div class="group">
+    <div class="group product-info">
       <!-- 标题样式 -->
       <anyiCellItem>
         <span slot="left" class="left-title-line"></span>
         <span slot="left" class="left-title top-title">保险信息</span>
       </anyiCellItem>
-      <cellItemCom leftColor="#282828" rightColor="#282828" :cellList="planInfos" :hasMore="true" :showBeforeNum="2"></cellItemCom>
+
+      <anyiCellItem arrow>
+        <span slot="left" class="left-title">保障计划</span>
+        <select v-model="productInfo.package_code" slot="right">
+          <option value="A">B款升级款</option>
+          <option value="B">C款升级款</option>
+        </select>
+      </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span class="left-title" slot="left">基本保额</span>
+        <select slot="right" v-model="productInfo.base_premium">
+          <option :key="index" v-for="(item, index) in limitList" :value="item.value">{{item.label}}</option>
+        </select>
+      </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span class="left-title" slot="left">保障期限</span>
+        <select slot="right" v-model="productInfo.life_limit">
+          <option :key="index" v-for="(item, index) in period" :value="item.value">{{item.label}}</option>
+        </select>
+      </anyiCellItem>
+
+      <anyiCellItem arrow>
+        <span class="left-title" slot="left">缴费年限</span>
+        <select slot="right" v-model="productInfo.payment_limit">
+          <option :key="index" v-for="(item, index) in yearPeriod" :value="item.value">{{item.label}}</option>
+        </select>
+      </anyiCellItem>
+
+      <anyiCellItem>
+        <span slot="left" class="left-title">缴费类型</span>
+        <span slot="right" class="right-title">年缴</span>
+      </anyiCellItem>
+
+      <anyiCellItem v-if="productInfo.package_code !== 'B'">
+        <span slot="left" class="left-title">附加轻症及轻症豁免</span>
+        <span slot="right" class="right-title">{{productInfo.is_sub_clinical === '1'? '包含' : '不包含'}}</span>
+        <anyiSwitch v-model="productInfo.is_sub_clinical" trueValue="1" falseValue="0" slot="right"></anyiSwitch>
+      </anyiCellItem>
+
+      <anyiCellItem v-if="productInfo.package_code !== 'B'">
+        <span slot="left" class="left-title">轻症疾病保额</span>
+        <span slot="right" class="right-title" v-if="productInfo.is_sub_clinical === '0'">不投保</span>
+        <span slot="right" class="right-title" v-if="productInfo.is_sub_clinical === '1'">{{productInfo.base_premium / 100 / 100 / 5}}万元</span>
+      </anyiCellItem>
+
+      <anyiCellItem v-if="insured.relation !== '00'">
+        <span slot="left" class="left-title">保费豁免</span>
+        <span slot="right" class="right-title">{{productInfo.is_lifelong === '1'? '包含' : '不包含'}}</span>
+        <anyiSwitch v-model="productInfo.is_lifelong" trueValue="1" falseValue="0" slot="right" v-if="showLifelongSwitch"></anyiSwitch>
+      </anyiCellItem>
+
+      <anyiCellItem v-if="insured.relation !== '00'">
+        <span slot="left" class="left-title">附加险缴费年限</span>
+        <span slot="right" class="right-title" v-if="productInfo.is_lifelong === '0'">不投保</span>
+        <span slot="right" class="right-title" v-if="productInfo.is_lifelong === '1'">{{productInfo.payment_limit - 1 }}年</span>
+      </anyiCellItem>
+      <!-- <cellItemCom leftColor="#282828" rightColor="#282828" :cellList="planInfos" :hasMore="true" :showBeforeNum="2"></cellItemCom> -->
     </div>
 
     <!-- 投保人信息 -->
@@ -140,8 +205,7 @@
         <span slot="left" class="left-title">出生日期</span>
         <input v-form:item="{required: '投保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="applicant.birthday">
         <span class="right-title yd-datetime-input" v-if="applicant.card_type === '01'" slot="right">{{applicant.birthday}}</span>
-        <yd-datetime :readonly="applicant.card_type === '01'" v-if="applicant.card_type !== '01' && insured.relation != '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
-        <yd-datetime :readonly="applicant.card_type === '01'" v-if="applicant.card_type !== '01' && insured.relation === '00'" slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
+        <yd-datetime v-else slot="right" type="date" v-model="applicant.birthday" :start-date="otherData.applicantStartTime" :end-date="otherData.applicantEndTime" placeholder="请选择" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem arrow>
@@ -161,7 +225,7 @@
         <input v-form:phone="{required: '投保人手机号码为空'}" slot="right" v-model="applicant.phone" type="text" placeholder="请输入">
       </anyiCellItem>
 
-      <anyiCellItem :noBorder="insured.relation !== '00'">
+      <anyiCellItem>
         <span slot="left" class="left-title">电子邮箱</span>
         <input v-form:email="{required:'投保人邮箱为空'}" slot="right" v-model="applicant.email" type="text" placeholder="请输入">
       </anyiCellItem>
@@ -176,7 +240,7 @@
         <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
-      <anyiCellItem :noBorder="true" arrow v-if="insured.relation === '00'">
+      <anyiCellItem arrow v-if="insured.relation === '00'">
         <span slot="left" class="left-title">职业</span>
         <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
@@ -193,6 +257,7 @@
       </anyiCellItem>
       <anyiCellItem arrow>
         <span slot="left" class="left-title">与投保人关系</span>
+        <input v-form:item="{required: '与投保人关系为空'}" type="text" slot="right" style="display: none" v-model="insured.relation">
         <select v-model="insured.relation" slot="right">
           <option value="01">配偶</option>
           <option value="02">父母</option>
@@ -235,7 +300,7 @@
         <span slot="left" class="left-title">出生日期</span>
         <input v-form:item="{required: '被保人出生日期为空'}" type="text" slot="right" style="display: none" v-model="insured.birthday">
         <span class="right-title yd-datetime-input" v-if="insured.card_type === '01'" slot="right">{{insured.birthday}}</span>
-        <yd-datetime :readonly="insured.card_type === '01'" v-if="insured.card_type !== '01'" slot="right" v-model="insured.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+        <yd-datetime v-else slot="right" v-model="insured.birthday" :start-date="otherData.insuredStartTime" :end-date="otherData.insuredEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
       </anyiCellItem>
 
       <anyiCellItem>
@@ -253,7 +318,7 @@
         <input v-form:item="{required: '被保人体重为空'}" slot="right" v-model="insured.weight" type="number" placeholder="请输入">
       </anyiCellItem>
 
-      <anyiCellItem arrow noBorder>
+      <anyiCellItem arrow>
         <span slot="left" class="left-title">职业</span>
         <input v-form:item="{required: '被保人职业为空'}" type="text" slot="right" style="display: none" v-model="insured.job_code">
         <span @click="showJobSelect = true" slot="right" class="right-title r-color" v-if="!insured.job_code">请输选择</span>
@@ -264,7 +329,7 @@
     <!-- 收益人信息 -->
     <!-- 受益人最多为3个 B不能设置受益人 必须为法定受益人 -->
     <div class="group">
-      <anyiCellItem :noBorder="productInfo.package_code === 'B' || beneficiary.type === '1'" arrow>
+      <anyiCellItem :arrow="productInfo.package_code === 'A'">
         <span slot="left" class="left-title-line"></span>
         <span slot="left" class="left-title">受益人信息</span>
         <select :disabled="productInfo.package_code === 'B'" v-model="beneficiary.type" slot="right">
@@ -323,13 +388,13 @@
             <anyiCellItem>
               <span slot="left" class="left-title">出生日期</span>
               <input v-form:item="{required: `受益人${index + 1}出生日期为空`}" type="text" slot="right" style="display: none" v-model="beneficiary.person[index].birthday">
-              <span class="right-title yd-datetime-input" v-if="beneficiary.person[index].card_type === '01'" slot="right">{{beneficiary.person[index].birthday}}</span>
-              <yd-datetime :readonly="beneficiary.person[index].certificate_type === '01'" v-else slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
+              <span class="right-title yd-datetime-input" v-if="beneficiary.person[index].certificate_type === '01'" slot="right">{{beneficiary.person[index].birthday}}</span>
+              <yd-datetime v-else slot="right" v-model="beneficiary.person[index].birthday" :start-date="otherData.beneficiaryStartTime" :end-date="otherData.beneficiaryEndTime" placeholder="请选择" type="date" :init-emit="false"></yd-datetime>
             </anyiCellItem>
 
-            <anyiCellItem noBorder>
+            <anyiCellItem>
               <span slot="left" class="left-title">受益比例（%）</span>
-              <input v-form:item="{required: `受益人${index + 1}受益比例为空`, valid:{regex:/^[1-9]\d{1,2}$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
+              <input v-form:item="{required: `受益人${index + 1}受益比例为空`, valid:{regex:/^([1-9]\d{0,1}|100)$/, errMsg: '收益比例为1-100之间的整数'}}" slot="right" v-model="beneficiary.person[index].percent" type="number" placeholder="请填写受益百分比">
             </anyiCellItem>
           </div>
         </accordion>
@@ -363,7 +428,7 @@
         <span slot="left" class="left-title">持卡人姓名</span>
         <input slot="right" disabled v-model="applicant.name" type="text" placeholder="需为投保人本人">
       </anyiCellItem>
-      <anyiCellItem noBorder>
+      <anyiCellItem>
         <span slot="left" class="left-title">银行账号</span>
         <input v-form:bank slot="right" v-model="applicant.account" type="number" placeholder="只支持银行储蓄卡">
       </anyiCellItem>
@@ -380,7 +445,7 @@
             <span slot="left" class="left-title">联系人姓名</span>
             <input slot="right" v-model="contact.name" type="text" placeholder="请输入">
           </anyiCellItem>
-          <anyiCellItem noBorder>
+          <anyiCellItem>
             <span slot="left" class="left-title">联系人手机号</span>
             <input slot="right" v-model="contact.phone" type="phone" placeholder="请输入有效手机号，便于联系">
           </anyiCellItem>
@@ -425,6 +490,7 @@
   </yd-layout>
 </template>
 <script>
+import anyiSwitch from "@/components/common/anyi-switch";
 import footerCom from "@/components/common/footerCom";
 import mixinPopup from "@/mixins/popup";
 import anyiCellItem from "@/components/common/anyi-cell-item";
@@ -444,6 +510,7 @@ export default {
   name: "Write",
   mixins: [mixinPopup],
   components: {
+    anyiSwitch,
     footerCom,
     anyiCellItem,
     cellItemCom,
@@ -491,6 +558,22 @@ export default {
     }
   },
   computed: {
+    //是否显示保费豁免切换按钮
+    showLifelongSwitch() {
+      //判断年龄投保人 > 50 岁不能投豁免
+      if (this.applicantAge > 50) {
+        return false;
+      }
+      if (this.productInfo.package_code === "A") {
+        if (this.productInfo.is_sub_clinical === "1") {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (this.productInfo.package_code === "B") {
+        return true;
+      }
+    },
     //投保人信息
     applicant() {
       return this.$store.state.productState.applicant;
@@ -518,32 +601,6 @@ export default {
     contact() {
       return this.$store.state.productState.contact;
     },
-    //保障计划
-    planInfos() {
-      if (this.productInfo.package_code === "A") {
-        return [
-          { label: "保障计划", value: this.otherData.labelPackageName },
-          { label: "基本保额", value: this.otherData.labelBasePremium },
-          { label: "保障期限", value: this.otherData.labelLifeLimit },
-          { label: "缴费年限", value: this.otherData.labelPaymentLimit },
-          { label: "缴费类型", value: this.otherData.labelPayType },
-          { label: "附加轻症及轻症豁免",value: this.otherData.labelSubClinical},
-          { label: "轻症疾病保额", value: this.otherData.labelSubClinicalNum },
-          { label: "保费豁免", value: this.otherData.labelLifelong },
-          { label: "附加险缴费年限", value: this.otherData.labelLifelongYear }
-        ];
-      }else if(this.productInfo.package_code === "B"){
-        return [
-          { label: "保障计划", value: this.otherData.labelPackageName },
-          { label: "基本保额", value: this.otherData.labelBasePremium },
-          { label: "保障期限", value: this.otherData.labelLifeLimit },
-          { label: "缴费年限", value: this.otherData.labelPaymentLimit },
-          { label: "缴费类型", value: this.otherData.labelPayType },
-          { label: "保费豁免", value: this.otherData.labelLifelong },
-          { label: "附加险缴费年限", value: this.otherData.labelLifelongYear }
-        ];
-      }
-    },
     tbxzDoc() {
       return product.doc["投保须知"];
     },
@@ -552,22 +609,96 @@ export default {
     },
     bxtkDoc() {
       return product.doc["保险条款"][this.productInfo.package_code];
+    },
+    //投保人年龄
+    applicantAge() {
+      if (this.applicant.card_type === "01") {
+        var result = Date.geCardInfooByCardId(this.applicant.card_id);
+        if (result) {
+          return result.age;
+        }
+      }
+      return Date.getAgeByDate(this.applicant.birthday);
+    },
+    //被保人年龄
+    insuredAge() {
+      if (this.insured.card_type === "01") {
+        var result = Date.geCardInfooByCardId(this.insured.card_id);
+        if (result) {
+          return result.age;
+        }
+      }
+      return Date.getAgeByDate(this.insured.birthday);
+    },
+    limitList() {
+      //最高保额规则 被保人
+      //30-17岁 最高 20W
+      //18-40岁 最高 50w
+      //41-45岁 最高 40W
+      //46-50岁 最高 30w
+      var age = this.insuredAge; //this.insuredAge
+      var productLimit = product.limit;
+      var limits = [];
+      if (age <= 17) {
+        limits = productLimit.slice(0, 6);
+      } else if (age <= 40) {
+        limits = [].concat(productLimit);
+      } else if (age <= 45) {
+        limits = productLimit.slice(0, 8);
+      } else if (age <= 50) {
+        limits = productLimit.slice(0, 6);
+      } else {
+        limits = productLimit.slice(0, productLimit.length);
+      }
+      console.log("当前可选择投保额度:%o", limits);
+      return limits;
+    },
+    period() {
+      return product["保障期限"];
+    },
+    yearPeriod() {
+      //1.投保人年龄 + 缴费年限<=70 被保险人年龄+缴费年限<=70
+      var result = [];
+      var arr = product["缴费年限"];
+      var applicantAge = this.applicantAge;
+      var insuredAge = this.insuredAge;
+      var countAge =
+        70 - (applicantAge > insuredAge ? applicantAge : insuredAge);
+      if (countAge >= 30) {
+        result = [...arr];
+      } else if (countAge >= 20) {
+        result = [arr[0], arr[1]];
+        if (this.model === "index") {
+          this.$store.dispatch("setProduct", {
+            key: "payment_limit",
+            value: "15"
+          });
+        }
+      } else if (countAge >= 15) {
+        result = [arr[0]];
+        if (this.model === "index") {
+          this.$store.dispatch("setProduct", {
+            key: "payment_limit",
+            value: "15"
+          });
+        }
+      } else {
+        result = [...arr];
+      }
+      return result;
     }
   },
   mounted() {
     console.log(this.$store.state.productState);
     this._initDefault();
     this.dispatchModule("setDefaultDate");
+    this.dispatchModule("setStateBySession");
   },
   methods: {
     _initDefault() {
       //设置默认次日生效
       if (!this.addtional.effect) {
         this.addtional.effect = Date.getDateByNextDay();
-      }
-
-      if (this.productInfo.package_code === "B") {
-        this.dispatchModule("setProduct", "is_sub_clinical", "0"); //不包含轻症
       }
 
       if (this.insured.relation !== "00") {
@@ -594,7 +725,7 @@ export default {
       }
     },
     _insureClick(res) {
-      //基本的表单校验;
+      // //基本的表单校验;
       if (!res.valid) {
         this.$dialog.toast({
           mes: res.msg,
@@ -705,7 +836,6 @@ export default {
         return false;
       }
       var now = new Date(); //当前时间
-      now.setDate(now.getDate() + 30);
       now.setHours(0);
       now.setMinutes(0);
       now.setSeconds(0);
@@ -715,7 +845,8 @@ export default {
       insuDate.setMinutes(0);
       insuDate.setSeconds(0);
       insuDate.setMilliseconds(0);
-      if (now.getTime() < insuDate.getTime()) {
+      var thtime = 30 * 24 * 60 * 60 * 1000;
+      if (insuDate.getTime() + thtime > now.getTime()) {
         this.$dialog.toast({
           mes: "被保人必须满30天",
           duration: 2000
@@ -835,7 +966,7 @@ export default {
       var list = this.beneficiary.person;
       var percent = 0;
       list.forEach(item => {
-        percent = Number.add(percent, Number(item.percent));
+        percent += Number(item.percent);
       });
       if (percent != 100) {
         this.$dialog.toast({

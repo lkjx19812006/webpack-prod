@@ -57,6 +57,33 @@
     }
   }
 }
+.footer-bottom-wrap {
+  background: #fff;
+  z-index: 9;
+  height: rem(110);
+  padding: 0 rem(32);
+  border-top: 1px solid #d2d2d2;
+  .btn-item {
+    width: rem(326);
+    height: rem(70);
+    border-radius: rem(8);
+    border: 1px solid $themeColor;
+    font-size: rem(30);
+    font-family: PingFang-SC-Medium;
+    color: $themeColor;
+    line-height: rem(68);
+    text-align: center;
+    background: #fff;
+    &.active {
+      background: $themeColor;
+      color: #fff;
+    }
+    &:active {
+      background: $activeColor;
+      color: #fff;
+    }
+  }
+}
 </style>
 <template>
   <yd-layout>
@@ -71,16 +98,7 @@
           <span class="left-tit" v-html="item.title" v-if="item.title"></span>
           <!-- <span class="right-tit"></span> -->
         </div>
-        <div class="p-modal-sub-conetnt bottom-after" v-for="(subItem, jdx) in item.infos" :key="jdx" v-html="subItem"></div>
-      </div>
-
-      <!-- 部分是 全否 -->
-      <div class="select-radio flex center">
-        <div class="tips flex center">
-          <span>{{healthDoc.tipsTitle}}</span>
-          <span class="des">{{healthDoc.tipsdes}}</span>
-        </div>
-        <buttonRadio class="radio-wrap" v-model="isHealth" :radioList="radioList"></buttonRadio>
+        <div class="p-modal-sub-conetnt" :class="[jdx >= item.infos.length - 1 ? '' : 'bottom-after']" v-for="(subItem, jdx) in item.infos" :key="jdx" v-html="subItem"></div>
       </div>
 
       <!-- 底部提示 -->
@@ -90,7 +108,15 @@
       </div>
 
     </div>
-    <yd-button class="popup-close-btn" slot="bottom" @click.native="_closePopup">下一步</yd-button>
+    <div class="footer-bottom-wrap flex row space item-center" slot="bottom">
+      <div class="btn-item yd-btn-primary" @click="_closePopup(false)">
+        部分为是
+      </div>
+      <div class="btn-item active yd-btn-primary" @click="_closePopup(true)">
+        以上全否
+      </div>
+    </div>
+    <!-- <yd-button class="popup-close-btn"  @click.native="_closePopup">下一步</yd-button> -->
   </yd-layout>
 </template>
 <script>
@@ -112,22 +138,15 @@ export default {
     }
   },
   data() {
-    return {
-      isHealth: false,
-      radioList: [
-        { label: "部分为是", value: false },
-        { label: "以上全否", value: true }
-      ]
-    };
+    return {};
   },
   methods: {
-    _closePopup() {
-      if (this.isHealth) {
-        //全否通过
+    _closePopup(param) {
+      if (param) {
         this.$router.push("write");
       } else {
         this.$dialog.toast({
-          mes: "健康不通过，不能进行投保",
+          mes:"您的健康告知不符合保险公司的审核标准，无法提交保单。建议您咨询之后再进行投保，非常感谢！",
           timeout: 2000
         });
       }

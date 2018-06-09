@@ -25,9 +25,10 @@ Vue.config.productionTip = false;
 
 // 设置路由标题 当前为动态路径
 const titles = {
-  '/index': '首页',
-  '/write': '填写信息',
-  '/confirm': '确认信息'
+  '/index': '康乐一生重大疾病保险',
+  '/health': '健康告知',
+  '/write': '填写投保信息',
+  '/confirm': '确认投保信息'
 };
 
 /**

@@ -1,6 +1,13 @@
 <style lang="scss" scoped>
 @import "../../../css/mixin.scss";
 .confirm {
+  /deep/ .anyi-cell-item {
+    &:last-child {
+      &:after {
+        content: none;
+      }
+    }
+  }
   //设置样式颜色
   .group {
     .left-title {
@@ -50,7 +57,7 @@
         <span slot="right" class="right-title" v-if="insured.relation === '00'">本人</span>
         <span slot="right" class="right-title" v-else>他人</span>
       </anyiCellItem>
-      <anyiCellItem noBorder>
+      <anyiCellItem>
         <span slot="left" class="left-title">起保日期</span>
         <span slot="right" class="yd-datetime-input">{{addtional.effect}}</span>
       </anyiCellItem>
@@ -112,7 +119,7 @@
         <span slot="right" class="right-title">{{applicant.phone}}</span>
       </anyiCellItem>
 
-      <anyiCellItem :noBorder="insured.relation !== '00'">
+      <anyiCellItem>
         <span slot="left" class="left-title">电子邮箱</span>
         <span slot="right" class="right-title">{{applicant.email}}</span>
       </anyiCellItem>
@@ -127,7 +134,7 @@
         <span slot="right" class="right-title">{{insured.weight}}</span>
       </anyiCellItem>
 
-      <anyiCellItem noBorder v-if="insured.relation === '00'">
+      <anyiCellItem v-if="insured.relation === '00'">
         <span slot="left" class="left-title">职业</span>
         <span slot="right" class="right-title text-overflow">{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
       </anyiCellItem>
@@ -188,7 +195,7 @@
         <span slot="right" class="right-title">{{insured.weight}}</span>
       </anyiCellItem>
 
-      <anyiCellItem noBorder>
+      <anyiCellItem>
         <span slot="left" class="left-title">职业</span>
         <span slot="right" class="right-title text-overflow">{{otherData.labelJob1}}、{{otherData.labelJob2}}、{{otherData.labelJob3}}</span>
       </anyiCellItem>
@@ -197,7 +204,7 @@
     <!-- 收益人信息 -->
     <!-- 受益人最多为3个 B不能设置受益人 必须为法定受益人 -->
     <div class="group">
-      <anyiCellItem :noBorder="productInfo.package_code === 'B' || beneficiary.type === '1'">
+      <anyiCellItem>
         <span slot="left" class="left-title-line"></span>
         <span slot="left" class="left-title  top-title">受益人信息</span>
         <span slot="right" class="right-title" v-if="beneficiary.type === '1'">法定受益人</span>
@@ -238,7 +245,7 @@
               <span slot="left" class="left-title">出生日期</span>
               <span slot="right" class="right-title">{{beneficiary.person[index].birthday}}</span>
             </anyiCellItem>
-            <anyiCellItem noBorder>
+            <anyiCellItem>
               <span slot="left" class="left-title">受益比例（%）</span>
               <span slot="right" class="right-title">{{beneficiary.person[index].percent}}</span>
             </anyiCellItem>
@@ -262,7 +269,7 @@
         <span slot="left" class="left-title">持卡人姓名</span>
         <span slot="right" class="right-title">{{applicant.name}}</span>
       </anyiCellItem>
-      <anyiCellItem noBorder>
+      <anyiCellItem>
         <span slot="left" class="left-title">银行账号</span>
         <span slot="right" class="right-title">{{applicant.account}}</span>
       </anyiCellItem>
@@ -279,7 +286,7 @@
             <span slot="left" class="left-title">联系人姓名</span>
             <span slot="right" class="right-title">{{contact.name}}</span>
           </anyiCellItem>
-          <anyiCellItem noBorder>
+          <anyiCellItem>
             <span slot="left" class="left-title">联系人手机号</span>
             <span slot="right" class="right-title">{{contact.phone}}</span>
           </anyiCellItem>
@@ -423,7 +430,7 @@ export default {
           ? "/spb/standard/product/insured.action"
           : "/spb/standard/product/insuredWithoutLogin.action";
 
-      var total = Number.multiply(this.total, 100); //产品总价
+      var total =this.total * 100; //产品总价
       var product = this.copyObj(this.productInfo); //复制产品信息
       product.base_premium = product.base_premium * 100; //基本保费处理
       var applicant = this.applicant; //投保人信息
@@ -438,7 +445,7 @@ export default {
         for (var key in item) {
           obj[key] = item[key];
         }
-        obj.percent = Number.divide(obj.percent, 100); //处理比例
+        obj.percent = obj.percent / 100; //处理比例
         beneficiary.person.push(obj);
       }
       var views = {

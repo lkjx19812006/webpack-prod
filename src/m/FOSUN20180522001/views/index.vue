@@ -38,6 +38,26 @@
     }
   }
 }
+.bottom-after {
+  background: #fff;
+  padding-left: rem(32);
+  .limitCom-title {
+    flex: 0 0 auto;
+    width: rem(120);
+    height: rem(42);
+    font-size: rem(30);
+    font-family: PingFang-SC-Medium;
+    color: $textColor;
+    line-height: rem(42);
+    text-align: center;
+    margin-right: rem(32);
+    background: #fff;
+  }
+  .limitCom-wrap {
+    flex: 1;
+    overflow: hidden;
+  }
+}
 </style>
 <template>
   <yd-layout>
@@ -66,8 +86,11 @@
     <!--头部套餐选择组件  -->
     <planSelect v-model="productInfo.package_code" :planList="planList"></planSelect>
 
-    <div class="bottom-after">
-      <limitCell ref="limitCom" v-model="productInfo.base_premium" :tabList="limitList"></limitCell>
+    <div class="bottom-after flex row item-center">
+      <span class="limitCom-title">基本保额</span>
+      <div class="limitCom-wrap">
+        <limitCell ref="limitCom" v-model="productInfo.base_premium" :tabList="limitList"></limitCell>
+      </div>
     </div>
 
     <!-- 保障责任 -->
@@ -226,6 +249,7 @@ export default {
   mounted() {
     this._initDefault();
     this.dispatchModule("setDefaultDate");
+    this.dispatchModule("setStateBySession");
   },
   methods: {
     //初始化默认值

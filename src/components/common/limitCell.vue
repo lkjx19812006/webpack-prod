@@ -25,6 +25,7 @@
     }
     &.active {
       .title {
+        transition: all 0.3s ease-in-out;
         border-color: $themeColor;
         color: #fff;
         background: $themeColor;

@@ -214,7 +214,7 @@ const actions = {
 
 //执行 执行同步操作
 const mutations = {
-	//设置迷人值
+	//设置默认值
 	setDefaultDate(state) {
 		//设置日期限制
 		//投保人日期选择开始时间
