@@ -295,8 +295,10 @@ export default {
       var subClinical_list = price[codeKey]["sub_clinical"] || null; //轻症费率表
       var lifelong_list = price[codeKey]["lifelong"]; //保费豁免费率表
 
-      var base_rate =
-        base_list[lifeKey][insuredSexKey][payYearKey][insuredAgeKey] * 100; //基础保费费率
+      var base_rate = Number.multiply(
+        base_list[lifeKey][insuredSexKey][payYearKey][insuredAgeKey],
+        100
+      ); //基础保费费率
       var subClinical_rate = 0; //轻症保费费率
       var lifelong_rate = 0; //豁免保费费率
       var total = 0; //总保费
@@ -304,26 +306,32 @@ export default {
         case "A":
           if (this.productInfo.is_sub_clinical === "1") {
             //选择了轻症
-            subClinical_rate =
+            subClinical_rate = Number.multiply(
               subClinical_list[lifeKey][insuredSexKey][payYearKey][
                 insuredAgeKey
-              ] * 100; //轻症费率
+              ],
+              100
+            ); //轻症费率
             if (this.productInfo.is_lifelong === "1") {
               //选择了保费豁免
-              lifelong_rate =
+              lifelong_rate = Number.multiply(
                 lifelong_list[lifeKey][applicantSexkey][payYearKey][
                   applicantAgekey
-                ] * 100; //豁免费率
+                ],
+                100
+              ); //豁免费率
             }
           }
           break;
         case "B":
           if (this.productInfo.is_lifelong === "1") {
             //选择了保费豁免
-            lifelong_rate =
+            lifelong_rate = Number.multiply(
               lifelong_list[lifeKey][applicantSexkey][payYearKey][
                 applicantAgekey
-              ] * 100;
+              ],
+              100
+            );
           }
           break;
       }
@@ -334,25 +342,28 @@ export default {
         5; /** 附加轻症保额，单位元；是主险保额的五分之一*/
 
       //计算保费
-      var base_price = Number.multiply(base_num / 100 / 10, base_rate / 100); //基础保费
+      var base_price = Number.multiply(
+        Number.divide(base_num, 1000),
+        base_rate
+      ); //基础保费
       var subClinical_price = Number.multiply(
-        subClinical_num / 100 / 10,
-        subClinical_rate / 100
+        Number.divide(subClinical_num, 1000),
+        subClinical_rate
       ); //轻症保费
-
       var lifelong_num = Number.add(base_price, subClinical_price); //豁免保额 = 基础保费 + 轻症保费
-      var lifelong_price =
-        Math.round(
-          Number.multiply(lifelong_num / 100 / 10, lifelong_rate / 100) * 100
-        ) / 100; //豁免保费
+      var lifelong_price = Number.multiply(
+        Number.divide(lifelong_num, 1000),
+        Number.divide(lifelong_rate, 100)
+      );
+      lifelong_price = Math.round(lifelong_price);
+      //豁免保费
       //拿到费率 计算保费
       var total = Number.add(
         Number.add(base_price, subClinical_price),
         lifelong_price
       );
-      // total = Number.multiply(total, limitNum);
       this.$store.dispatch("setTotal", total || 0); //设置计算后的值
-      return total || 0;
+      return Number.divide(total || 0, 100);
     },
 
     period() {
