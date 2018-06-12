@@ -362,6 +362,7 @@ export default {
         Number.add(base_price, subClinical_price),
         lifelong_price
       );
+      console.log(total);
       this.$store.dispatch("setTotal", total || 0); //设置计算后的值
       return Number.divide(total || 0, 100);
     },

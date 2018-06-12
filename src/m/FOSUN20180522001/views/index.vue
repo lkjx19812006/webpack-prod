@@ -112,7 +112,7 @@
 
     <bottomTips></bottomTips>
 
-    <footerCom slot="bottom" themecolor="#E42F46" :price="total" @insureClick="_insureClick"></footerCom>
+    <footerCom slot="bottom" themecolor="#E42F46" :price="price" @insureClick="_insureClick"></footerCom>
 
     <!-- 更多详情弹框 -->
     <yd-popup v-model="popup.more" position="right" width="100%" height="100%">
@@ -213,6 +213,10 @@ export default {
     },
     insured() {
       return this.$store.state.productState.insured[0];
+    },
+    price() {
+      var total = this.$store.state.productState.total;
+      return Number.divide(total || 0, 100);
     },
     otherData() {
       return this.$store.state.productState.otherData;
